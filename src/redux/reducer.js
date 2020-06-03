@@ -50,11 +50,11 @@ const initialState = {
             name: 'New Phone',
             description: 'Saving for a new phone',
             targetAmount: 1200,
-            moneyAdded: 0,
             complete: false,
             dateCreated: '2020-06-03'
         }
     ],
+    fundAdditions: [],
     transactions: [],
 };
 
@@ -70,14 +70,17 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
         case 'ADD_FUND': let newFunds = getNewArray(state.funds, value); return {...state, funds: newFunds};
+        case 'ADD_FUND_ADDITION': let newFundAddition = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAddition};
 
         case 'UPDATE_ACCOUNT': let updatedAccounts = replaceObject(state.accounts, value); return {...state, accounts: updatedAccounts};
         case 'UPDATE_CATEGORY': let updatedCategories = replaceObject(state.categories, value); return {...state, categories: updatedCategories};
         case 'UPDATE_FUND': let updatedFunds = replaceObject(state.funds, value); return {...state, funds: updatedFunds};
+        case 'UPDATE_FUND_ADDITION': let updatedFundAdditions = replaceObject(state.fundAdditions, value); return {...state, fundAdditions: updatedFundAdditions};
 
         case 'REMOVE_ACCOUNT': let removedAccounts = removeObject(state.accounts, value); return {...state, accounts: removedAccounts};
         case 'REMOVE_CATEGORY': let removedCategories = removeObject(state.categories, value); return {...state, categories: removedCategories};
         case 'REMOVE_FUND': let removedFunds = removeObject(state.funds, value); return {...state, funds: removedFunds};
+        case 'REMOVE_FUND_ADDITION': let removedFundAdditions = removeObject(state.fundAdditions, value); return {...state, fundAdditions: removedFundAdditions};
         default: return state;
     }
 }
