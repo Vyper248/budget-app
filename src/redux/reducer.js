@@ -95,6 +95,13 @@ const initialState = {
             date: '2020-02-28',
             fund: 1,
             dateCreated: '2020-06-04'
+        },
+        {
+            id: 2,
+            amount: 50,
+            date: '2020-04-24',
+            fund: 1,
+            dateCreated: '2020-06-04'
         }
     ],
     transactions: [
@@ -103,7 +110,7 @@ const initialState = {
             type: 'spend',
             amount: 24.21,
             description: 'Food',
-            date: '2020-05-29',
+            date: '2020-04-28',
             category: 2,
             account: 1,
             dateCreated: '2020-06-03'
@@ -125,6 +132,26 @@ const initialState = {
             description: 'Earnings',
             date: '2020-02-28',
             category: 1,
+            account: 1,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 4,
+            type: 'spend',
+            amount: 874.29,
+            description: 'Earnings',
+            date: '2020-04-24',
+            category: 1,
+            account: 1,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 5,
+            type: 'spend',
+            amount: 25,
+            description: 'Phone Case',
+            date: '2020-05-22',
+            fund: 1,
             account: 1,
             dateCreated: '2020-06-03'
         }

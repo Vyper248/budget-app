@@ -37,6 +37,34 @@ export const getLatestDates = (startDate, periodLength) => {
     return latestDates;
 };
 
+export const getSummaryTotals = (transactions, funds, categories, fundAdditions) => {
+    let obj = {};
+
+    const addToTotals = tr => {
+        let heading = getTransactionHeading(funds, categories, tr);
+
+        if (tr.fund !== undefined) {
+            let target = getFundTarget(funds, tr);            
+            if (obj[heading] === undefined) obj[heading] = {saved: 0, target: target, spent: 0, remaining: 0};            
+            
+            if (tr.account > 0) obj[heading].spent += tr.amount;
+            else obj[heading].saved += tr.amount;
+
+            obj[heading].remaining = obj[heading].saved - obj[heading].spent;
+
+            return;
+        }
+
+        if (obj[heading] === undefined) obj[heading] = 0;
+        obj[heading] += tr.amount;
+    }
+
+    transactions.forEach(addToTotals);
+    fundAdditions.forEach(addToTotals);
+
+    return obj;
+}
+
 export const getSummaryRows = (dates, transactions, funds, categories, fundAdditions) => {
     if (dates.length === 0) return [];    
 
@@ -83,6 +111,12 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     
     return obj;
 };
+
+const getFundTarget = (funds, tr) => {
+    let fund = funds.find(obj => obj.id === tr.fund);
+    if (fund !== undefined) return fund.targetAmount;
+    return 0;
+}
 
 const getTransactionHeading = (funds, categories, tr) => {
     if (tr.category !== undefined) {
