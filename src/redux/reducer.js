@@ -1,10 +1,14 @@
+import { format } from 'date-fns';
+
 const initialState = {
+    currentPage: 'Home',
     general: {
-        payPeriodType: 'monthly',
+        payPeriodType: 'fourWeekly',
         backgroundColor: 'black',
         textColor: 'white',
         currencySymbol: '£',
-        showDecimals: true
+        showDecimals: true,
+        startDate: '2019-11-08',
     },
     accounts: [
         {
@@ -28,8 +32,14 @@ const initialState = {
             name: 'Earnings',
             description: '',
             type: 'income',
-            budget: 0,
-            carryOverBudget: false,
+            hidden: false,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 3,
+            name: 'Interest',
+            description: '',
+            type: 'income',
             hidden: false,
             dateCreated: '2020-06-03'
         },
@@ -38,11 +48,27 @@ const initialState = {
             name: 'Food',
             description: '',
             type: 'expense',
-            budget: 60,
-            carryOverBudget: true,
             hidden: false,
             dateCreated: '2020-06-03'
         },
+    ],
+    budgets: [
+        {
+            id: 1,
+            category: 2,
+            amount: 50,
+            startDate: '2020-01-03',
+            endDate: '2020-02-27',
+            carryOver: true,
+        },
+        {
+            id: 2,
+            category: 2,
+            amount: 80,
+            startDate: '2020-02-28',
+            endDate: undefined,
+            carryOver: true,
+        }
     ],
     funds: [
         {
@@ -52,33 +78,86 @@ const initialState = {
             targetAmount: 1200,
             complete: false,
             dateCreated: '2020-06-03'
+        },
+        {
+            id: 2,
+            name: 'Savings',
+            description: 'General Savings',
+            targetAmount: 0,
+            complete: false,
+            dateCreated: '2020-01-03'
         }
     ],
-    fundAdditions: [],
-    transactions: [],
+    fundAdditions: [
+        {
+            id: 1,
+            amount: 50,
+            date: '2020-02-28',
+            fund: 1,
+            dateCreated: '2020-06-04'
+        }
+    ],
+    transactions: [
+        {
+            id: 1,
+            type: 'spend',
+            amount: 24.21,
+            description: 'Food',
+            date: '2020-05-29',
+            category: 2,
+            account: 1,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 2,
+            type: 'spend',
+            amount: 14.71,
+            description: 'Food',
+            date: '2020-02-28',
+            category: 2,
+            account: 1,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 3,
+            type: 'spend',
+            amount: 874.29,
+            description: 'Earnings',
+            date: '2020-02-28',
+            category: 1,
+            account: 1,
+            dateCreated: '2020-06-03'
+        }
+    ],
 };
 
 export const reducer = (state = initialState, action) => {
     let value = action.payload;
     switch(action.type) {
+        case 'SET_CURRENT_PAGE': return {...state, currentPage: value};
+
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value}};
         case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};
         case 'SET_TEXT_COLOR': return {...state, general: {...state.general, textColor: value}};
         case 'SET_CURRENCY_SYMBOL': return {...state, general: {...state.general, currencySymbol: value}};
         case 'SET_SHOW_DECIMALS': return {...state, general: {...state.general, showDecimals: value}};
+        case 'SET_START_DATE': return {...state, general: {...state.general, startDate: value}};
 
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
+        case 'ADD_BUDGET': let newBudgets = getNewArray(state.budgets, value); return {...state, budgets: newBudgets};
         case 'ADD_FUND': let newFunds = getNewArray(state.funds, value); return {...state, funds: newFunds};
         case 'ADD_FUND_ADDITION': let newFundAddition = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAddition};
 
         case 'UPDATE_ACCOUNT': let updatedAccounts = replaceObject(state.accounts, value); return {...state, accounts: updatedAccounts};
         case 'UPDATE_CATEGORY': let updatedCategories = replaceObject(state.categories, value); return {...state, categories: updatedCategories};
+        case 'UPDATE_BUDGET': let updatedBudgets = replaceObject(state.budgets, value); return {...state, budgets: updatedBudgets};
         case 'UPDATE_FUND': let updatedFunds = replaceObject(state.funds, value); return {...state, funds: updatedFunds};
         case 'UPDATE_FUND_ADDITION': let updatedFundAdditions = replaceObject(state.fundAdditions, value); return {...state, fundAdditions: updatedFundAdditions};
 
         case 'REMOVE_ACCOUNT': let removedAccounts = removeObject(state.accounts, value); return {...state, accounts: removedAccounts};
         case 'REMOVE_CATEGORY': let removedCategories = removeObject(state.categories, value); return {...state, categories: removedCategories};
+        case 'REMOVE_BUDGET': let removedBudgets = removeObject(state.budgets, value); return {...state, budgets: removedBudgets};
         case 'REMOVE_FUND': let removedFunds = removeObject(state.funds, value); return {...state, funds: removedFunds};
         case 'REMOVE_FUND_ADDITION': let removedFundAdditions = removeObject(state.fundAdditions, value); return {...state, fundAdditions: removedFundAdditions};
         default: return state;
@@ -98,7 +177,6 @@ const replaceObject = (arr, object) => {
 }
 
 const getNewArray = (arr, object) => {
-    let latestID = arr[arr.length-1].id;
-    object.id = latestID+1;
+    object.id = format(new Date(),'yyyyMMddHHmmss');
     return [...arr, object];
 }
