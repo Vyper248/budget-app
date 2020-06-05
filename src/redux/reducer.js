@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 
 const initialState = {
     currentPage: 'Home',
+    addTransaction: false,
     general: {
         payPeriodType: 'fourWeekly',
         backgroundColor: 'black',
@@ -162,6 +163,7 @@ export const reducer = (state = initialState, action) => {
     let value = action.payload;
     switch(action.type) {
         case 'SET_CURRENT_PAGE': return {...state, currentPage: value};
+        case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value}};
         case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};
@@ -174,7 +176,8 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
         case 'ADD_BUDGET': let newBudgets = getNewArray(state.budgets, value); return {...state, budgets: newBudgets};
         case 'ADD_FUND': let newFunds = getNewArray(state.funds, value); return {...state, funds: newFunds};
-        case 'ADD_FUND_ADDITION': let newFundAddition = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAddition};
+        case 'ADD_FUND_ADDITION': let newFundAdditions = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAdditions};
+        case 'ADD_TRANSACTION': let newTransactions = getNewArray(state.transactions, value); return {...state, transactions: newTransactions, addTransaction: false};
 
         case 'UPDATE_ACCOUNT': let updatedAccounts = replaceObject(state.accounts, value); return {...state, accounts: updatedAccounts};
         case 'UPDATE_CATEGORY': let updatedCategories = replaceObject(state.categories, value); return {...state, categories: updatedCategories};
@@ -187,6 +190,7 @@ export const reducer = (state = initialState, action) => {
         case 'REMOVE_BUDGET': let removedBudgets = removeObject(state.budgets, value); return {...state, budgets: removedBudgets};
         case 'REMOVE_FUND': let removedFunds = removeObject(state.funds, value); return {...state, funds: removedFunds};
         case 'REMOVE_FUND_ADDITION': let removedFundAdditions = removeObject(state.fundAdditions, value); return {...state, fundAdditions: removedFundAdditions};
+        case 'REMOVE_TRANSACTION': let removedTransactions = removeObject(state.transactions, value); return {...state, transactions: removedTransactions};
         default: return state;
     }
 }
@@ -204,6 +208,6 @@ const replaceObject = (arr, object) => {
 }
 
 const getNewArray = (arr, object) => {
-    object.id = format(new Date(),'yyyyMMddHHmmss');
+    object.id = Number(format(new Date(),'yyyyMMddHHmmss'));
     return [...arr, object];
 }

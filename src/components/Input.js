@@ -1,0 +1,49 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const StyledComp = styled.input`
+    height: var(--input-height);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-left: 10px;
+    font-size: 1em;
+    width: 100px;
+    border-radius: 0px;
+    -webkit-appearance: none;
+
+    :focus {
+        outline: none;
+        border: 1px solid #33C9F9;
+    }
+`;
+
+const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[]}) => {
+    if (type === 'dropdown' && (options.length > 0 || groups.length > 0)) return (
+        <StyledComp as='select' onChange={onChange} value={value}>
+            <option hidden value={undefined}>Select an Option</option>
+        {
+            options.length > 0 
+            ? options.map(option => {
+                return <option value={option.value}>{option.display}</option>
+            })
+            : groups.map(group => {
+                return (
+                    <optgroup label={group.label}>
+                    {
+                        group.options.map(option => {
+                            return <option value={option.value}>{option.display}</option>
+                        })
+                    }
+                    </optgroup>
+                )
+            })
+        }
+        </StyledComp>
+    );
+
+    return (
+        <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder}/>
+    );
+}
+
+export default Input;

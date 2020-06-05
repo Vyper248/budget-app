@@ -1,6 +1,11 @@
 :root {
   --bg-color: black;
   --text-color: white;
+  --input-height: 30px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {

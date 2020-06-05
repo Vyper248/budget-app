@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StyledComp = styled.div`
     display: flex;
@@ -19,6 +19,7 @@ const StyledComp = styled.div`
 
 const Header = () => {
     const dispatch = useDispatch();
+    const addTransaction = useSelector(state => state.addTransaction);
 
     return (
         <StyledComp>
@@ -26,6 +27,7 @@ const Header = () => {
             <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Categories'})}>Categories</div>
             <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Goals'})}>Goals</div>
             <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Accounts'})}>Accounts</div>
+            <div onClick={() => dispatch({type: 'SET_ADD_TRANSACTION', payload: !addTransaction})}>Add Transaction</div>
         </StyledComp>
     )
 }
