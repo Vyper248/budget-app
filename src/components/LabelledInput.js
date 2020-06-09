@@ -20,6 +20,7 @@ const StyledComp = styled.div`
         border-bottom: 1px solid white;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
+        background-color: #333;
     }
 
     & > input, & > select {

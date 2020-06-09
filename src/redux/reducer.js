@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
 const initialState = {
-    currentPage: 'Home',
+    currentPage: 'Categories',
     addTransaction: false,
     general: {
         payPeriodType: 'fourWeekly',
@@ -176,7 +176,7 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
         case 'ADD_BUDGET': let newBudgets = getNewArray(state.budgets, value); return {...state, budgets: newBudgets};
         case 'ADD_FUND': let newFunds = getNewArray(state.funds, value); return {...state, funds: newFunds};
-        case 'ADD_FUND_ADDITION': let newFundAdditions = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAdditions};
+        case 'ADD_FUND_ADDITION': let newFundAdditions = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAdditions, addTransaction: false};
         case 'ADD_TRANSACTION': let newTransactions = getNewArray(state.transactions, value); return {...state, transactions: newTransactions, addTransaction: false};
 
         case 'UPDATE_ACCOUNT': let updatedAccounts = replaceObject(state.accounts, value); return {...state, accounts: updatedAccounts};

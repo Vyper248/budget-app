@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import Header from './components/Header';
 import SummaryTables from './containers/SummaryTables';
 import AddTransaction from './containers/AddTransaction';
-
+import Categories from './containers/Categories';
 
 function App() {
     const page = useSelector(state => state.currentPage);
@@ -16,6 +16,7 @@ function App() {
         <div className="App">
             <Header/>
             { page === 'Home' ? <SummaryTables/> : null }
+            { page === 'Categories' ? <Categories/> : null }
             { addTransaction ? <AddTransaction/> : null }
         </div>
     );

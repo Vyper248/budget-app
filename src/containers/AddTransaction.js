@@ -20,15 +20,6 @@ const StyledComp = styled.div`
     }
 `;
 
-/*
-type: 'spend',
-amount: 25,
-description: 'Phone Case',
-date: '2020-05-22',
-fund: 1,
-account: 1,
-*/
-
 const AddTransaction = () => {
     const dispatch = useDispatch();
 
@@ -60,6 +51,16 @@ const AddTransaction = () => {
         dispatch({type: 'ADD_TRANSACTION', payload: transaction});
     }
 
+    const addFundAddition = () => {
+        //make sure transaction is valid
+        if (amount === 0) return;
+        if (date.length === 0) return;
+        if (fund === undefined) return;
+
+        let fundAddition = {amount: Number(amount), date, fund};        
+        dispatch({type: 'ADD_FUND_ADDITION', payload: fundAddition});
+    }
+
     const onChangeGroup = (e) => {
         let value = e.target.value;
         let [id, name] = value.split(':');
@@ -79,11 +80,33 @@ const AddTransaction = () => {
         }
     }
 
+    let types = [
+        {value: 'spend', display: 'Spend/Receive'},
+        {value: 'fundAddition', display: 'Add to Fund'},
+    ];
+
+    if (accounts.length > 1) types.push({value: 'transfer', display: 'Transfer'});
+
+    if (type === 'fundAddition') {
+        return (
+            <StyledComp>
+                <div>
+                    <strong>Add Transaction</strong>
+                    <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
+                    <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                    <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
+                    <LabelledInput label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
+                    <Button value="Add Transaction" onClick={addFundAddition} width="140px"/>
+                </div>
+            </StyledComp>
+        );
+    }
+
     return (
         <StyledComp>
             <div>
                 <strong>Add Transaction</strong>
-                { accounts.length > 1 ? <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={[{value: 'spend', display: 'Spend'}, {value: 'transfer', display: 'Transfer'}]}/> : null }
+                <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
                 <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(e.target.value)}/>
                 { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
                 <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
