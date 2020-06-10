@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 const initialState = {
     currentPage: 'Categories',
     addTransaction: false,
+    editMode: false,
     general: {
         payPeriodType: 'fourWeekly',
         backgroundColor: 'black',
@@ -162,8 +163,9 @@ const initialState = {
 export const reducer = (state = initialState, action) => {
     let value = action.payload;
     switch(action.type) {
-        case 'SET_CURRENT_PAGE': return {...state, currentPage: value};
+        case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
+        case 'SET_EDIT_MODE': return {...state, editMode: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value}};
         case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};

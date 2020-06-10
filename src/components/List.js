@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 const StyledComp = styled.div`
@@ -7,6 +8,7 @@ const StyledComp = styled.div`
     margin: 5px;
     padding: 0px 5px;
     overflow: scroll;
+    position: relative;
 
     & > div {
         border: 1px solid white;
@@ -23,19 +25,34 @@ const StyledComp = styled.div`
     & > div.selected {
         background-color: #555;
     }
+
+    & > div:last-child {
+        position: absolute;
+        bottom: 0px;
+        left: 5px;
+        width: calc(100% - 10px);
+    }
 `;
 
-const List = ({heading='', array=[], onClickObj, onClickEdit, selected}) => {
+const List = ({heading='', array=[], onClickObj, selected}) => {
+    const dispatch = useDispatch();
+    const editMode = useSelector(state => state.editMode);
+
+    const toggleEditMode = () => {
+        dispatch({type: 'SET_EDIT_MODE', payload: !editMode});
+    }
+
     return (
         <StyledComp>
             <h4>{heading}</h4>
             {
                 array.map(obj => {
                     return (
-                        <div onClick={onClickObj(obj.id)} className={selected === obj.id ? 'selected': ''}>{obj.name}</div>
+                        <div onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
                     );
                 })
             }
+            <div onClick={toggleEditMode} className={editMode ? 'selected' : ''}>Edit {heading}</div>
         </StyledComp>
     );
 }

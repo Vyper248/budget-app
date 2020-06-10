@@ -26,7 +26,6 @@ const StyledComp = styled.div`
     & > input, & > select {
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
-        border: 1px solid white;
         width: 150px;
     }
 `;

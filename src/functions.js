@@ -177,3 +177,7 @@ export const checkBudget = (budgets, date, categoryId, transactions) => {
         return '';
     }    
 }
+
+export const capitalize = (string) => {
+    return string.slice(0,1).toUpperCase() + string.slice(1);
+}
