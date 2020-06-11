@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { format, parseISO, parse, compareAsc } from 'date-fns';
 import { parseCurrency } from '../functions';
 
@@ -32,7 +33,9 @@ const StyledTransaction = styled.div`
     }
 `;
 
-const Transactions = ({transactions=[], heading=''}) => {
+const Transactions = ({transactions=[], heading='', accountId}) => {
+    const categories = useSelector(state => state.categories);
+
     //organise by month/year
     let organisedObj = {};
     transactions.forEach(obj => {
@@ -68,7 +71,7 @@ const Transactions = ({transactions=[], heading=''}) => {
                                         <StyledTransaction>
                                             <div>
                                                 <span>{obj.date}</span> 
-                                                <span>{parseCurrency(obj.amount)}</span>
+                                                <span>{getAmount(obj, categories, accountId)}</span>
                                             </div>
                                         </StyledTransaction>
                                     );
@@ -81,6 +84,37 @@ const Transactions = ({transactions=[], heading=''}) => {
             }
         </StyledComp>
     );
+}
+
+//determine whether amount should be positive or negative
+const getAmount = (transaction, categories, accountId) => {
+    //fund addition, so positive
+    if (transaction.type === undefined) return parseCurrency(transaction.amount);
+
+    //transaction for a fund, so negative
+    if (transaction.fund !== undefined) return parseCurrency(-transaction.amount);
+
+    if (transaction.category !== undefined) {
+        let category = categories.find(obj => obj.id === transaction.category);
+        if (category !== undefined) {
+            //transaction for expense category, so negative
+            if (category.type === 'expense') return parseCurrency(-transaction.amount);
+
+            //transaction for income category, so positive
+            if (category.type ===  'income') return parseCurrency(transaction.amount);
+        } else {
+            //has a category, but can't find it, so return 0
+            return parseCurrency(0);
+        }
+    }    
+
+    if (transaction.from !== undefined && accountId !== undefined) {
+        //transfer from this account, so negative
+        if (transaction.from === accountId) return parseCurrency(-transaction.amount);
+
+        //transfer to this account, so positive
+        if (transaction.to === accountId) return parseCurrency(transaction.amount);
+    }
 }
 
 export default Transactions;

@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
 const initialState = {
-    currentPage: 'Categories',
+    currentPage: 'Funds',
     addTransaction: false,
     editMode: false,
     general: {
@@ -26,6 +26,20 @@ const initialState = {
             extraCharges: 0,
             currency: '£',
             dateCreated: '2020-06-03'
+        },
+        {
+            id: 2,
+            name: 'Ulster',
+            description: '',
+            interestRate: 1.0,
+            startingBalance: 0,
+            balance: 0,
+            spending: false,
+            default: false,
+            closed: false,
+            extraCharges: 0,
+            currency: '£',
+            dateCreated: '2019-06-03'
         },
     ],
     categories: [
@@ -155,6 +169,16 @@ const initialState = {
             date: '2020-05-22',
             fund: 1,
             account: 1,
+            dateCreated: '2020-06-03'
+        },
+        {
+            id: 6,
+            type: 'transfer',
+            amount: 60,
+            description: '',
+            date: '2020-05-28',
+            from: 1,
+            to: 2,
             dateCreated: '2020-06-03'
         }
     ],

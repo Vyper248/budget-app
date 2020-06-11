@@ -14,7 +14,7 @@ const fund = {
 
 const account = {
     name: '',
-    description: '',
+    note: '',
     interestRate: 0.0,
     startingBalance: 0,
     balance: 0,
@@ -22,7 +22,7 @@ const account = {
     default: false,
     closed: false,
     extraCharges: 0,
-    currency: '',
+    currency: '£',
 }
 
 const budget = {

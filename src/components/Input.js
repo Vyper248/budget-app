@@ -8,7 +8,7 @@ const StyledComp = styled.input`
     color: var(--text-color);
     padding-left: 10px;
     font-size: 1em;
-    width: 100px;
+    width: ${props => props.width};
     border-radius: 0px;
     -webkit-appearance: none;
 
@@ -18,9 +18,9 @@ const StyledComp = styled.input`
     }
 `;
 
-const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[]}) => {
+const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[], width="100px"}) => {
     if (type === 'dropdown' && (options.length > 0 || groups.length > 0)) return (
-        <StyledComp as='select' onChange={onChange} value={value}>
+        <StyledComp as='select' onChange={onChange} value={value} width={width}>
             <option hidden value={undefined}>Select an Option</option>
         {
             options.length > 0 
@@ -43,7 +43,7 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
     );
 
     return (
-        <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder}/>
+        <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder} width={width}/>
     );
 }
 

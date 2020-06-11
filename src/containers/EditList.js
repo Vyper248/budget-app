@@ -35,8 +35,8 @@ const EditInput = ({label, defaultValue, value, onChange}) => {
     if (label === 'category') return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={categories.map(obj => ({value: obj.id, display: obj.name}))}/>;
     if (typeof defaultValue === 'number') return <Input type="number" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label}/>;
     if (typeof defaultValue === 'string' && defaultValue === 'date') return <Input type="date" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label}/>;
-    if (typeof defaultValue === 'string' && defaultValue.length === 0) return <Input onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label}/>;
-    if (typeof defaultValue === 'string' && defaultValue.length > 0) return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={defaultValue.split(',').map(obj => ({value: obj, display: capitalize(obj)}))}/>;
+    if (typeof defaultValue === 'string' && defaultValue.includes(',') > 0) return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={defaultValue.split(',').map(obj => ({value: obj, display: capitalize(obj)}))}/>;
+    if (typeof defaultValue === 'string') return <Input onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} width={label === 'description' ? '300px' : '100px'}/>;
     if (typeof defaultValue === 'boolean') return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={[{display: 'Yes', value: true}, {display: 'No', value: false}]}/>;
 }
 

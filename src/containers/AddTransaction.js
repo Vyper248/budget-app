@@ -8,7 +8,7 @@ import Button from '../components/Button';
 
 const StyledComp = styled.div`
     position: fixed;
-    top: 30px;
+    top: 28px;
     width: 100%;
 
     & > div {
@@ -44,10 +44,16 @@ const AddTransaction = () => {
         if (amount === 0) return;
         if (date.length === 0) return;
         if (account === undefined) return;
-        if (fund === undefined && category === undefined) return;
+        if (type === 'spend' && fund === undefined && category === undefined) return;
         if (type === 'transfer' && from === undefined && to === undefined) return;
 
-        let transaction = {type, amount: Number(amount), description, date, account, fund, category, from, to};
+        let transaction;
+        if (type === 'spend') {
+            transaction = {type, amount, description, date, account, fund, category};
+        } else if (type === 'transfer') {
+            transaction = {type, amount, date, from, to};
+        }        
+
         dispatch({type: 'ADD_TRANSACTION', payload: transaction});
     }
 
@@ -57,7 +63,7 @@ const AddTransaction = () => {
         if (date.length === 0) return;
         if (fund === undefined) return;
 
-        let fundAddition = {amount: Number(amount), date, fund};        
+        let fundAddition = {amount, date, fund};        
         dispatch({type: 'ADD_FUND_ADDITION', payload: fundAddition});
     }
 
@@ -93,7 +99,7 @@ const AddTransaction = () => {
                 <div>
                     <strong>Add Transaction</strong>
                     <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
-                    <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                    <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
                     <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
                     <LabelledInput label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
                     <Button value="Add Transaction" onClick={addFundAddition} width="140px"/>
@@ -107,15 +113,15 @@ const AddTransaction = () => {
             <div>
                 <strong>Add Transaction</strong>
                 <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
-                <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
                 { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
                 <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-                { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(e.target.value)} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
-                { type === 'transfer' ? <LabelledInput label={'From'} type='dropdown' value={from} onChange={(e) => setFrom(e.target.value)} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
-                { type === 'transfer' ? <LabelledInput label={'To'} type='dropdown' value={to} onChange={(e) => setTo(e.target.value)} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
-                <LabelledInput label={'Group'} type='dropdown' value={undefined} onChange={onChangeGroup} groups={[ 
+                { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
+                { type === 'transfer' ? <LabelledInput label={'From'} type='dropdown' value={from} onChange={(e) => setFrom(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
+                { type === 'transfer' ? <LabelledInput label={'To'} type='dropdown' value={to} onChange={(e) => setTo(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
+                { type === 'transfer' ? null : <LabelledInput label={'Group'} type='dropdown' value={undefined} onChange={onChangeGroup} groups={[ 
                                                                         {label: 'Funds', options: funds.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )} , 
-                                                                        {label: 'Categories', options: categories.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )}  ]}/>
+                                                                        {label: 'Categories', options: categories.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )}  ]}/> }
                 <Button value="Add Transaction" onClick={addTransaction} width="140px"/>
             </div>
         </StyledComp>
