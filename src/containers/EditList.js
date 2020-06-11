@@ -6,6 +6,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import Table from '../components/Table';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 import { modals } from '../modals';
 import { capitalize } from '../functions';
@@ -14,19 +15,6 @@ const StyledComp = styled.div`
     border: 1px solid white;
     margin: 5px 5px 5px 0px;
     overflow: scroll;
-`;
-
-const StyledDeleteIcon = styled.div`
-    color: red;
-
-    :hover {
-        cursor: pointer;
-    }
-
-    & > svg {
-        position: relative;
-        top: 3px;
-    }
 `;
 
 const EditInput = ({label, defaultValue, value, onChange}) => {
@@ -90,7 +78,7 @@ const EditList = ({array=[]}) => {
                                     );
                                 })
                             }
-                                <td><StyledDeleteIcon><FaTrashAlt onClick={onDelete(obj.id)} style={{color: 'red'}}/></StyledDeleteIcon></td>
+                                <td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td>
                             </tr>
                         );
                     })
