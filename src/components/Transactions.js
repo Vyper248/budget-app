@@ -73,7 +73,7 @@ const Transactions = ({transactions=[], heading='', accountId}) => {
                     return (
                         <StyledGroup>
                             <strong>{group.month}</strong>
-                            { group.transactions.map(obj => <Transaction obj={obj} categories={categories} accountId={accountId} showDelete={showDelete}/>) }
+                            { group.transactions.map(obj => <Transaction obj={obj} accountId={accountId} showDelete={showDelete}/>) }
                         </StyledGroup>
                     )
 
