@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
 const initialState = {
-    currentPage: 'Funds',
+    currentPage: 'Home',
     addTransaction: false,
     editMode: false,
     general: {

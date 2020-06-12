@@ -166,6 +166,7 @@ export const parseCurrency = (value) => {
 
 export const checkBudget = (budgets, date, categoryId, transactions) => {
     let budget = budgets.find(obj => {
+        if (obj.category !== categoryId) return false;
         if (compareAsc(parseISO(obj.startDate), parseISO(date)) === 1) return false;
         if (obj.endDate !== undefined && compareAsc(parseISO(obj.endDate), parseISO(date)) === -1) return false;
         return true;

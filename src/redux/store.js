@@ -15,13 +15,13 @@ const localStorageMiddleware = ({getState}) => {
 
 const getFromLocalStorage = () => {
     let state = localStorage.getItem('budgetState');
-    if (state !== null) return JSON.parse(state);
+    if (state !== null) state = JSON.parse(state);
+    state.currentPage = 'Home';
+    state.editMode = false;
+    state.addTransaction = false;
+    return state;
 }
 
 const store = createStore(reducer, getFromLocalStorage(), applyMiddleware(localStorageMiddleware));
-
-// store.subscribe(() => {
-//     console.log('Save Store');
-// });
 
 export default store;
