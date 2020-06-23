@@ -28,12 +28,12 @@ const EditInput = ({label, defaultValue, value, onChange}) => {
     if (typeof defaultValue === 'boolean') return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={[{display: 'Yes', value: true}, {display: 'No', value: false}]}/>;
 }
 
-const EditList = ({array=[]}) => {
+const EditList = ({array=[], vertical=false}) => {
     const dispatch = useDispatch();
     const currentPage = useSelector(state => state.currentPage);
 
     const modalKey = currentPage.toLowerCase();
-    const modalObj = modals[modalKey];
+    const modalObj = {...modals[modalKey]};
     const modal = modalObj.modal;
     const add = 'ADD'+modalObj.editString;
     const update = 'UPDATE'+modalObj.editString;
@@ -51,6 +51,34 @@ const EditList = ({array=[]}) => {
     const onAdd = () => {
         dispatch({type: add, payload: modalObj});
     }
+
+    if (vertical) return (
+        <StyledComp>
+            <h4>Edit {currentPage}</h4>
+            {
+                array.map(obj => {
+                    return (
+                        <Table key={'accounts-'+obj.id} style={{display: 'inline-block', margin: '10px'}}>
+                            <tbody>
+                                {
+                                    Object.keys(modal).map(key => {
+                                        return (
+                                            <tr key={'account-'+key}>
+                                                <td>{key}</td>
+                                                <td><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)}/></td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                                <tr><td>Delete</td><td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td></tr>
+                            </tbody>
+                        </Table>
+                    );
+                })
+            }
+            <Button value="Add New" width="150px" onClick={onAdd}/>
+        </StyledComp>
+    );
 
     return (
         <StyledComp>

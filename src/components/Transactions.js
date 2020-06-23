@@ -35,9 +35,15 @@ const EditButton = styled.div`
     font-size: 1.5em;
 `;
 
-const Transactions = ({transactions=[], heading='', accountId}) => {
-    const categories = useSelector(state => state.categories);
+const Transactions = ({transactions=[], heading='', id}) => {
+    const accounts = useSelector(state => state.accounts);
+    const currentPage = useSelector(state => state.currentPage);
     const [showDelete, setShowDelete] = useState(false);
+
+    let accountId = currentPage === 'Accounts' ? id : undefined;    
+
+    let account = null;
+    if (accountId !== undefined) account = accounts.find(obj => obj.id === accountId);
 
     //organise by month/year
     let organisedObj = {};
@@ -64,6 +70,14 @@ const Transactions = ({transactions=[], heading='', accountId}) => {
         setShowDelete(!showDelete);
     }
 
+    let total = transactions.reduce((t,c) => {
+        t += c.amount;
+        console.log(c);
+        return t;
+    }, 0);
+    console.log(total);
+    
+
     return (
         <StyledComp>
             <h4>{heading} - Transactions</h4>
@@ -71,13 +85,21 @@ const Transactions = ({transactions=[], heading='', accountId}) => {
             {
                 organisedArr.map(group => {
                     return (
-                        <StyledGroup>
+                        <StyledGroup key={'transactionGroup-'+group.month}>
                             <strong>{group.month}</strong>
-                            { group.transactions.map(obj => <Transaction obj={obj} accountId={accountId} showDelete={showDelete}/>) }
+                            { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete}/>) }
                         </StyledGroup>
                     )
 
                 })
+            }
+            {
+                accountId !== undefined ? (
+                    <StyledGroup>
+                        <strong>Opening Balance</strong>
+                        <Transaction obj={{date: account.dateOpened, amount: account.startingBalance}} accountId={accountId}/>
+                    </StyledGroup>
+                ) : null
             }
         </StyledComp>
     );

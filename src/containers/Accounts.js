@@ -37,8 +37,8 @@ const Categories = () => {
                 <ListContainer>
                     <List heading={'Accounts'} array={accounts} onClickObj={onClickObj} selected={account}/>
                     { editMode 
-                        ? <EditList array={accounts}/>
-                        : <Transactions transactions={filteredTransactions} heading={accountName} accountId={account}/> 
+                        ? <EditList array={accounts} vertical={true}/>
+                        : <Transactions transactions={filteredTransactions} heading={accountName} id={account}/> 
                     }
                 </ListContainer>
             </Container>
