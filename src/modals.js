@@ -23,6 +23,7 @@ const account = {
     closed: false,
     extraCharges: 0,
     currency: '£',
+    dateOpened: 'date'
 }
 
 const budget = {
