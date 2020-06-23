@@ -25,6 +25,7 @@ const initialState = {
             closed: false,
             extraCharges: 0,
             currency: '£',
+            dateOpened: '2020-01-16',
             dateCreated: '2020-06-03'
         },
         {
@@ -39,6 +40,7 @@ const initialState = {
             closed: false,
             extraCharges: 0,
             currency: '£',
+            dateOpened: '2019-04-11',
             dateCreated: '2019-06-03'
         },
     ],
@@ -234,6 +236,6 @@ const replaceObject = (arr, object) => {
 }
 
 const getNewArray = (arr, object) => {
-    object.id = Number(format(new Date(),'yyyyMMddHHmmss'));
+    object.id = Number(format(new Date(),'yyyyMMddHHmmss'));    
     return [...arr, object];
 }
