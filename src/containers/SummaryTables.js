@@ -30,9 +30,9 @@ const SummaryTables = () => {
                 <thead>
                     <tr>
                         <td></td>
-                        { incomeCategories.map(obj => <td>{obj.name}</td>) }
-                        { funds.map(obj => <td>{obj.name}</td>) }
-                        { expenseCategories.map(obj => <td>{obj.name}</td>) }
+                        { incomeCategories.map(obj => <td key={'heading-'+obj.id}>{obj.name}</td>) }
+                        { funds.map(obj => <td key={'heading-'+obj.id}>{obj.name}</td>) }
+                        { expenseCategories.map(obj => <td key={'heading-'+obj.id}>{obj.name}</td>) }
                         <td>Remaining</td>
                     </tr>
                 </thead>
@@ -40,11 +40,11 @@ const SummaryTables = () => {
                     {
                         dates.map(date => {
                             return (
-                                <tr>
+                                <tr key={'summaryDate-'+date}>
                                     <td>{date}</td>
-                                    { incomeCategories.map(obj => <td>{parseCurrency(rows[date][obj.name])}</td>) }
-                                    { funds.map(obj => <td>{parseCurrency(rows[date][obj.name])}</td>) }
-                                    { expenseCategories.map(obj => <td>{parseCurrency(rows[date][obj.name])}{checkBudget(budgets, date, obj.id, transactions)}</td>) }
+                                    { incomeCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
+                                    { funds.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
+                                    { expenseCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}{checkBudget(budgets, date, obj.id, transactions)}</td>) }
                                     <td>{ parseCurrency(rows[date].remaining) }</td>
                                 </tr>
                             )
@@ -57,14 +57,14 @@ const SummaryTables = () => {
             <Table>
                 <thead>
                     <tr>
-                        { incomeCategories.map(obj => <td>{obj.name}</td>) }
-                        { expenseCategories.map(obj => <td>{obj.name}</td>) }
+                        { incomeCategories.map(obj => <td key={'totalsHeading-'+obj.id}>{obj.name}</td>) }
+                        { expenseCategories.map(obj => <td key={'totalsHeading-'+obj.id}>{obj.name}</td>) }
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        { incomeCategories.map(obj => <td>{parseCurrency(summaryTotals[obj.name])}</td>) }
-                        { expenseCategories.map(obj => <td>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        { incomeCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
                     </tr>
                 </tbody>
             </Table>
@@ -74,25 +74,25 @@ const SummaryTables = () => {
                 <thead>
                     <tr>
                         <td></td>
-                        { funds.map(obj => <td>{obj.name}</td>) }
+                        { funds.map(obj => <td key={'fundHeading-'+obj.id}>{obj.name}</td>) }
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Target</td>
-                        { funds.map(obj => <td>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].target) : parseCurrency(0)}</td>) }
+                        { funds.map(obj => <td key={'fundTotalTarget-'+obj.id}>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].target) : parseCurrency(0)}</td>) }
                     </tr>
                     <tr>
                         <td>Saved</td>
-                        { funds.map(obj => <td>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].saved) : parseCurrency(0)}</td>) }
+                        { funds.map(obj => <td key={'fundTotalSaved-'+obj.id}>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].saved) : parseCurrency(0)}</td>) }
                     </tr>
                     <tr>
                         <td>Spent</td>
-                        { funds.map(obj => <td>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].spent) : parseCurrency(0)}</td>) }
+                        { funds.map(obj => <td key={'fundTotalSpent-'+obj.id}>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].spent) : parseCurrency(0)}</td>) }
                     </tr>
                     <tr>
                         <td>Remaining</td>
-                        { funds.map(obj => <td>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].remaining) : parseCurrency(0)}</td>) }
+                        { funds.map(obj => <td key={'fundTotalRemaining-'+obj.id}>{summaryTotals[obj.name] !== undefined ? parseCurrency(summaryTotals[obj.name].remaining) : parseCurrency(0)}</td>) }
                     </tr>
                 </tbody>
             </Table>

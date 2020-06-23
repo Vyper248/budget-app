@@ -48,7 +48,7 @@ const List = ({heading='', array=[], onClickObj, selected}) => {
             {
                 array.map(obj => {
                     return (
-                        <div onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
+                        <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
                     );
                 })
             }
