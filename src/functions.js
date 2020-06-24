@@ -182,3 +182,44 @@ export const checkBudget = (budgets, date, categoryId, transactions) => {
 export const capitalize = (string) => {
     return string.slice(0,1).toUpperCase() + string.slice(1);
 }
+
+export const toCamelCase = (string) => {
+    let removeSpaces = string.replace(/ /g, '');
+    return removeSpaces.slice(0,1).toLowerCase() + removeSpaces.slice(1);
+}
+
+export const fromCamelCase = (string) => {
+    let replaceCapitals = string.replace(/[A-Z]/g, ' $&');
+    return capitalize(replaceCapitals);
+}
+
+//determine whether amount should be positive or negative
+export const getAmount = (transaction, categories, accountId, asCurrency=true) => {
+    //fund addition, so positive
+    if (transaction.type === undefined) return asCurrency ? parseCurrency(transaction.amount) : transaction.amount;
+
+    //transaction for a fund, so negative
+    if (transaction.fund !== undefined) return asCurrency ? parseCurrency(-transaction.amount) : -transaction.amount;
+
+    if (transaction.category !== undefined) {
+        let category = categories.find(obj => obj.id === transaction.category);
+        if (category !== undefined) {
+            //transaction for expense category, so negative
+            if (category.type === 'expense') return asCurrency ? parseCurrency(-transaction.amount) : -transaction.amount;
+
+            //transaction for income category, so positive
+            if (category.type ===  'income') return asCurrency ? parseCurrency(transaction.amount) : transaction.amount;
+        } else {
+            //has a category, but can't find it, so return 0
+            return asCurrency ? parseCurrency(0) : 0;
+        }
+    }    
+
+    if (transaction.from !== undefined && accountId !== undefined) {
+        //transfer from this account, so negative
+        if (transaction.from === accountId) return asCurrency ? parseCurrency(-transaction.amount) : -transaction.amount;
+
+        //transfer to this account, so positive
+        if (transaction.to === accountId) return asCurrency ? parseCurrency(transaction.amount) : transaction.amount;
+    }
+}

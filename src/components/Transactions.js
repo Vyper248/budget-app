@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { format, parseISO, parse, compareAsc } from 'date-fns';
 import { FaEdit } from 'react-icons/fa';
 
+import { getAmount } from '../functions';
+
 import Transaction from './Transaction';
 import IconButton from './IconButton';
 
@@ -37,6 +39,7 @@ const EditButton = styled.div`
 
 const Transactions = ({transactions=[], heading='', id}) => {
     const accounts = useSelector(state => state.accounts);
+    const categories = useSelector(state => state.categories);
     const currentPage = useSelector(state => state.currentPage);
     const [showDelete, setShowDelete] = useState(false);
 
@@ -71,12 +74,12 @@ const Transactions = ({transactions=[], heading='', id}) => {
     }
 
     let total = transactions.reduce((t,c) => {
-        t += c.amount;
-        console.log(c);
+        t += getAmount(c, categories, accountId, false);
         return t;
-    }, 0);
+    }, 0);        
+
+    if (accountId !== undefined) total += account.startingBalance;
     console.log(total);
-    
 
     return (
         <StyledComp>

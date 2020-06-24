@@ -16,6 +16,10 @@ const StyledComp = styled.input`
         outline: none;
         border: 1px solid #33C9F9;
     }
+
+    &::-webkit-calendar-picker-indicator {
+        filter: invert(100%);
+    }
 `;
 
 const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[], width="100px"}) => {
@@ -25,14 +29,14 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
         {
             options.length > 0 
             ? options.map(option => {
-                return <option value={option.value}>{option.display}</option>
+                return <option key={'inputOption-'+option.value} value={option.value}>{option.display}</option>
             })
             : groups.map(group => {
                 return (
-                    <optgroup label={group.label}>
+                    <optgroup key={'inputGroup-'+group.label} label={group.label}>
                     {
                         group.options.map(option => {
-                            return <option value={option.value}>{option.display}</option>
+                            return <option key={'inputGroupOption-'+option.value} value={option.value}>{option.display}</option>
                         })
                     }
                     </optgroup>
