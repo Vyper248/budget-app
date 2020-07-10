@@ -1,12 +1,18 @@
 import React from 'react';
+import { useMediaQuery } from 'react-responsive'
 
 import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
 
 import Table from '../components/Table';
+import Grid from '../components/Grid';
+import AmountGroup from '../components/AmountGroup';
 
 import { getLatestDates, getSummaryRows, getSummaryTotals, parseCurrency, checkBudget } from '../functions';
 
 const SummaryTables = () => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
+
     const general = useSelector(state => state.general);
     const transactions = useSelector(state => state.transactions);
     const categories = useSelector(state => state.categories);
@@ -22,6 +28,23 @@ const SummaryTables = () => {
     const expenseCategories = categories.filter(obj => obj.type === 'expense');
 
     const summaryTotals = getSummaryTotals(transactions, funds, categories, fundAdditions);
+
+    if (isMobile) {
+        let latestDate = dates[dates.length-1];
+        let displayDate = format(new Date(latestDate), 'do MMMM yyyy');
+        
+        return (
+            <div>
+                <Grid>
+                    <div style={{fontSize: '1.5em', gridColumnStart: 1, gridColumnEnd: 3, fontWeight: 'bold'}}>{displayDate}</div>
+                    { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='income'/>) }
+                    { funds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='fund'/>) }
+                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])+checkBudget(budgets, latestDate, obj.id, transactions)} type='expense'/>) }
+                    <AmountGroup title='Remaining' amount={parseCurrency(rows[latestDate].remaining)} type='remaining'/>
+                </Grid>
+            </div>
+        );
+    }    
 
     return (
         <div>

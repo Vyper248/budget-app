@@ -7,20 +7,10 @@ import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
 
 const StyledComp = styled.div`
-    position: fixed;
-    top: 28px;
-    width: 100%;
-
-    & > div {
-        border: 1px solid white;
-        width: 300px;
-        margin: auto;
-        padding: 10px;
-        background-color: black;
-    }
+    
 `;
 
-const AddTransaction = () => {
+const AddTransaction = ({onAdd=()=>{}}) => {
     const dispatch = useDispatch();
 
     const accounts = useSelector(state => state.accounts);
@@ -55,6 +45,7 @@ const AddTransaction = () => {
         }        
 
         dispatch({type: 'ADD_TRANSACTION', payload: transaction});
+        onAdd();
     }
 
     const addFundAddition = () => {
@@ -65,6 +56,7 @@ const AddTransaction = () => {
 
         let fundAddition = {amount, date, fund};        
         dispatch({type: 'ADD_FUND_ADDITION', payload: fundAddition});
+        onAdd();
     }
 
     const onChangeGroup = (e) => {
@@ -95,36 +87,32 @@ const AddTransaction = () => {
 
     if (type === 'fundAddition') {
         return (
-            <StyledComp>
-                <div>
-                    <strong>Add Transaction</strong>
-                    <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
-                    <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
-                    <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-                    <LabelledInput label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
-                    <Button value="Add Transaction" onClick={addFundAddition} width="140px"/>
-                </div>
-            </StyledComp>
-        );
-    }
-
-    return (
-        <StyledComp>
             <div>
                 <strong>Add Transaction</strong>
                 <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
                 <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
-                { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
                 <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-                { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
-                { type === 'transfer' ? <LabelledInput label={'From'} type='dropdown' value={from} onChange={(e) => setFrom(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
-                { type === 'transfer' ? <LabelledInput label={'To'} type='dropdown' value={to} onChange={(e) => setTo(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
-                { type === 'transfer' ? null : <LabelledInput label={'Group'} type='dropdown' value={undefined} onChange={onChangeGroup} groups={[ 
-                                                                        {label: 'Funds', options: funds.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )} , 
-                                                                        {label: 'Categories', options: categories.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )}  ]}/> }
-                <Button value="Add Transaction" onClick={addTransaction} width="140px"/>
+                <LabelledInput label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
+                <Button value="Add Transaction" onClick={addFundAddition} width="140px"/>
             </div>
-        </StyledComp>
+        );
+    }
+
+    return (
+        <div>
+            <strong>Add Transaction</strong>
+            <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/>
+            <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
+            { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
+            <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
+            { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
+            { type === 'transfer' ? <LabelledInput label={'From'} type='dropdown' value={from} onChange={(e) => setFrom(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
+            { type === 'transfer' ? <LabelledInput label={'To'} type='dropdown' value={to} onChange={(e) => setTo(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
+            { type === 'transfer' ? null : <LabelledInput label={'Group'} type='dropdown' value={undefined} onChange={onChangeGroup} groups={[ 
+                                                                    {label: 'Funds', options: funds.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )} , 
+                                                                    {label: 'Categories', options: categories.map(obj => ({value: obj.id+':'+obj.name, display: obj.name}) )}  ]}/> }
+            <Button value="Add Transaction" onClick={addTransaction} width="140px"/>
+        </div>
     );
 }
 
