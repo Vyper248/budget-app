@@ -77,7 +77,7 @@ const HeaderDropdown = ({value, options, onChange}) => {
             <div className='dropdownDisplay' onClick={toggleOpen}>{currentValue.display}<TiArrowSortedDown/></div>
             <div className='dropdownGroup'>
             {
-                options.map(obj => <div className='dropdownItem' onClick={onClickItem(obj.value)}>{obj.display}</div>)
+                options.map(obj => <div key={'headerDropdown-'+obj.value} className='dropdownItem' onClick={onClickItem(obj.value)}>{obj.display}</div>)
             }
                 <div className='dropdownItem' onClick={onClickEdit}>Edit</div>
             </div>

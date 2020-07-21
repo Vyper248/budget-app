@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTrashAlt } from 'react-icons/fa';
+import { format, parseISO } from 'date-fns';
 
 import { parseCurrency, getAmount } from '../functions';
 
@@ -9,6 +10,7 @@ import IconButton from '../components/IconButton';
 
 const StyledComp = styled.div`
     & > table {
+        width: 100%;
         max-width: 650px;
         margin: auto;
     }
@@ -18,23 +20,22 @@ const StyledComp = styled.div`
     }
 
     & td:nth-child(1) {
-        width: 110px;
         text-align: left;
     }
 
     & td:nth-child(2) {
-        width: 200px;
-        text-align: center;
-    }
-
-    & td:nth-child(3) {
         width: 100px;
         text-align: right;
     }
 
-    & td:nth-child(4) {
+    & td:nth-child(3) {
         width: 50px;
         text-align: right;
+    }
+
+    & td span.date {
+        font-size: 0.8em;
+        color: #CCC;
     }
 
     @media screen and (max-width: 700px) {        
@@ -47,11 +48,11 @@ const StyledComp = styled.div`
         }
 
         & tr > td:first-child {
-            padding-left: 5px;
+            padding-left: 15px;
         }
 
         & tr > td:last-child {
-            padding-right: 5px;
+            padding-right: 15px;
         }
     }
 `;
@@ -61,19 +62,26 @@ const Transaction = ({obj, accountId, showDelete=false}) => {
     const categories = useSelector(state => state.categories);
     const funds = useSelector(state => state.funds);
     const accounts = useSelector(state => state.accounts);
+    const currentPage = useSelector(state => state.currentPage);
 
     const remove = () => {     
         if (obj.type === undefined) dispatch({type: 'REMOVE_FUND_ADDITION', payload: obj.id});
         else dispatch({type: 'REMOVE_TRANSACTION', payload: obj.id});
     }
 
+    let date = format(parseISO(obj.date), 'MMM d, yyyy');
+    let description = getType(obj, accountId, categories, funds, accounts, currentPage);
+
     return (
         <StyledComp>
             <table>
                 <tbody>
                     <tr>
-                        <td>{obj.date}</td>
-                        <td style={{width: accountId !== undefined ? '200px' : '100px'}}>{getType(obj, accountId, categories, funds, accounts)}</td>
+                        <td>
+                            { description.length > 0 ? <span className='description'>{ getType(obj, accountId, categories, funds, accounts, currentPage) }</span> : null }
+                            { description.length > 0 ? <br/> : null }
+                            { description.length > 0 ? <span className='date'>{ date }</span> : <span className='description'>{ date }</span>}
+                        </td>
                         <td>{getAmount(obj, categories, accountId)}</td>
                         { showDelete ? <td><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px'/></td> : null }
                     </tr>
@@ -83,7 +91,18 @@ const Transaction = ({obj, accountId, showDelete=false}) => {
     );
 }
 
-const getType = (transaction, accountId, categories, funds, accounts) => {
+const getType = (transaction, accountId, categories, funds, accounts, page) => {
+    if (page === 'Categories') {
+        let id = transaction.account;
+        let account = accounts.find(obj => obj.id === id);
+        if (account !== undefined) {
+            if (transaction.description.length > 0) return account.name + ' - ' + transaction.description;
+            return account.name;
+        } else {
+            if (transaction.description.length > 0) return transaction.description;
+        }
+    }
+
     if (accountId === undefined) return '';
 
     //get category name
