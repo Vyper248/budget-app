@@ -62,6 +62,16 @@ export const getSummaryTotals = (transactions, funds, categories, fundAdditions)
     transactions.forEach(addToTotals);
     fundAdditions.forEach(addToTotals);
 
+    //work out total remaining
+    const incomeCategories = categories.filter(obj => obj.type === 'income');
+    const expenseCategories = categories.filter(obj => obj.type === 'expense');
+
+    let totalRemaining = 0;
+    incomeCategories.forEach(category => totalRemaining += obj[category.name]);
+    expenseCategories.forEach(category => totalRemaining -= obj[category.name]);
+    funds.forEach(fund => totalRemaining -= obj[fund.name].saved);
+    obj.remaining = totalRemaining;
+
     return obj;
 }
 
@@ -144,6 +154,8 @@ export const parseCurrency = (value) => {
     let { general } = store.getState();    
     let { currencySymbol, showDecimals } = general;    
 
+    //make sure it doens't return -£0.00
+    if (value > -0.009 && value < 0.009) return `${currencySymbol}0${showDecimals ? '.00' : ''}`;
     if (value === null || value === undefined || value === 0) return `${currencySymbol}0${showDecimals ? '.00' : ''}`;
     let string = Number(value).toFixed(showDecimals ? 2 : 0);    
 
@@ -177,6 +189,11 @@ export const checkBudget = (budgets, date, categoryId, transactions) => {
     } else {
         return '';
     }    
+}
+
+export const checkFundTarget = (fund) => {
+    if (fund.target !== 0) return ` / ${parseCurrency(fund.target)}`;
+    else return '';
 }
 
 export const capitalize = (string) => {
