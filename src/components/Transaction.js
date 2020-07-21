@@ -36,6 +36,24 @@ const StyledComp = styled.div`
         width: 50px;
         text-align: right;
     }
+
+    @media screen and (max-width: 700px) {        
+        & > table {
+            width: 100%;
+        }
+
+        & td {
+            height: 40px;
+        }
+
+        & tr > td:first-child {
+            padding-left: 5px;
+        }
+
+        & tr > td:last-child {
+            padding-right: 5px;
+        }
+    }
 `;
 
 const Transaction = ({obj, accountId, showDelete=false}) => {

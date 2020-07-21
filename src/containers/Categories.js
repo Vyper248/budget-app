@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
@@ -8,6 +9,8 @@ import Container from '../components/Container';
 import EditList from './EditList';
 
 const Categories = () => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
+
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
     const categories = useSelector(state => state.categories);
@@ -34,10 +37,10 @@ const Categories = () => {
         <div>  
             <Container>
                 <ListContainer>
-                    <List heading={'Categories'} array={categories} onClickObj={onClickObj} selected={category}/>
+                    { isMobile ? null : <List heading={'Categories'} array={categories} onClickObj={onClickObj} selected={category}/> }
                     { editMode 
                         ? <EditList array={categories}/>
-                        : <Transactions transactions={filteredTransactions} heading={categoryName}/> 
+                        : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={categories} id={category}/> 
                     }
                 </ListContainer>
             </Container>

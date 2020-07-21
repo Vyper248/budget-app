@@ -15,6 +15,11 @@ const StyledComp = styled.div`
     border: 1px solid white;
     margin: 5px 5px 5px 0px;
     overflow: scroll;
+
+    @media screen and (max-width: 700px) {
+        margin: 0px;
+        border: none;
+    }
 `;
 
 const EditInput = ({label, defaultValue, value, onChange, width='100px'}) => {

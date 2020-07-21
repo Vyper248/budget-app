@@ -3,17 +3,24 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { format, parseISO, parse, compareAsc } from 'date-fns';
 import { FaEdit } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
 
 import { getAmount } from '../functions';
 
 import Transaction from './Transaction';
 import IconButton from './IconButton';
+import HeaderDropdown from './HeaderDropdown';
 
 const StyledComp = styled.div`
     border: 1px solid white;
     margin: 5px 5px 5px 0px;
     overflow: scroll;
     position: relative;
+
+    @media screen and (max-width: 700px) {
+        margin: 0px;
+        border: none;
+    }
 `;
 
 const StyledGroup = styled.div`
@@ -28,6 +35,26 @@ const StyledGroup = styled.div`
         margin-top: 5px;
         border-top: 1px solid gray;
     }
+
+    @media screen and (max-width: 700px) {
+        margin: 0px;
+
+        & > div {
+            padding: 0px;
+        }
+
+        & > div:first-of-type {
+            margin-top: 0px;
+            border-top: none;
+        }
+
+        & > strong {
+            display: block;
+            width: 100%;
+            background-color: gray;
+            padding: 10px;
+        }
+    }
 `;
 
 const EditButton = styled.div`
@@ -35,9 +62,15 @@ const EditButton = styled.div`
     right: 12px;
     top: 10px;
     font-size: 1.5em;
+
+    @media screen and (max-width: 700px) {
+        top: 15px;
+    }
 `;
 
-const Transactions = ({transactions=[], heading='', id}) => {
+const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[]}) => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
+
     const accounts = useSelector(state => state.accounts);
     const categories = useSelector(state => state.categories);
     const currentPage = useSelector(state => state.currentPage);
@@ -73,6 +106,10 @@ const Transactions = ({transactions=[], heading='', id}) => {
         setShowDelete(!showDelete);
     }
 
+    const onChangePage = (id) => {
+        onClickDropdown(Number(id))();
+    }
+
     let total = transactions.reduce((t,c) => {
         t += getAmount(c, categories, accountId, false);
         return t;
@@ -83,7 +120,8 @@ const Transactions = ({transactions=[], heading='', id}) => {
 
     return (
         <StyledComp>
-            <h4>{heading} - Transactions</h4>
+            { isMobile ? null : <h4>{heading} - Transactions</h4> }
+            { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
             <EditButton><IconButton Icon={FaEdit} color='white' onClick={toggleDelete}/></EditButton>
             {
                 organisedArr.map(group => {

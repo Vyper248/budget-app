@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
@@ -8,6 +9,8 @@ import Container from '../components/Container';
 import EditList from './EditList';
 
 const Funds = () => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
+
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
     const funds = useSelector(state => state.funds);
@@ -41,10 +44,10 @@ const Funds = () => {
         <div>  
             <Container>
                 <ListContainer>
-                    <List heading={'Funds'} array={funds} onClickObj={onClickObj} selected={fund}/>
+                    { isMobile ? null : <List heading={'Funds'} array={funds} onClickObj={onClickObj} selected={fund}/> }
                     { editMode 
                         ? <EditList array={funds}/>
-                        : <Transactions transactions={combined} heading={fundName}/> 
+                        : <Transactions transactions={combined} heading={fundName} onClickDropdown={onClickObj} objArray={funds} id={fund}/> 
                     }
                 </ListContainer>
             </Container>
