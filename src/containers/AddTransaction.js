@@ -16,7 +16,9 @@ const AddTransaction = ({onAdd=()=>{}}) => {
     const accounts = useSelector(state => state.accounts);
     const funds = useSelector(state => state.funds);
     const categories = useSelector(state => state.categories);
-    let defaultAccount = accounts.length > 0 ? accounts[0].id : undefined;
+
+    const filteredAccounts = accounts.filter(obj => obj.spending === true);
+    let defaultAccount = filteredAccounts.length > 0 ? filteredAccounts[0].id : undefined;
 
     const [type, setType] = useState('spend');
     const [amount, setAmount] = useState(0);
@@ -105,7 +107,7 @@ const AddTransaction = ({onAdd=()=>{}}) => {
             <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
             { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
             <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-            { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
+            { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={filteredAccounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
             { type === 'transfer' ? <LabelledInput label={'From'} type='dropdown' value={from} onChange={(e) => setFrom(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
             { type === 'transfer' ? <LabelledInput label={'To'} type='dropdown' value={to} onChange={(e) => setTo(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> : null }
             { type === 'transfer' ? null : <LabelledInput label={'Group'} type='dropdown' value={undefined} onChange={onChangeGroup} groups={[ 
