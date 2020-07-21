@@ -5,6 +5,7 @@ const Table = styled.table`
     ${'' /* border-collapse: collapse; */}
     border-spacing: 0px;
     overflow: hidden;
+    border-radius: 5px;
 
     & thead td {
         background-color: #555;
@@ -36,17 +37,33 @@ const Table = styled.table`
     }
 
     & td {
-        padding: 10px;
-        border-right: 1px solid gray;
-        border-bottom: 1px solid gray;
+        padding: 10px 15px;
+        border-right: 1px solid #444;
+        border-bottom: 1px solid #444;
     }
 
     & thead tr:first-child td {
-        border-top: 1px solid gray;
+        border-top: 1px solid #444;
     }
 
     & tr td:first-child {
-        border-left: 1px solid gray;
+        border-left: 1px solid #444;
+    }
+
+    & thead tr:first-child td:first-child {
+        border-top-left-radius: 5px;
+    }
+
+    & thead tr:first-child td:last-child {
+        border-top-right-radius: 5px;
+    }
+
+    & tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 5px;
+    }
+
+    & tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 5px;
     }
 `;
 
