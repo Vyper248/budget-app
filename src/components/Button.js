@@ -6,7 +6,7 @@ const StyledComp = styled.div`
     border: 1px solid var(--text-color);
     border-radius: 5px;
     height: var(--input-height);
-    display: flex;
+    display: ${props => props.inline ? 'inline flex' : 'flex'};
     justify-content: center;
     align-items: center;
     width: ${props => props.width};
@@ -18,9 +18,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%'}) => {
+const Button = ({value, onClick, width='100%', inline=false}) => {
     return (
-        <StyledComp width={width} onClick={onClick}>{value}</StyledComp>
+        <StyledComp width={width} onClick={onClick} inline={inline}>{value}</StyledComp>
     );
 }
 
