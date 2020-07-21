@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 const StyledComp = styled.div`
     color: ${props => props.color};
+    display: inline-block;
+    font-size: ${props => props.size};
     
     :hover {
         cursor: pointer;
@@ -14,9 +16,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const IconButton = ({Icon, onClick, color='white', topAdjust='3px'}) => {
+const IconButton = ({Icon, onClick, color='white', topAdjust='3px', size='1em'}) => {
     return (
-        <StyledComp color={color} topAdjust={topAdjust}>
+        <StyledComp color={color} topAdjust={topAdjust} size={size}>
             <Icon onClick={onClick}/>
         </StyledComp>
     );
