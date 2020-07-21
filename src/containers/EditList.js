@@ -41,6 +41,9 @@ const EditList = ({array=[], vertical=false}) => {
 
     const onChange = (obj, key) => (e) => {
         obj[key] = e.target.value;
+        //make sure false and true are boolean not string
+        if (obj[key] === 'false') obj[key] = false;
+        if (obj[key] === 'true') obj[key] = true;
         dispatch({type: update, payload: obj});
     }
 
@@ -88,7 +91,7 @@ const EditList = ({array=[], vertical=false}) => {
                     <tr>
                     {
                         Object.keys(modal).map(key => {
-                            return <td>{fromCamelCase(key)}</td>
+                            return <td key={"EditListHeading-"+key}>{fromCamelCase(key)}</td>
                         })
                     }
                         <td></td>
@@ -96,13 +99,13 @@ const EditList = ({array=[], vertical=false}) => {
                 </thead>
                 <tbody>
                 {
-                    array.map(obj => {
+                    array.map((obj, i) => {
                         return (
-                            <tr>
+                            <tr key={"EditListRow-"+i}>
                             {
-                                Object.keys(modal).map(key => {
+                                Object.keys(modal).map((key,j) => {
                                     return (
-                                        <td><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)}/></td>
+                                        <td key={"EditListData-"+key+i}><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)}/></td>
                                     );
                                 })
                             }
