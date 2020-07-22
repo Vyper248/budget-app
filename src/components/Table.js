@@ -6,6 +6,7 @@ const Table = styled.table`
     border-spacing: 0px;
     overflow: hidden;
     border-radius: 5px;
+    background-color: black;
 
     & thead td {
         background-color: #555;

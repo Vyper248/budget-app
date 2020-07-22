@@ -39,7 +39,7 @@ const Categories = () => {
                 <ListContainer>
                     { isMobile ? null : <List heading={'Categories'} array={categories} onClickObj={onClickObj} selected={category}/> }
                     { editMode 
-                        ? <EditList array={categories}/>
+                        ? <EditList array={categories} onClickDropdown={onClickObj} id={category}/>
                         : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={categories} id={category}/> 
                     }
                 </ListContainer>

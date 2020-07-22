@@ -7,7 +7,7 @@ const StyledComp = styled.div`
     font-size: ${props => props.size};
     ${props => props.bordered ? 'border: 1px solid white' : ''};
     width: ${props => props.width ? props.width : 'auto'};
-    padding: 5px;
+    padding: ${props => props.bordered ? '5px' : '0px'};
     border-radius: 5px;
     
     :hover {

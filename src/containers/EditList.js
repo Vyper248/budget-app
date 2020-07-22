@@ -2,14 +2,17 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FaTrashAlt } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
 
 import Table from '../components/Table';
-import Input from '../components/Input';
 import Button from '../components/Button';
 import IconButton from '../components/IconButton';
+import HeaderDropdown from '../components/HeaderDropdown';
+import EditInput from '../components/EditInput';
+import MobileEditGroup from '../components/MobileEditGroup';
 
 import { modals } from '../modals';
-import { capitalize, fromCamelCase } from '../functions';
+import { fromCamelCase } from '../functions';
 
 const StyledComp = styled.div`
     border: 1px solid white;
@@ -22,18 +25,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const EditInput = ({label, defaultValue, value, onChange, width='100px'}) => {
-    const categories = useSelector(state => state.categories);
+const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
 
-    if (label === 'category') return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={categories.map(obj => ({value: obj.id, display: obj.name}))} width={width}/>;
-    if (typeof defaultValue === 'number') return <Input type="number" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} width={width}/>;
-    if (typeof defaultValue === 'string' && defaultValue === 'date') return <Input type="date" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} width={width}/>;
-    if (typeof defaultValue === 'string' && defaultValue.includes(',') > 0) return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={defaultValue.split(',').map(obj => ({value: obj, display: capitalize(obj)}))}/>;
-    if (typeof defaultValue === 'string') return <Input onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} width={label === 'description' ? '300px' : width}/>;
-    if (typeof defaultValue === 'boolean') return <Input type="dropdown" onChange={onChange} value={value !== undefined ? value : defaultValue} placeholder={label} options={[{display: 'Yes', value: true}, {display: 'No', value: false}]} width={width}/>;
-}
-
-const EditList = ({array=[], vertical=false}) => {
     const dispatch = useDispatch();
     const currentPage = useSelector(state => state.currentPage);
 
@@ -56,22 +50,44 @@ const EditList = ({array=[], vertical=false}) => {
         dispatch({type: remove, payload: id});
     }
 
-    const onAdd = () => {        
-        dispatch({type: add, payload: modal});
+    const onAdd = () => {      
+        let newObj = {...modal};
+        Object.keys(newObj).forEach(key => {
+            if (typeof newObj[key] === 'string' && newObj[key].includes(',')) newObj[key] = newObj[key].split(',')[0];
+        });  
+        dispatch({type: add, payload: newObj});
     }
 
-    if (vertical) return (
+    const onChangePage = (id) => {
+        onClickDropdown(Number(id))();
+    }
+
+    if (isMobile) return (
+        <StyledComp>
+            <HeaderDropdown value={'Edit'} options={array.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} />
+            {
+                array.map(obj => {
+                    return (
+                        <MobileEditGroup key={'MobileEditGroup-'+obj.id} modal={modal} obj={obj} onChange={onChange} onDelete={onDelete}/>
+                    );
+                })
+            }
+            <Button value="Add New" width="150px" onClick={onAdd} color='#0F0'/>
+        </StyledComp>
+    );
+
+    if (vertical || isMobile) return (
         <StyledComp>
             <h4>Edit {currentPage}</h4>
             {
                 array.map(obj => {
                     return (
-                        <Table key={'accounts-'+obj.id} style={{display: 'inline-block', margin: '10px'}} padding='2px'>
+                        <Table key={'EditListTable-'+obj.id} style={{display: 'inline-block', margin: '10px'}} padding='2px'>
                             <tbody>
                                 {
                                     Object.keys(modal).map(key => {
                                         return (
-                                            <tr key={'account-'+key}>
+                                            <tr key={'EditListRow-'+key}>
                                                 <td>{fromCamelCase(key)}</td>
                                                 <td><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)} width='140px'/></td>
                                             </tr>
@@ -91,7 +107,7 @@ const EditList = ({array=[], vertical=false}) => {
     return (
         <StyledComp>
             <h4>Edit {currentPage}</h4>
-            <Table>
+            <Table padding='2px'>
                 <thead>
                     <tr>
                     {

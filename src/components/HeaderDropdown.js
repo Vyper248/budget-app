@@ -50,11 +50,12 @@ const StyledComp = styled.div`
     }
 `;
 
-const HeaderDropdown = ({value, options, onChange}) => {
+const HeaderDropdown = ({value, options=[], onChange}) => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
 
     let currentValue = options.find(obj => obj.value === value);
+    if (value === 'Edit') currentValue = {display: 'Edit'};
 
     const toggleOpen = () => {
         setOpen(!open);
