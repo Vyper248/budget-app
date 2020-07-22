@@ -88,7 +88,7 @@ const SummaryTables = () => {
                     <Grid>
                         { getHeading() }
                         { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='income'/>) }
-                        { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name].remaining)+checkFundTarget(summaryTotals[obj.name])} type='fund'/>) }
+                        { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name] ? summaryTotals[obj.name].remaining : 0)+checkFundTarget(summaryTotals[obj.name])} type='fund'/>) }
                         { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='expense'/>) }
                         <AmountGroup title='Remaining' amount={parseCurrency(summaryTotals.remaining)} type='remaining'/>
                     </Grid>

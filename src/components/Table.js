@@ -37,7 +37,7 @@ const Table = styled.table`
     }
 
     & td {
-        padding: 10px 15px;
+        padding: ${props => props.padding ? props.padding : '10px 15px'};
         border-right: 1px solid #444;
         border-bottom: 1px solid #444;
     }

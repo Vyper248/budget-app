@@ -43,7 +43,7 @@ const MobileAddButton = styled.div`
         border-bottom: 3px solid white;
         position: fixed;
         bottom: 11px;
-        width: calc(50% - 22px);
+        width: calc(50% - 22.5px);
         height: 20px;
         z-index: 4;
         ${props => props.open ? 'transform: translateY(-275px);' : ''};

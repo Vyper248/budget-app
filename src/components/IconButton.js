@@ -5,6 +5,10 @@ const StyledComp = styled.div`
     color: ${props => props.color};
     display: inline-block;
     font-size: ${props => props.size};
+    ${props => props.bordered ? 'border: 1px solid white' : ''};
+    width: ${props => props.width ? props.width : 'auto'};
+    padding: 5px;
+    border-radius: 5px;
     
     :hover {
         cursor: pointer;
@@ -16,9 +20,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const IconButton = ({Icon, onClick, color='white', topAdjust='3px', size='1em'}) => {
+const IconButton = ({Icon, onClick, color='white', topAdjust='3px', size='1em', width='auto', bordered=false}) => {
     return (
-        <StyledComp color={color} topAdjust={topAdjust} size={size}>
+        <StyledComp color={color} topAdjust={topAdjust} size={size} width={width} bordered={bordered}>
             <Icon onClick={onClick}/>
         </StyledComp>
     );

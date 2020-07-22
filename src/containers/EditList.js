@@ -66,7 +66,7 @@ const EditList = ({array=[], vertical=false}) => {
             {
                 array.map(obj => {
                     return (
-                        <Table key={'accounts-'+obj.id} style={{display: 'inline-block', margin: '10px'}}>
+                        <Table key={'accounts-'+obj.id} style={{display: 'inline-block', margin: '10px'}} padding='2px'>
                             <tbody>
                                 {
                                     Object.keys(modal).map(key => {
@@ -78,13 +78,13 @@ const EditList = ({array=[], vertical=false}) => {
                                         );
                                     })
                                 }
-                                <tr><td>Delete</td><td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td></tr>
+                                <tr><td colSpan='2'><Button value="Delete" onClick={onDelete(obj.id)} width='50%' color='red'/></td></tr>
                             </tbody>
                         </Table>
                     );
                 })
             }
-            <Button value="Add New" width="150px" onClick={onAdd}/>
+            <Button value="Add New" width="150px" onClick={onAdd} color='#0F0'/>
         </StyledComp>
     );
 
@@ -122,7 +122,7 @@ const EditList = ({array=[], vertical=false}) => {
                 </tbody>
             </Table>
 
-            <Button value="Add New" width="150px" onClick={onAdd}/>
+            <Button value="Add New" width="150px" onClick={onAdd} color='#0F0'/>
         </StyledComp>
     );
 }

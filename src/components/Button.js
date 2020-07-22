@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const StyledComp = styled.div`
     background-color: var(--bg-color);
     border: 1px solid var(--text-color);
+    ${props => props.color ? `border-color: ${props.color}` : ''};
     border-radius: 5px;
     height: var(--input-height);
     display: ${props => props.inline ? 'inline flex' : 'flex'};
@@ -18,9 +19,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%', inline=false}) => {
+const Button = ({value, onClick, width='100%', inline=false, color=undefined}) => {
     return (
-        <StyledComp width={width} onClick={onClick} inline={inline}>{value}</StyledComp>
+        <StyledComp width={width} onClick={onClick} inline={inline} color={color}>{value}</StyledComp>
     );
 }
 

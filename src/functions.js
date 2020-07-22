@@ -40,6 +40,10 @@ export const getLatestDates = (startDate, periodLength) => {
 export const getSummaryTotals = (transactions, funds, categories, fundAdditions) => {
     let obj = {};
 
+    //make sure every key has a value even if no transactions for it
+    funds.forEach(fund => obj[fund.name] = {saved: 0, target: fund.targetAmount, spent: 0, remaining: 0});
+    categories.forEach(category => obj[category.name] = 0);
+
     const addToTotals = tr => {
         let heading = getTransactionHeading(funds, categories, tr);
 
@@ -156,7 +160,7 @@ export const parseCurrency = (value) => {
 
     //make sure it doens't return -£0.00
     if (value > -0.009 && value < 0.009) return `${currencySymbol}0${showDecimals ? '.00' : ''}`;
-    if (value === null || value === undefined || value === 0) return `${currencySymbol}0${showDecimals ? '.00' : ''}`;
+    if (value === null || value === undefined || value === 0 || isNaN(value)) return `${currencySymbol}0${showDecimals ? '.00' : ''}`;
     let string = Number(value).toFixed(showDecimals ? 2 : 0);    
 
     let negative = false;
@@ -192,6 +196,7 @@ export const checkBudget = (budgets, date, categoryId, transactions) => {
 }
 
 export const checkFundTarget = (fund) => {
+    if (fund === undefined) return '';
     if (fund.target !== 0) return ` / ${parseCurrency(fund.target)}`;
     else return '';
 }
