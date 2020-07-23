@@ -5,7 +5,7 @@ import Table from './Table';
 import Button from './Button';
 import EditInput from './EditInput';
 
-import { fromCamelCase } from '../functions';
+import { fromCamelCase, checkIfCanDelete } from '../functions';
 
 const StyledComp = styled.div`
     border: 1px solid white;
@@ -89,7 +89,7 @@ const MobileEditGroup = ({modal, obj, onChange, onDelete}) => {
             </div>
             <div>
                 <div onClick={toggle}>Edit</div>
-                <div onClick={onDelete(obj.id)}>Delete</div>
+                { checkIfCanDelete(obj) ? <div onClick={onDelete(obj.id)}>Delete</div> : <div style={{color: 'grey'}}>Delete</div>}
             </div>
         </StyledComp>
     );

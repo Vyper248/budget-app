@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
+import { format } from 'date-fns';
 
 import Table from '../components/Table';
 import Button from '../components/Button';
@@ -12,7 +13,7 @@ import EditInput from '../components/EditInput';
 import MobileEditGroup from '../components/MobileEditGroup';
 
 import { modals } from '../modals';
-import { fromCamelCase } from '../functions';
+import { fromCamelCase, checkIfCanDelete} from '../functions';
 
 const StyledComp = styled.div`
     border: 1px solid white;
@@ -54,6 +55,7 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
         let newObj = {...modal};
         Object.keys(newObj).forEach(key => {
             if (typeof newObj[key] === 'string' && newObj[key].includes(',')) newObj[key] = newObj[key].split(',')[0];
+            if (typeof newObj[key] === 'string' && newObj[key] === 'date') newObj[key] = format(new Date(), 'yyyy-MM-dd');
         });  
         dispatch({type: add, payload: newObj});
     }
@@ -94,7 +96,13 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
                                         );
                                     })
                                 }
-                                <tr><td colSpan='2'><Button value="Delete" onClick={onDelete(obj.id)} width='50%' color='red'/></td></tr>
+                                <tr>
+                                    <td colSpan='2'>
+                                    { checkIfCanDelete(obj) 
+                                        ? <Button value="Delete" onClick={onDelete(obj.id)} width='50%' color='red'/> 
+                                        : <div style={{height: 'var(--input-height)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Being Used</div> }
+                                    </td>
+                                </tr>
                             </tbody>
                         </Table>
                     );
