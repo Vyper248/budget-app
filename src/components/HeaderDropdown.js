@@ -57,6 +57,10 @@ const HeaderDropdown = ({value, options=[], onChange}) => {
     let currentValue = options.find(obj => obj.value === value);
     if (value === 'Edit') currentValue = {display: 'Edit'};
 
+    if (currentValue === undefined) {
+        currentValue = {display: 'Edit'};
+    }
+
     const toggleOpen = () => {
         setOpen(!open);
     }
