@@ -12,41 +12,10 @@ const initialState = {
         showDecimals: true,
         startDate: '2019-11-08',
     },
-    accounts: [
-        {
-            id: 1,
-            name: 'Tesco',
-            description: '',
-            interestRate: 1.0,
-            startingBalance: 300,
-            balance: 300,
-            spending: true,
-            default: true,
-            closed: false,
-            extraCharges: 0,
-            currency: '£',
-            dateOpened: '2020-01-16',
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 2,
-            name: 'Ulster',
-            description: '',
-            interestRate: 1.0,
-            startingBalance: 0,
-            balance: 0,
-            spending: false,
-            default: false,
-            closed: false,
-            extraCharges: 0,
-            currency: '£',
-            dateOpened: '2019-04-11',
-            dateCreated: '2019-06-03'
-        },
-    ],
+    accounts: [],
     categories: [
         {
-            id: 1,
+            id: 20200723153000,
             name: 'Earnings',
             description: '',
             type: 'income',
@@ -54,7 +23,7 @@ const initialState = {
             dateCreated: '2020-06-03'
         },
         {
-            id: 3,
+            id: 20200723153001,
             name: 'Interest',
             description: '',
             type: 'income',
@@ -62,7 +31,7 @@ const initialState = {
             dateCreated: '2020-06-03'
         },
         {
-            id: 2,
+            id: 20200723153102,
             name: 'Food',
             description: '',
             type: 'expense',
@@ -73,7 +42,7 @@ const initialState = {
     budgets: [
         {
             id: 1,
-            category: 2,
+            category: 20200723153102,
             amount: 50,
             startDate: '2020-01-03',
             endDate: '2020-02-27',
@@ -81,7 +50,7 @@ const initialState = {
         },
         {
             id: 2,
-            category: 2,
+            category: 20200723153102,
             amount: 80,
             startDate: '2020-02-28',
             endDate: undefined,
@@ -90,15 +59,7 @@ const initialState = {
     ],
     funds: [
         {
-            id: 1,
-            name: 'New Phone',
-            description: 'Saving for a new phone',
-            targetAmount: 1200,
-            complete: false,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 2,
+            id: 20200723153130,
             name: 'Savings',
             description: 'General Savings',
             targetAmount: 0,
@@ -106,84 +67,8 @@ const initialState = {
             dateCreated: '2020-01-03'
         }
     ],
-    fundAdditions: [
-        {
-            id: 1,
-            amount: 50,
-            date: '2020-02-28',
-            fund: 1,
-            dateCreated: '2020-06-04'
-        },
-        {
-            id: 2,
-            amount: 50,
-            date: '2020-04-24',
-            fund: 1,
-            dateCreated: '2020-06-04'
-        }
-    ],
-    transactions: [
-        {
-            id: 1,
-            type: 'spend',
-            amount: 24.21,
-            description: 'Food',
-            date: '2020-04-28',
-            category: 2,
-            account: 1,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 2,
-            type: 'spend',
-            amount: 14.71,
-            description: 'Food',
-            date: '2020-02-28',
-            category: 2,
-            account: 1,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 3,
-            type: 'spend',
-            amount: 874.29,
-            description: 'Earnings',
-            date: '2020-02-28',
-            category: 1,
-            account: 1,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 4,
-            type: 'spend',
-            amount: 874.29,
-            description: 'Earnings',
-            date: '2020-04-24',
-            category: 1,
-            account: 1,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 5,
-            type: 'spend',
-            amount: 25,
-            description: 'Phone Case',
-            date: '2020-05-22',
-            fund: 1,
-            account: 1,
-            dateCreated: '2020-06-03'
-        },
-        {
-            id: 6,
-            type: 'transfer',
-            amount: 60,
-            description: '',
-            date: '2020-05-28',
-            from: 1,
-            to: 2,
-            dateCreated: '2020-06-03'
-        }
-    ],
+    fundAdditions: [],
+    transactions: [],
 };
 
 export const reducer = (state = initialState, action) => {
@@ -207,7 +92,7 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_FUND_ADDITION': let newFundAdditions = getNewArray(state.fundAdditions, value); return {...state, fundAdditions: newFundAdditions, addTransaction: false};
         case 'ADD_TRANSACTION': let newTransactions = getNewArray(state.transactions, value); return {...state, transactions: newTransactions, addTransaction: false};
 
-        case 'UPDATE_ACCOUNT': let updatedAccounts = replaceObject(state.accounts, value); return {...state, accounts: updatedAccounts};
+        case 'UPDATE_ACCOUNT': let updatedAccounts = replaceAccount(state.accounts, value); return {...state, accounts: updatedAccounts};
         case 'UPDATE_CATEGORY': let updatedCategories = replaceObject(state.categories, value); return {...state, categories: updatedCategories};
         case 'UPDATE_BUDGET': let updatedBudgets = replaceObject(state.budgets, value); return {...state, budgets: updatedBudgets};
         case 'UPDATE_FUND': let updatedFunds = replaceObject(state.funds, value); return {...state, funds: updatedFunds};
@@ -229,6 +114,20 @@ const removeObject = (arr, id) => {
 
 const replaceObject = (arr, object) => {
     let copy = [...arr];
+    let index = copy.findIndex(obj => obj.id === object.id);
+    if (index === -1) return arr;
+    copy.splice(index,1,object);
+    return copy;
+}
+
+const replaceAccount = (arr, object) => {
+    let copy = [...arr];
+
+    //there can only be one default account
+    if (object.defaultAccount === true) {
+        copy.forEach(obj => obj.id !== object.id ? obj.defaultAccount = false : null);
+    }
+
     let index = copy.findIndex(obj => obj.id === object.id);
     if (index === -1) return arr;
     copy.splice(index,1,object);
