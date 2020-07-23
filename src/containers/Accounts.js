@@ -22,6 +22,13 @@ const Categories = () => {
     const [account, setAccount] = useState(firstAccountId);
     const [accountName, setAccountName] = useState(firstAccountName);
 
+    React.useEffect(() => {
+        //If there's no object in the array, then go straight to edit mode
+        if (accounts.length === 0 && !editMode) {
+            dispatch({type: 'SET_EDIT_MODE', payload: true});
+        }
+    });
+
     const onClickObj = (id) => () => {
         let account = accounts.find(obj => obj.id === id);
         setAccount(id);
@@ -32,7 +39,7 @@ const Categories = () => {
     const filteredTransactions = transactions.filter(obj => {
         if (obj.from !== undefined && obj.to !== undefined && (obj.from === account || obj.to === account)) return true; 
         return obj.account !== undefined && obj.account === account ? true : false;
-    });    
+    });   
 
     return (
         <div>  
@@ -40,7 +47,7 @@ const Categories = () => {
                 <ListContainer>
                     { isMobile ? null : <List heading={'Accounts'} array={accounts} onClickObj={onClickObj} selected={account}/> }
                     { editMode 
-                        ? <EditList array={accounts} vertical={true}/>
+                        ? <EditList array={accounts} vertical={true} onClickDropdown={onClickObj} id={account}/>
                         : <Transactions transactions={filteredTransactions} heading={accountName} id={account} onClickDropdown={onClickObj} objArray={accounts}/> 
                     }
                 </ListContainer>

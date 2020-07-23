@@ -23,6 +23,13 @@ const Funds = () => {
     const [fund, setFund] = useState(firstFundId);
     const [fundName, setFundName] = useState(firstFundName);
 
+    React.useEffect(() => {
+        //If there's no object in the array, then go straight to edit mode
+        if (funds.length === 0 && !editMode) {
+            dispatch({type: 'SET_EDIT_MODE', payload: true});
+        }
+    });
+
     const onClickObj = (id) => () => {
         let fund = funds.find(obj => obj.id === id);
         setFund(id);
@@ -46,7 +53,7 @@ const Funds = () => {
                 <ListContainer>
                     { isMobile ? null : <List heading={'Funds'} array={funds} onClickObj={onClickObj} selected={fund}/> }
                     { editMode 
-                        ? <EditList array={funds}/>
+                        ? <EditList array={funds} onClickDropdown={onClickObj} id={fund}/>
                         : <Transactions transactions={combined} heading={fundName} onClickDropdown={onClickObj} objArray={funds} id={fund}/> 
                     }
                 </ListContainer>

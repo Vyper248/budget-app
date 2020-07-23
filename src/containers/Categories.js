@@ -22,6 +22,13 @@ const Categories = () => {
     const [category, setCategory] = useState(firstCategoryId);
     const [categoryName, setCategoryName] = useState(firstCategoryName);
 
+    React.useEffect(() => {
+        //If there's no object in the array, then go straight to edit mode
+        if (categories.length === 0 && !editMode) {
+            dispatch({type: 'SET_EDIT_MODE', payload: true});
+        }
+    });
+
     const onClickObj = (id) => () => {
         let category = categories.find(obj => obj.id === id);
         setCategory(id);
