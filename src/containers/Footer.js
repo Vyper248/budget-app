@@ -105,7 +105,8 @@ const Footer = () => {
                 <div className="middle"></div>
             </MobileAddButton>
             <BottomArea open={isOpen}>
-                { isOpen ? <AddTransaction onAdd={onAddTransaction}/> : isFullyOpen ? <AddTransaction onAdd={onAddTransaction}/> : null }
+                <AddTransaction onAdd={onAddTransaction}/> 
+                {/* { isOpen ? <AddTransaction onAdd={onAddTransaction}/> : isFullyOpen ? <AddTransaction onAdd={onAddTransaction}/> : null } */}
             </BottomArea>
         </div>
     );
