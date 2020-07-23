@@ -31,10 +31,13 @@ const StyledComp = styled.div`
 `;
 
 const LabelledInput = ({label, type='text', value, placeholder='', onChange, options=[], groups=[]}) => {
+    let inputValue = value;
+    if (isNaN(inputValue) && type === 'number') inputValue = '';
+
     return (
         <StyledComp>
             <label>{label}</label>
-            <Input value={value} type={type} onChange={onChange} placeholder={placeholder} options={options} groups={groups}/>
+            <Input value={inputValue} type={type} onChange={onChange} placeholder={placeholder} options={options} groups={groups}/>
         </StyledComp>
     );
 }
