@@ -245,3 +245,19 @@ export const getAmount = (transaction, categories, accountId, asCurrency=true) =
         if (transaction.to === accountId) return asCurrency ? parseCurrency(transaction.amount) : transaction.amount;
     }
 }
+
+export const checkIfCanDelete = (obj) => {
+    let id = obj.id;
+
+    let { transactions, fundAdditions, budgets } = store.getState();
+
+    let allObjs = [...transactions, ...fundAdditions, ...budgets];
+
+    for (let obj of allObjs) {
+        if (obj.category === id) return false;
+        if (obj.fund === id) return false;
+        if (obj.account === id) return false;
+    }
+
+    return true;
+}
