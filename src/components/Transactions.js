@@ -124,6 +124,9 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
             { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
             <EditButton><IconButton Icon={FaEdit} color='white' onClick={toggleDelete}/></EditButton>
             {
+                organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null
+            }
+            {
                 organisedArr.map(group => {
                     return (
                         <StyledGroup key={'transactionGroup-'+group.month}>
