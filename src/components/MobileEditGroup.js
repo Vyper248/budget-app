@@ -8,7 +8,7 @@ import EditInput from './EditInput';
 import { fromCamelCase, checkIfCanDelete } from '../functions';
 
 const StyledComp = styled.div`
-    border: 1px solid white;
+    border: 1px solid var(--menu-border-color);
     display: inline-block;
     margin: 10px;
     border-radius: 5px;
@@ -16,7 +16,7 @@ const StyledComp = styled.div`
 
     & > div:first-child {
         padding: 10px;
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid var(--menu-border-color);
         font-weight: bold;
     }
 

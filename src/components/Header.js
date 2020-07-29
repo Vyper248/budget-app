@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const StyledComp = styled.div`
     display: flex;
-    border-bottom: 1px solid var(--text-color);
+    border-bottom: 1px solid var(--menu-border-color);
     width: 100%;
+    background-color: var(--menu-bg-color);
 
     & > div {
+        color: var(--menu-text-color);
         padding: 5px 10px;
-        border-right: 1px solid var(--text-color);
+        border-right: 1px solid var(--menu-border-color);
         ${props => props.isMobile ? 'flex-grow: 1;' : ''};
         ${props => props.isMobile ? 'padding: 10px' : ''};
     }
@@ -20,12 +22,14 @@ const StyledComp = styled.div`
     }
 
     & > div.selected {
-        background-color: #555;
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
     }
 
     & > div:hover {
-        background-color: #555;
+        background-color: var(--menu-selected-bg-color);
         cursor: pointer;
+        color: var(--menu-selected-text-color);
     }
 `;
 

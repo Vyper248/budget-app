@@ -12,7 +12,7 @@ import IconButton from './IconButton';
 import HeaderDropdown from './HeaderDropdown';
 
 const StyledComp = styled.div`
-    border: 1px solid white;
+    border: 1px solid var(--menu-border-color);
     margin: 5px 5px 5px 0px;
     overflow: scroll;
     position: relative;
@@ -24,7 +24,7 @@ const StyledComp = styled.div`
 `;
 
 const StyledGroup = styled.div`
-    margin: 10px;
+    margin: 0px 10px;
 
     & > div {
         border-bottom: 1px solid gray;
@@ -32,8 +32,20 @@ const StyledGroup = styled.div`
     }
 
     & > div:first-of-type {
-        margin-top: 5px;
-        border-top: 1px solid gray;
+        margin-top: 0px;
+        border-top: none;
+    }
+
+    & > div:last-of-type {
+        border-bottom: none;
+    }
+
+    & > strong {
+        display: block;
+        width: 100%;
+        background-color: var(--group-heading-bg-color);
+        padding: 10px;
+        color: var(--group-heading-text-color);
     }
 
     @media screen and (max-width: 700px) {
@@ -41,18 +53,6 @@ const StyledGroup = styled.div`
 
         & > div {
             padding: 0px;
-        }
-
-        & > div:first-of-type {
-            margin-top: 0px;
-            border-top: none;
-        }
-
-        & > strong {
-            display: block;
-            width: 100%;
-            background-color: gray;
-            padding: 10px;
         }
     }
 `;
@@ -122,7 +122,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         <StyledComp>
             { isMobile ? null : <h4>{heading} - Transactions</h4> }
             { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
-            <EditButton><IconButton Icon={FaEdit} color='white' onClick={toggleDelete}/></EditButton>
+            <EditButton><IconButton Icon={FaEdit} onClick={toggleDelete}/></EditButton>
             {
                 organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null
             }

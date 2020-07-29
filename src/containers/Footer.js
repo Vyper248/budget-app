@@ -11,9 +11,9 @@ const BottomArea = styled.div`
     transition: 0.3s;
     width: 100%;
     height: 288px;
-    background-color: black;
+    background-color: var(--footer-bg);
     padding: 10px;
-    border: 2px solid black;
+    border: 2px solid var(--footer-bg);
     z-index: 3;
     ${props => props.open ? 'transform: translateY(-275px);' : ''};
 
@@ -28,8 +28,8 @@ const MobileAddButton = styled.div`
     }
 
     & > svg {
-        background-color: black;
-        border: 3px solid white;
+        background-color: var(--footer-bg);
+        border: 3px solid var(--footer-border);
         border-radius: 100%;
         font-size: 51px;
         position: fixed;
@@ -37,10 +37,11 @@ const MobileAddButton = styled.div`
         left: 50%;
         transform: translate(-50%,${props => props.open ? '-275px' : '0px'});
         z-index: 4;
+        fill: var(--footer-border);
     }
 
     & > div.left, & > div.right {
-        border-bottom: 3px solid white;
+        border-bottom: 3px solid var(--footer-border);
         position: fixed;
         bottom: 11px;
         width: calc(50% - 22.5px);
@@ -50,19 +51,19 @@ const MobileAddButton = styled.div`
     }
 
     & > div.right {
-        border-left: 3px solid white;
+        border-left: 3px solid var(--footer-border);
         right: 0px;
         border-radius: 0px 0px 0px 20px;
     }
 
     & > div.left {
-        border-right: 3px solid white;
+        border-right: 3px solid var(--footer-border);
         left: 0px;
         border-radius: 0px 0px 20px 0px;
     }
 
     & > div.middle {
-        background-color: black;
+        background-color: var(--footer-bg);
         position: fixed;
         z-index: 1;
         width: 55px;

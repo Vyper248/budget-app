@@ -1,7 +1,68 @@
 :root {
-  --bg-color: black;
-  --text-color: white;
+  /* --bg-color: white;
+  --text-color: black;
+  --light-text-color: #888;
   --input-height: 30px;
+
+  --menu-bg-color: black;
+  --menu-selected-bg-color: #CCC;
+  --menu-text-color: black;
+  --menu-selected-text-color: black;
+  --menu-border-color: black;
+
+  --icon-color: black;
+  --group-heading-bg-color: gray;
+  --group-heading-text-color: white;
+  
+  --footer-bg: white;
+  --footer-border: black; 
+  
+  --table-heading-bg-color: #555;
+  --table-heading-text-color: white;*/
+
+  --bg-color: #222;
+  --text-color: white;
+  --light-text-color: #CCC;
+  --input-height: 30px;
+
+  --menu-bg-color: #009fe8;
+  --menu-selected-bg-color: #0076ad;
+  --menu-text-color: white;
+  --menu-selected-text-color: white;
+  --menu-border-color: white;
+
+  --icon-color: #4dc6ff;
+  --group-heading-bg-color: #009fe8;
+  --group-heading-text-color: white;
+  
+  --footer-bg: #222;
+  --footer-border: #20cc16;
+  
+  --table-heading-bg-color: #666;
+  --table-heading-text-color: white;
+  
+  /* --bg-color: black;
+  --text-color: white;
+  --light-text-color: #CCC;
+  --input-height: 30px;
+
+  --menu-bg-color: black;
+  --menu-selected-bg-color: #555;
+  --menu-text-color: white;
+  --menu-selected-text-color: white;
+  --menu-border-color: #888;
+
+  --icon-color: white;
+  --group-heading-bg-color: gray;
+  --group-heading-text-color: white;
+  
+  --footer-bg: black;
+  --footer-border: white;
+  
+  --table-heading-bg-color: #333;
+  --table-heading-text-color: white; */
+  
+ 
 }
 
 * {

@@ -15,7 +15,8 @@ const StyledComp = styled.div`
 
     :hover {
         cursor: pointer;
-        background-color: #555;
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
     }
 `;
 

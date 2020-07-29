@@ -8,10 +8,14 @@ const StyledComp = styled.div`
     margin: 5px auto;
     position: relative;
 
+    & > div > svg {
+        fill: var(--icon-color);
+    }
+
     & > div.dropdownDisplay {
         font-size: 1.5em;
         font-weight: bold;
-        border-bottom: 1px solid white;
+        border-bottom: 2px solid var(--icon-color);
         padding: 5px;
         position: relative;
         padding-right: 30px;
@@ -27,14 +31,14 @@ const StyledComp = styled.div`
     }
 
     & > div.dropdownGroup {
-        border-left: 1px solid gray;
-        border-bottom: ${props => props.open ? '1px solid gray' : 'none'};
-        border-right: 1px solid gray;
+        border-left: 1px solid var(--menu-border-color);
+        border-bottom: ${props => props.open ? '1px solid var(--menu-border-color)' : 'none'};
+        border-right: 1px solid var(--menu-border-color);
         position: absolute;
         top: 100%;
         left: 0px;
         right: 0px;
-        background-color: black;
+        background-color: var(--bg-color);
         max-height: ${props => props.open ? props.maxHeight : '0px'};
         overflow: scroll;
         transition: 0.3s;
@@ -42,7 +46,7 @@ const StyledComp = styled.div`
 
     & div.dropdownItem {
         padding: 10px;
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid var(--menu-border-color);
     }
 
     & div.dropdownItem:last-child {

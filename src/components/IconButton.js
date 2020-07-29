@@ -20,7 +20,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const IconButton = ({Icon, onClick, color='white', topAdjust='3px', size='1em', width='auto', bordered=false}) => {
+const IconButton = ({Icon, onClick, color='var(--icon-color)', topAdjust='3px', size='1em', width='auto', bordered=false}) => {
     return (
         <StyledComp color={color} topAdjust={topAdjust} size={size} width={width} bordered={bordered}>
             <Icon onClick={onClick}/>

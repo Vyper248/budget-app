@@ -90,7 +90,7 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
                                     Object.keys(modal).map(key => {
                                         return (
                                             <tr key={'EditListRow-'+key}>
-                                                <td>{fromCamelCase(key)}</td>
+                                                <th>{fromCamelCase(key)}</th>
                                                 <td><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)} width='140px'/></td>
                                             </tr>
                                         );

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 const StyledComp = styled.div`
-    border: 1px solid white;
+    border: 1px solid var(--menu-border-color);
     width: 200px;
     margin: 5px;
     padding: 0px 5px;
@@ -11,19 +11,21 @@ const StyledComp = styled.div`
     position: relative;
 
     & > div {
-        border: 1px solid white;
+        border: 1px solid var(--menu-border-color);
         padding: 5px;
         width: 100%;
         margin-bottom: 5px;
     }
 
     & > div:hover {
-        background-color: #555;
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
         cursor: pointer;
     }
 
     & > div.selected {
-        background-color: #555;
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
     }
 
     & > div:last-child {

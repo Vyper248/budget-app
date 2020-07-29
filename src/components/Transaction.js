@@ -35,7 +35,7 @@ const StyledComp = styled.div`
 
     & td span.date {
         font-size: 0.8em;
-        color: #CCC;
+        color: var(--light-text-color);
     }
 
     @media screen and (max-width: 700px) {        

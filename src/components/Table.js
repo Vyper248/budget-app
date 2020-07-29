@@ -6,14 +6,17 @@ const Table = styled.table`
     border-spacing: 0px;
     overflow: hidden;
     border-radius: 5px;
-    background-color: black;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 
     & thead td {
-        background-color: #555;
+        background-color: var(--table-heading-bg-color);
+        color: var(--table-heading-text-color);
     }
 
     & thead td.income {
         background-color: green;
+        color: white;
     }
 
     & thead td.expense {
@@ -31,31 +34,37 @@ const Table = styled.table`
         color: black;
     }
 
+    & tbody th {
+        background-color: var(--table-heading-bg-color);
+        color: var(--table-heading-text-color);
+        font-weight: normal;
+    }
+
     & tr td.corner-top-left {
         border-top: none !important;
         border-left: none !important;
         background-color: transparent;
     }
 
-    & td {
+    & td, & th {
         padding: ${props => props.padding ? props.padding : '10px 15px'};
-        border-right: 1px solid #444;
-        border-bottom: 1px solid #444;
+        border-right: 1px solid var(--menu-border-color);
+        border-bottom: 1px solid var(--menu-border-color);
+    }
+    
+    & > *:first-child tr:first-child > * {
+        border-top: 1px solid var(--menu-border-color);
     }
 
-    & thead tr:first-child td {
-        border-top: 1px solid #444;
+    & tr td:first-child, & tr th:first-child {
+        border-left: 1px solid var(--menu-border-color);
     }
 
-    & tr td:first-child {
-        border-left: 1px solid #444;
-    }
-
-    & thead tr:first-child td:first-child {
+    & > *:first-child tr:first-child > *:first-child {
         border-top-left-radius: 5px;
     }
 
-    & thead tr:first-child td:last-child {
+    & > *:first-child tr:first-child > *:last-child {
         border-top-right-radius: 5px;
     }
 
