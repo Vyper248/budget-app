@@ -78,13 +78,13 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
         </StyledComp>
     );
 
-    if (vertical || isMobile) return (
+    if (true || isMobile) return (
         <StyledComp>
             <h4>Edit {currentPage}</h4>
             {
                 array.map(obj => {
                     return (
-                        <Table key={'EditListTable-'+obj.id} style={{display: 'inline-block', margin: '10px'}} padding='2px'>
+                        <Table key={'EditListTable-'+obj.id} style={{display: 'inline-block', margin: '10px'}} padding='2px 5px'>
                             <tbody>
                                 {
                                     Object.keys(modal).map(key => {
@@ -138,7 +138,7 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
                                     );
                                 })
                             }
-                                <td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td>
+                                { checkIfCanDelete(obj) ? <td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td> : <td></td> }
                             </tr>
                         );
                     })

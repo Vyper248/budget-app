@@ -55,14 +55,21 @@ const StyledComp = styled.div`
 
 const MobileEditGroup = ({modal, obj, onChange, onDelete}) => {
     const [open, setOpen] = useState(obj.name.length === 0 ? true : false);
+    const [editing, setEditing] = useState(false);
 
-    const toggle = () => {
-        setOpen(!open);
+    const onEdit = () => {
+        setOpen(true);
+        setEditing(true);
+    }
+
+    const onCancel = () => {
+        onDelete(obj.id)();
     }
 
     const close = () => {
         if (obj.name.length === 0) return;
         setOpen(false);
+        setEditing(false);
     }
 
     return (
@@ -84,11 +91,12 @@ const MobileEditGroup = ({modal, obj, onChange, onDelete}) => {
                         }
                         </tbody>
                     </Table>
-                    <Button value="Close" onClick={close} width="150px"/>
+                    { !editing ? <Button value="Cancel" onClick={onCancel} width="150px" inline={true} style={{marginRight: '5px'}}/> : null }
+                    <Button value="Close" onClick={close} width="150px" inline={true}/>
                 </div>
             </div>
             <div>
-                <div onClick={toggle}>Edit</div>
+                <div onClick={onEdit}>Edit</div>
                 { checkIfCanDelete(obj) ? <div onClick={onDelete(obj.id)}>Delete</div> : <div style={{color: 'grey'}}>Delete</div>}
             </div>
         </StyledComp>

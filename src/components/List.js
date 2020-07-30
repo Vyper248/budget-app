@@ -15,6 +15,8 @@ const StyledComp = styled.div`
         padding: 5px;
         width: 100%;
         margin-bottom: 5px;
+        background-color: var(--menu-bg-color);
+        color: var(--menu-text-color);
     }
 
     & > div:hover {

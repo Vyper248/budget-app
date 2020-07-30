@@ -20,9 +20,9 @@ const StyledComp = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%', inline=false, color=undefined}) => {
+const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}}) => {
     return (
-        <StyledComp width={width} onClick={onClick} inline={inline} color={color}>{value}</StyledComp>
+        <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style}>{value}</StyledComp>
     );
 }
 
