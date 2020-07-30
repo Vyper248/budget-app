@@ -17,6 +17,7 @@ const StyledComp = styled.div`
 
     & td {
         ${'' /* border: 1px solid white; */}
+        height: 39px;
     }
 
     & td:nth-child(1) {
@@ -33,6 +34,10 @@ const StyledComp = styled.div`
         text-align: right;
     }
 
+    & div.description {
+        max-width: 540px;
+    }
+
     & td span.date {
         font-size: 0.8em;
         color: var(--light-text-color);
@@ -41,6 +46,10 @@ const StyledComp = styled.div`
     @media screen and (max-width: 700px) {        
         & > table {
             width: 100%;
+        }
+
+        & div.description {
+            max-width: 250px;
         }
 
         & td {
@@ -78,9 +87,8 @@ const Transaction = ({obj, accountId, showDelete=false}) => {
                 <tbody>
                     <tr>
                         <td>
-                            { description.length > 0 ? <span className='description'>{ getType(obj, accountId, categories, funds, accounts, currentPage) }</span> : null }
-                            { description.length > 0 ? <br/> : null }
-                            { description.length > 0 ? <span className='date'>{ date }</span> : <span className='description'>{ date }</span>}
+                            { description.length > 0 ? <div className='description'>{ getType(obj, accountId, categories, funds, accounts, currentPage) }</div> : null }
+                            { description.length > 0 ? <span className='date'>{ date }</span> : <div className='description'>{ date }</div>}
                         </td>
                         <td>{getAmount(obj, categories, accountId)}</td>
                         { showDelete ? <td><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px'/></td> : null }
@@ -108,7 +116,12 @@ const getType = (transaction, accountId, categories, funds, accounts, page) => {
     //get category name
     if (transaction.category !== undefined) {
         let category = categories.find(obj => obj.id === transaction.category);
-        if (category !== undefined) return category.name;
+        if (category !== undefined) {
+            if (transaction.description.length > 0) return category.name + ' - ' + transaction.description;
+            return category.name;
+        } else {
+            if (transaction.description.length > 0) return transaction.description;
+        }
     }
 
     //get fund name

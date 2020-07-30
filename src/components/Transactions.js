@@ -26,18 +26,25 @@ const StyledComp = styled.div`
 const StyledGroup = styled.div`
     margin: 0px 10px;
 
-    & > div {
+    & > div > div {
         border-bottom: 1px solid gray;
         padding: 3px;
     }
 
-    & > div:first-of-type {
+    & > div > div:first-of-type {
         margin-top: 0px;
         border-top: none;
     }
 
-    & > div:last-of-type {
+    & > div > div:last-of-type {
         border-bottom: none;
+    }
+
+    & > div {
+        border-bottom: ${props => props.open === false ? '1px solid var(--menu-border-color)' : '1px solid var(--bg-color)'};
+        ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*51}px`};
+        overflow: hidden;
+        transition: 0.3s;
     }
 
     & > strong {
@@ -48,11 +55,22 @@ const StyledGroup = styled.div`
         color: var(--group-heading-text-color);
     }
 
+    & > strong:hover {
+        cursor: pointer;
+    }
+
     @media screen and (max-width: 700px) {
         margin: 0px;
 
-        & > div {
+        & > div > div {
             padding: 0px;
+        }
+
+        & > div {
+            border-bottom: ${props => props.open === false ? '1px solid var(--menu-border-color)' : '1px solid var(--bg-color)'};
+            ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*45}px`};
+            overflow: hidden;
+            transition: 0.3s;
         }
     }
 `;
@@ -75,6 +93,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     const categories = useSelector(state => state.categories);
     const currentPage = useSelector(state => state.currentPage);
     const [showDelete, setShowDelete] = useState(false);
+    const [closed, setClosed] = useState({});
 
     let accountId = currentPage === 'Accounts' ? id : undefined;    
 
@@ -110,12 +129,18 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         onClickDropdown(Number(id))();
     }
 
+    const onToggleGroup = (month) => () => {
+        let closedObj = {...closed};
+        closedObj[month] === undefined ? closedObj[month] = true : closedObj[month] = !closedObj[month];
+        setClosed(closedObj);
+    }
+
     let total = transactions.reduce((t,c) => {
         t += getAmount(c, categories, accountId, false);
         return t;
     }, 0);        
 
-    if (accountId !== undefined) total += account.startingBalance;
+    if (accountId !== undefined && account) total += account.startingBalance;
     console.log(total);
 
     return (
@@ -129,16 +154,18 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
             {
                 organisedArr.map(group => {
                     return (
-                        <StyledGroup key={'transactionGroup-'+group.month}>
-                            <strong>{group.month}</strong>
-                            { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete}/>) }
+                        <StyledGroup key={'transactionGroup-'+group.month+accountId} open={closed[group.month] !== true} qty={group.transactions.length}>
+                            <strong onClick={onToggleGroup(group.month)}>{group.month}</strong>
+                            <div>
+                                { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete}/>) }
+                            </div>
                         </StyledGroup>
                     )
 
                 })
             }
             {
-                accountId !== undefined ? (
+                accountId !== undefined && account && account.startingBalance > 0 ? (
                     <StyledGroup>
                         <strong>Opening Balance</strong>
                         <Transaction obj={{date: account.dateOpened, amount: account.startingBalance}} accountId={accountId}/>
