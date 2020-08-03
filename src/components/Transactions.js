@@ -154,7 +154,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
             {
                 organisedArr.map(group => {
                     return (
-                        <StyledGroup key={'transactionGroup-'+group.month+accountId} open={closed[group.month] !== true} qty={group.transactions.length}>
+                        <StyledGroup key={'transactionGroup-'+group.month+id} open={closed[group.month] !== true} qty={group.transactions.length}>
                             <strong onClick={onToggleGroup(group.month)}>{group.month}</strong>
                             <div>
                                 { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete}/>) }
