@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaTrashAlt } from 'react-icons/fa';
 import { format, parseISO } from 'date-fns';
 
-import { parseCurrency, getAmount } from '../functions';
+import { parseCurrency, getAmount, filterDeleted } from '../functions';
 
 import IconButton from '../components/IconButton';
 
@@ -68,9 +68,9 @@ const StyledComp = styled.div`
 
 const Transaction = ({obj, accountId, showDelete=false}) => {
     const dispatch = useDispatch();
-    const categories = useSelector(state => state.categories);
-    const funds = useSelector(state => state.funds);
-    const accounts = useSelector(state => state.accounts);
+    const categories = useSelector(state => filterDeleted(state.categories));
+    const funds = useSelector(state => filterDeleted(state.funds));
+    const accounts = useSelector(state => filterDeleted(state.accounts));
     const currentPage = useSelector(state => state.currentPage);
 
     const remove = () => {     

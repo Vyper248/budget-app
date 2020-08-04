@@ -109,13 +109,20 @@ export const reducer = (state = initialState, action) => {
 }
 
 const removeObject = (arr, id) => {
-    return arr.filter(obj => obj.id !== id);
+    return arr.map(obj => {
+        if (obj.id === id) {
+            let date = Number(format(new Date(),'yyyyMMddHHmmss'));
+            return {id: obj.id, deleted: date};
+        } else return obj;
+    });
+    // return arr.filter(obj => obj.id !== id);
 }
 
 const replaceObject = (arr, object) => {
     let copy = [...arr];
     let index = copy.findIndex(obj => obj.id === object.id);
     if (index === -1) return arr;
+    object.updated = Number(format(new Date(),'yyyyMMddHHmmss'));
     copy.splice(index,1,object);
     return copy;
 }
@@ -130,6 +137,7 @@ const replaceAccount = (arr, object) => {
 
     let index = copy.findIndex(obj => obj.id === object.id);
     if (index === -1) return arr;
+    object.updated = Number(format(new Date(),'yyyyMMddHHmmss'));
     copy.splice(index,1,object);
     return copy;
 }

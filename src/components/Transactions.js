@@ -5,7 +5,7 @@ import { format, parseISO, parse, compareAsc } from 'date-fns';
 import { FaEdit } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 
-import { getAmount } from '../functions';
+import { getAmount, filterDeleted} from '../functions';
 
 import Transaction from './Transaction';
 import IconButton from './IconButton';
@@ -89,8 +89,8 @@ const EditButton = styled.div`
 const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[]}) => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
-    const accounts = useSelector(state => state.accounts);
-    const categories = useSelector(state => state.categories);
+    const accounts = useSelector(state => filterDeleted(state.accounts));
+    const categories = useSelector(state => filterDeleted(state.categories));
     const currentPage = useSelector(state => state.currentPage);
     const [showDelete, setShowDelete] = useState(false);
     const [closed, setClosed] = useState({});

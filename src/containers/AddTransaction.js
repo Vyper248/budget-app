@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { filterDeleted } from '../functions';
+
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
 
 const AddTransaction = ({onAdd=()=>{}}) => {
     const dispatch = useDispatch();
 
-    const accounts = useSelector(state => state.accounts);
-    const funds = useSelector(state => state.funds);
-    const categories = useSelector(state => state.categories);
+    const accounts = useSelector(state => filterDeleted(state.accounts));
+    const funds = useSelector(state => filterDeleted(state.funds));
+    const categories = useSelector(state => filterDeleted(state.categories));
 
     let defaultAccountObj = accounts.find(obj => obj.defaultAccount === true);
     let defaultAccount = defaultAccountObj !== undefined ? defaultAccountObj.id : accounts.length > 0 ? accounts[0].id : undefined;

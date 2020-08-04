@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 
 import Input from './Input';
 
-import { capitalize } from '../functions';
+import { capitalize, filterDeleted } from '../functions';
 
 const EditInput = ({label, defaultValue, value, onChange, width=undefined}) => {
-    const categories = useSelector(state => state.categories);
+    const categories = useSelector(state => filterDeleted(state.categories));
 
     let itemWidth = '100px';
     if (width === undefined && label === 'description') itemWidth = '300px';

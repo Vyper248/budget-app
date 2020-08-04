@@ -2,23 +2,25 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
+import { filterDeleted } from '../functions';
+
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
 import Transactions from '../components/Transactions';
 import Container from '../components/Container';
 import EditList from './EditList';
 
-const Categories = () => {
+const Accounts = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
-    const accounts = useSelector(state => state.accounts);
+    const accounts = useSelector(state => filterDeleted(state.accounts));
     const firstAccount = accounts[0];
     let firstAccountId = firstAccount !== undefined ? firstAccount.id : undefined;
     let firstAccountName = firstAccount !== undefined ? firstAccount.name : '';
     
-    const transactions = useSelector(state => state.transactions);
+    const transactions = useSelector(state => filterDeleted(state.transactions));
     const [account, setAccount] = useState(firstAccountId);
     const [accountName, setAccountName] = useState(firstAccountName);
 
@@ -56,4 +58,4 @@ const Categories = () => {
     );
 }
 
-export default Categories;
+export default Accounts;

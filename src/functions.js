@@ -261,3 +261,7 @@ export const checkIfCanDelete = (obj) => {
 
     return true;
 }
+
+export const filterDeleted = (arr) => {
+    return arr.filter(obj => obj.deleted !== undefined ? false : true);
+}

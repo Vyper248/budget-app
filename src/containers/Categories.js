@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
+import { filterDeleted } from '../functions';
+
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
 import Transactions from '../components/Transactions';
@@ -13,12 +15,12 @@ const Categories = () => {
 
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
-    const categories = useSelector(state => state.categories);
+    const categories = useSelector(state => filterDeleted(state.categories));
     const firstCategory = categories[0];
     let firstCategoryId = firstCategory !== undefined ? firstCategory.id : undefined;
     let firstCategoryName = firstCategory !== undefined ? firstCategory.name : '';
     
-    const transactions = useSelector(state => state.transactions);
+    const transactions = useSelector(state => filterDeleted(state.transactions));
     const [category, setCategory] = useState(firstCategoryId);
     const [categoryName, setCategoryName] = useState(firstCategoryName);
 

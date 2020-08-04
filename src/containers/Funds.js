@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
+import { filterDeleted } from '../functions';
+
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
 import Transactions from '../components/Transactions';
@@ -13,13 +15,13 @@ const Funds = () => {
 
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
-    const funds = useSelector(state => state.funds);
+    const funds = useSelector(state => filterDeleted(state.funds));
     const firstFund = funds[0];
     let firstFundId = firstFund !== undefined ? firstFund.id : undefined;
     let firstFundName = firstFund !== undefined ? firstFund.name : '';
     
-    const transactions = useSelector(state => state.transactions);
-    const fundAdditions = useSelector(state => state.fundAdditions);
+    const transactions = useSelector(state => filterDeleted(state.transactions));
+    const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
     const [fund, setFund] = useState(firstFundId);
     const [fundName, setFundName] = useState(firstFundName);
 

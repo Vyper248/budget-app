@@ -10,18 +10,18 @@ import AmountGroup from '../components/AmountGroup';
 import Button from '../components/Button';
 import IconButton from '../components/IconButton';
 
-import { getLatestDates, getSummaryRows, getSummaryTotals, parseCurrency, checkBudget, checkFundTarget } from '../functions';
+import { getLatestDates, getSummaryRows, getSummaryTotals, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
     const general = useSelector(state => state.general);
-    const transactions = useSelector(state => state.transactions);
-    const categories = useSelector(state => state.categories);
-    const budgets = useSelector(state => state.budgets);
-    const funds = useSelector(state => state.funds);
-    const fundAdditions = useSelector(state => state.fundAdditions);
-    const accounts = useSelector(state => state.accounts);
+    const transactions = useSelector(state => filterDeleted(state.transactions));
+    const categories = useSelector(state => filterDeleted(state.categories));
+    const budgets = useSelector(state => filterDeleted(state.budgets));
+    const funds = useSelector(state => filterDeleted(state.funds));
+    const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
+    const accounts = useSelector(state => filterDeleted(state.accounts));
 
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
