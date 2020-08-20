@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FaPiggyBank } from 'react-icons/fa';
+
+import { parseCurrency } from '../functions';
+
+import BudgetInput from './BudgetInput';
 
 const StyledComp = styled.div`
     text-align: center;
@@ -14,6 +19,7 @@ const StyledComp = styled.div`
     }
 
     & > div:first-of-type {
+        position: relative;
         font-size: 1.2em;
         font-weight: bold;
         padding: 2px;
@@ -28,13 +34,36 @@ const StyledComp = styled.div`
         font-size: 1em;
         margin-bottom: 5px;
     }
+
+    & .budgetIcon {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+
+    & .budgetIcon:hover {
+        cursor: pointer;
+    }
 `;
 
-const AmountGroup = ({title, amount, type}) => {
+const AmountGroup = ({title, amount, type, budget=0, editBudget=false, id, date}) => {
+    const [editMode, setEditMode] = useState(false);
+
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    }
+
     return (
         <StyledComp type={type} className={title === 'Earnings' || title === 'Remaining' ? 'fullRow' : ''}>
-            <div>{title}</div>
-            <div>{amount}</div>
+            <div>
+                { title }
+                { editBudget ? <div className="budgetIcon" onClick={toggleEditMode}><FaPiggyBank/></div> : null }
+            </div>
+            <div>
+                { amount }
+                { !editMode && budget > 0 ? ` / ${parseCurrency(budget)}` : '' }
+                { editMode ? <span> / <BudgetInput value={budget} category={id} date={date}/></span> : null }
+            </div>
         </StyledComp>
     );
 }

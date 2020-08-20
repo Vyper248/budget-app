@@ -1,4 +1,4 @@
-import { add, compareAsc, parseISO, format } from 'date-fns';
+import { add, compareAsc, compareDesc, parseISO, format } from 'date-fns';
 import store from './redux/store';
 
 export const getLatestDates = (startDate, periodLength) => {
@@ -180,19 +180,26 @@ export const parseCurrency = (value) => {
     return arr.join('');    
 }
 
-export const checkBudget = (budgets, date, categoryId, transactions) => {
-    let budget = budgets.find(obj => {
-        if (obj.category !== categoryId) return false;
-        if (compareAsc(parseISO(obj.startDate), parseISO(date)) === 1) return false;
-        if (obj.endDate !== undefined && compareAsc(parseISO(obj.endDate), parseISO(date)) === -1) return false;
-        return true;
-    });
+export const checkBudget = (budgets, date, categoryId, transactions, number=false) => {
+    let budget = getLatestBudget(budgets, date, categoryId);
 
-    if (budget !== undefined) {
+    if (budget !== undefined && budget.amount > 0) {
+        if (number) return budget.amount;
         return ` / ${parseCurrency(budget.amount)}`;
     } else {
+        if (number) return 0;
         return '';
     }    
+}
+
+
+const getLatestBudget = (budgets, date, category) => {
+    for (let i = budgets.length-1; i >= 0; i--) {
+        let budget = budgets[i];
+        if (budget.category !== category) continue;
+        if (compareDesc(parseISO(budget.startDate), parseISO(date)) >= 0) return budget;
+    }
+    return undefined;
 }
 
 export const checkFundTarget = (fund) => {

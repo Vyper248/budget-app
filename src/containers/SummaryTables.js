@@ -3,12 +3,13 @@ import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { FaPiggyBank } from 'react-icons/fa';
 
 import Table from '../components/Table';
 import Grid from '../components/Grid';
 import AmountGroup from '../components/AmountGroup';
-import Button from '../components/Button';
 import IconButton from '../components/IconButton';
+import BudgetInput from '../components/BudgetInput';
 
 import { getLatestDates, getSummaryRows, getSummaryTotals, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
 
@@ -21,12 +22,13 @@ const SummaryTables = () => {
     const budgets = useSelector(state => filterDeleted(state.budgets));
     const funds = useSelector(state => filterDeleted(state.funds));
     const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
-    const accounts = useSelector(state => filterDeleted(state.accounts));
 
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
     const dates = getLatestDates(general.startDate, general.payPeriodType);
     const [latestDate, setLatestDate] = useState(dates[dates.length-1]);
+
+    const [editCategory, setEditCategory] = useState(0);
 
     const rows = getSummaryRows(dates, transactions, funds, categories, fundAdditions);
 
@@ -34,6 +36,11 @@ const SummaryTables = () => {
     const expenseCategories = categories.filter(obj => obj.type === 'expense');
 
     const summaryTotals = getSummaryTotals(transactions, funds, categories, fundAdditions);
+
+    const toggleEditCategory = (id) => () => {
+        if (editCategory === id) setEditCategory(0);
+        else setEditCategory(id);
+    }
 
     const setPreviousDate = () => {
         if (latestDate === 'Totals') {
@@ -87,10 +94,10 @@ const SummaryTables = () => {
                 <div>
                     <Grid>
                         { getHeading() }
-                        { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='income'/>) }
-                        { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name] ? summaryTotals[obj.name].remaining : 0)+checkFundTarget(summaryTotals[obj.name])} type='fund'/>) }
-                        { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='expense'/>) }
-                        <AmountGroup title='Remaining' amount={parseCurrency(summaryTotals.remaining)} type='remaining'/>
+                        { incomeCategories.map(obj => <AmountGroup key={'totals-heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='income'/>) }
+                        { filteredFunds.map(obj => <AmountGroup key={'totals-heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name] ? summaryTotals[obj.name].remaining : 0)+checkFundTarget(summaryTotals[obj.name])} type='fund'/>) }
+                        { expenseCategories.map(obj => <AmountGroup key={'totals-heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='expense'/>) }
+                        <AmountGroup title='TotalRemaining' amount={parseCurrency(summaryTotals.remaining)} type='remaining'/>
                     </Grid>
                 </div>
             );
@@ -102,7 +109,7 @@ const SummaryTables = () => {
                     { getHeading() }
                     { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='income'/>) }
                     { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='fund'/>) }
-                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])+checkBudget(budgets, latestDate, obj.id, transactions)} type='expense'/>) }
+                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='expense' editBudget={true} budget={checkBudget(budgets, latestDate, obj.id, transactions, true)} id={obj.id} date={latestDate}/>) }
                     <AmountGroup title='Remaining' amount={parseCurrency(rows[latestDate].remaining)} type='remaining'/>
                 </Grid>
             </div>
@@ -118,7 +125,7 @@ const SummaryTables = () => {
                         <td>Date</td>
                         { incomeCategories.map(obj => <td key={'heading-'+obj.id} className="income">{obj.name}</td>) }
                         { filteredFunds.map(obj => <td key={'heading-'+obj.id} className="fund">{obj.name}</td>) }
-                        { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}</td>) }
+                        { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}<div className="budgetIcon" onClick={toggleEditCategory(obj.id)}><FaPiggyBank/></div></td>) }
                         <td className="remaining">Remaining</td>
                     </tr>
                 </thead>
@@ -130,7 +137,7 @@ const SummaryTables = () => {
                                     <td>{date}</td>
                                     { incomeCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
                                     { filteredFunds.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
-                                    { expenseCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}{checkBudget(budgets, date, obj.id, transactions)}</td>) }
+                                    { expenseCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}{editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions)}</td>) }
                                     <td>{ parseCurrency(rows[date].remaining) }</td>
                                 </tr>
                             )

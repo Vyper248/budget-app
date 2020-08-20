@@ -51,6 +51,7 @@ const List = ({heading='', array=[], onClickObj, selected}) => {
             <h4>{heading}</h4>
             {
                 array.map(obj => {
+                    if (obj.name.length === 0) return null;
                     return (
                         <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
                     );

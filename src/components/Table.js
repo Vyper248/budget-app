@@ -75,6 +75,20 @@ const Table = styled.table`
     & tbody tr:last-child td:last-child {
         border-bottom-right-radius: 5px;
     }
+
+    & td {
+        position: relative;
+    }
+
+    & .budgetIcon {
+        ${'' /* position: absolute; */}
+        float: right;
+        margin-left: 5px;
+    }
+
+    & .budgetIcon:hover {
+        cursor: pointer;
+    }
 `;
 
 export default Table;

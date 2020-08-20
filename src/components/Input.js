@@ -29,6 +29,7 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
         {
             options.length > 0 
             ? options.map(option => {
+                if (option.display.length === 0) return null;
                 return <option key={'inputOption-'+option.value} value={option.value}>{option.display}</option>
             })
             : groups.map(group => {
@@ -36,6 +37,7 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
                     <optgroup key={'inputGroup-'+group.label} label={group.label}>
                     {
                         group.options.map(option => {
+                            if (option.display.length === 0) return null;
                             return <option key={'inputGroupOption-'+option.value} value={option.value}>{option.display}</option>
                         })
                     }
@@ -45,6 +47,8 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
         }
         </StyledComp>
     );
+
+    if (type === 'dropdown' && (options.length === 0 && groups.length === 0)) return <StyledComp value={'No Options'} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder} disabled={true}/>
 
     return (
         <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder}/>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaTrashAlt } from 'react-icons/fa';
 import { format, parseISO } from 'date-fns';
 
-import { parseCurrency, getAmount, filterDeleted } from '../functions';
+import { getAmount, filterDeleted } from '../functions';
 
 import IconButton from '../components/IconButton';
 

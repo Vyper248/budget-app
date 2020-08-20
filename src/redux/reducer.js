@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, compareAsc, compareDesc, parseISO } from 'date-fns';
 
 const initialState = {
     currentPage: 'Home',
@@ -45,7 +45,6 @@ const initialState = {
             category: 20200723153102,
             amount: 50,
             startDate: '2020-01-03',
-            endDate: '2020-02-27',
             carryOver: true,
         },
         {
@@ -53,7 +52,6 @@ const initialState = {
             category: 20200723153102,
             amount: 80,
             startDate: '2020-02-28',
-            endDate: undefined,
             carryOver: true,
         }
     ],
@@ -94,7 +92,7 @@ export const reducer = (state = initialState, action) => {
 
         case 'UPDATE_ACCOUNT': let updatedAccounts = replaceAccount(state.accounts, value); return {...state, accounts: updatedAccounts};
         case 'UPDATE_CATEGORY': let updatedCategories = replaceObject(state.categories, value); return {...state, categories: updatedCategories};
-        case 'UPDATE_BUDGET': let updatedBudgets = replaceObject(state.budgets, value); return {...state, budgets: updatedBudgets};
+        case 'UPDATE_BUDGET': let updatedBudgets = updateBudget(state.budgets, value); return {...state, budgets: updatedBudgets};
         case 'UPDATE_FUND': let updatedFunds = replaceObject(state.funds, value); return {...state, funds: updatedFunds};
         case 'UPDATE_FUND_ADDITION': let updatedFundAdditions = replaceObject(state.fundAdditions, value); return {...state, fundAdditions: updatedFundAdditions};
 
@@ -106,6 +104,44 @@ export const reducer = (state = initialState, action) => {
         case 'REMOVE_TRANSACTION': let removedTransactions = removeObject(state.transactions, value); return {...state, transactions: removedTransactions};
         default: return state;
     }
+}
+
+const updateBudget = (budgets, newBudget) => {
+    newBudget.id = Number(format(new Date(),'yyyyMMddHHmmss')); 
+    //get previous budget
+    let previousBudget = getPreviousBudget(budgets, newBudget.startDate, newBudget.category);
+
+    //check if there's already a budget with this start date
+    let budget = budgets.find(obj => obj.startDate === newBudget.startDate && obj.category === newBudget.category);
+    if (budget !== undefined) {
+        //check if this budget is same as previous - then delete
+        // if (previousBudget !== undefined && previousBudget.amount === newBudget.amount) {
+        //     return removeObject(budgets, budget.id);
+        // }
+
+        budget.amount = newBudget.amount;
+        return replaceObject(budgets, budget);
+    }
+
+    //if there's no budget already, but new budget is same as previous budget, don't do anything
+    if (previousBudget !== undefined && newBudget.amount === previousBudget.amount) return budgets;
+
+    //if no budget already, and new budget is different, then add new
+    let newBudgets = [...budgets, newBudget];
+    newBudgets.sort((a,b) => {
+        return compareAsc(parseISO(a.startDate), parseISO(b.startDate));
+    });
+
+    return newBudgets;
+}
+
+const getPreviousBudget = (budgets, date, category) => {
+    for (let i = budgets.length-1; i >= 0; i--) {
+        let budget = budgets[i];
+        if (budget.category !== category) continue;
+        if (compareDesc(parseISO(budget.startDate), parseISO(date)) === 1) return budget;
+    }
+    return undefined;
 }
 
 const removeObject = (arr, id) => {
