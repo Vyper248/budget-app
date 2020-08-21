@@ -50,6 +50,8 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
 
     if (type === 'dropdown' && (options.length === 0 && groups.length === 0)) return <StyledComp value={'No Options'} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder} disabled={true}/>
 
+    if (type === 'number' && isNaN(value)) value = '';
+
     return (
         <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder}/>
     );

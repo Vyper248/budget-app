@@ -40,7 +40,10 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
     const remove = 'REMOVE'+modalObj.editString; 
 
     const onChange = (obj, key) => (e) => {
-        obj[key] = e.target.value;
+        let value = e.target.value;
+        if (typeof modal[key] === 'number') value = parseFloat(value);
+
+        obj[key] = value;
         //make sure false and true are boolean not string
         if (obj[key] === 'false') obj[key] = false;
         if (obj[key] === 'true') obj[key] = true;

@@ -5,11 +5,12 @@ import { format, parseISO, parse, compareAsc } from 'date-fns';
 import { FaEdit } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 
-import { getAmount, filterDeleted} from '../functions';
+import { getAmount, filterDeleted } from '../functions';
 
 import Transaction from './Transaction';
 import IconButton from './IconButton';
 import HeaderDropdown from './HeaderDropdown';
+import TotalsDisplay from './TotalsDisplay';
 
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
@@ -140,14 +141,34 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         return t;
     }, 0);        
 
-    if (accountId !== undefined && account) total += account.startingBalance;
-    console.log(total);
+    if (accountId !== undefined && account) total += parseFloat(account.startingBalance);
+    
+    let categoryType = 'Expense';
+    if (currentPage === 'Categories') {
+        let category = objArray.find(obj => obj.id === id);
+        if (category !== undefined) categoryType = category.type;
+    }
+
+    let fundInfo = {};
+    if (currentPage === 'Funds') {
+        let fund = objArray.find(obj => obj.id === id);
+        if (fund !== undefined) {
+            fundInfo = {
+                target: fund.targetAmount,
+                remaining: fund.targetAmount - total
+            }
+        }
+    }
 
     return (
         <StyledComp>
-            { isMobile ? null : <h4>{heading} - Transactions</h4> }
+            { isMobile ? null : <h4>{heading}</h4> }
             { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
             <EditButton><IconButton Icon={FaEdit} onClick={toggleDelete}/></EditButton>
+            { currentPage === 'Accounts' ? <TotalsDisplay label="Balance" value={total}/> : null }
+            { currentPage === 'Categories' && categoryType === 'expense' ? <TotalsDisplay label="Total Spent" value={-total}/> : null }
+            { currentPage === 'Categories' && categoryType === 'income' ? <TotalsDisplay label="Total Earned" value={total}/> : null }
+            { currentPage === 'Funds' ? <TotalsDisplay value={total} fundObj={fundInfo}/> : null }
             {
                 organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null
             }
