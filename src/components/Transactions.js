@@ -90,16 +90,13 @@ const EditButton = styled.div`
 const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[]}) => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
-    const accounts = useSelector(state => filterDeleted(state.accounts));
     const categories = useSelector(state => filterDeleted(state.categories));
     const currentPage = useSelector(state => state.currentPage);
     const [showDelete, setShowDelete] = useState(false);
     const [closed, setClosed] = useState({});
 
     let accountId = currentPage === 'Accounts' ? id : undefined;    
-
-    let account = null;
-    if (accountId !== undefined) account = accounts.find(obj => obj.id === accountId);
+    let currentObj = objArray.find(obj => obj.id === id);
 
     //organise by month/year
     let organisedObj = {};
@@ -137,25 +134,29 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     }
 
     let total = transactions.reduce((t,c) => {
-        t += getAmount(c, categories, accountId, false);
+        t += getAmount(c, categories, id, false);
         return t;
     }, 0);        
 
-    if (accountId !== undefined && account) total += parseFloat(account.startingBalance);
+    let negative = false;
+    if (currentObj && currentObj.startingBalance > 0) {
+        if (currentObj.type === 'expense') {
+            total -= parseFloat(currentObj.startingBalance);
+            negative = true;
+        } else total += parseFloat(currentObj.startingBalance);
+    }
     
     let categoryType = 'Expense';
     if (currentPage === 'Categories') {
-        let category = objArray.find(obj => obj.id === id);
-        if (category !== undefined) categoryType = category.type;
+        if (currentObj !== undefined) categoryType = currentObj.type;
     }
 
     let fundInfo = {};
     if (currentPage === 'Funds') {
-        let fund = objArray.find(obj => obj.id === id);
-        if (fund !== undefined) {
+        if (currentObj !== undefined) {
             fundInfo = {
-                target: fund.targetAmount,
-                remaining: fund.targetAmount - total
+                target: currentObj.targetAmount,
+                remaining: currentObj.targetAmount - total
             }
         }
     }
@@ -186,10 +187,10 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
                 })
             }
             {
-                accountId !== undefined && account && account.startingBalance > 0 ? (
+                currentObj && currentObj.startingBalance > 0 ? (
                     <StyledGroup>
                         <strong>Opening Balance</strong>
-                        <Transaction obj={{date: account.dateOpened, amount: account.startingBalance}} accountId={accountId}/>
+                        <Transaction obj={{date: currentObj.dateOpened, amount: negative ? -currentObj.startingBalance : currentObj.startingBalance, description: ''}} accountId={accountId}/>
                     </StyledGroup>
                 ) : null
             }

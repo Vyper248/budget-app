@@ -42,7 +42,7 @@ export const getSummaryTotals = (transactions, funds, categories, fundAdditions)
 
     //make sure every key has a value even if no transactions for it
     funds.forEach(fund => obj[fund.name] = {saved: 0, target: fund.targetAmount, spent: 0, remaining: 0});
-    categories.forEach(category => obj[category.name] = 0);
+    categories.forEach(category => obj[category.name] = category.startingBalance > 0 ? category.startingBalance : 0);
 
     const addToTotals = tr => {
         let heading = getTransactionHeading(funds, categories, tr);

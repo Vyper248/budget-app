@@ -3,6 +3,7 @@ const category = {
     description: '',
     type: 'income,expense',
     hidden: false,
+    startingBalance: 0
 };
 
 const fund = {
@@ -28,7 +29,7 @@ const budget = {
     category: 0,
     amount: 0,
     startDate: 'date',
-    endDate: 'date',
+    endDate: 'date'
 }
 
 export const modals = {

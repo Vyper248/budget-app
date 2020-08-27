@@ -78,7 +78,7 @@ const Transaction = ({obj, accountId, showDelete=false}) => {
         else dispatch({type: 'REMOVE_TRANSACTION', payload: obj.id});
     }
 
-    let date = format(parseISO(obj.date), 'MMM d, yyyy');
+    let date = obj.date !== undefined ? format(parseISO(obj.date), 'MMM d, yyyy') : '';
     let description = getType(obj, accountId, categories, funds, accounts, currentPage);
 
     return (
