@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledComp = styled.div`
-    background-color: var(--bg-color);
+    background-color: var(--menu-bg-color);
     border: 1px solid var(--text-color);
     ${props => props.color ? `border-color: ${props.color}` : ''};
     border-radius: 5px;

@@ -272,3 +272,41 @@ export const checkIfCanDelete = (obj) => {
 export const filterDeleted = (arr) => {
     return arr.filter(obj => obj.deleted !== undefined ? false : true);
 }
+
+export const formatDate = (date, formatMethod='MMM d, yyyy') => {
+    if (date === undefined) return '';
+    if (date.length == 0) return '';
+    return format(parseISO(date), formatMethod);
+} 
+
+export const parseTransaction = (tr) => {
+    let { categories, accounts, funds } = store.getState();
+    let copyTr = {...tr};
+
+    if (copyTr.category !== undefined) {
+        let category = categories.find((obj) => obj.id === copyTr.category);
+        if (category !== undefined) copyTr.category = category.name;
+    }
+
+    if (copyTr.account !== undefined) {
+        let account = accounts.find((obj) => obj.id === copyTr.account);
+        if (account !== undefined) copyTr.account = account.name;
+    }
+
+    if (copyTr.fund !== undefined) {
+        let fund = funds.find((obj) => obj.id === copyTr.fund);
+        if (fund !== undefined) copyTr.fund = fund.name;
+    }
+
+    if (copyTr.from !== undefined) {
+        let account = accounts.find((obj) => obj.id === copyTr.from);
+        if (account !== undefined) copyTr.from = account.name;
+    }
+
+    if (copyTr.to !== undefined) {
+        let account = accounts.find((obj) => obj.id === copyTr.to);
+        if (account !== undefined) copyTr.to = account.name;
+    }
+
+    return copyTr;
+}

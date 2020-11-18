@@ -11,6 +11,8 @@ import Transaction from './Transaction';
 import IconButton from './IconButton';
 import HeaderDropdown from './HeaderDropdown';
 import TotalsDisplay from './TotalsDisplay';
+import Modal from './Modal';
+import TransactionDetails from './TransactionDetails';
 
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
@@ -95,6 +97,9 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     const [showDelete, setShowDelete] = useState(false);
     const [closed, setClosed] = useState({});
 
+    const [details, setDetails] = useState({});
+    const [showDetails, setShowDetails] = useState(false);
+
     let accountId = currentPage === 'Accounts' ? id : undefined;    
     let currentObj = objArray.find(obj => obj.id === id);
 
@@ -133,6 +138,15 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         setClosed(closedObj);
     }
 
+    const onToggleDetails = (obj) => () => {
+        setDetails(obj);
+        setShowDetails(true);
+    }
+
+    const onCloseDetails = () => {
+        setShowDetails(false);
+    }
+
     let total = transactions.reduce((t,c) => {
         t += getAmount(c, categories, id, false);
         return t;
@@ -165,6 +179,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         <StyledComp>
             { isMobile ? null : <h4>{heading}</h4> }
             { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
+            <Modal visible={showDetails}><TransactionDetails obj={details} onClose={onCloseDetails}/></Modal>
             <EditButton><IconButton Icon={FaEdit} onClick={toggleDelete}/></EditButton>
             { currentPage === 'Accounts' ? <TotalsDisplay label="Balance" value={total}/> : null }
             { currentPage === 'Categories' && categoryType === 'expense' ? <TotalsDisplay label="Total Spent" value={-total}/> : null }
@@ -179,7 +194,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
                         <StyledGroup key={'transactionGroup-'+group.month+id} open={closed[group.month] !== true} qty={group.transactions.length}>
                             <strong onClick={onToggleGroup(group.month)}>{group.month}</strong>
                             <div>
-                                { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete}/>) }
+                                { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete} onClick={onToggleDetails}/>) }
                             </div>
                         </StyledGroup>
                     )

@@ -36,11 +36,19 @@ const StyledComp = styled.div`
 
     & div.description {
         max-width: 540px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     & td span.date {
         font-size: 0.8em;
         color: var(--light-text-color);
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #555;
     }
 
     @media screen and (max-width: 700px) {        
@@ -66,7 +74,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const Transaction = ({obj, accountId, showDelete=false}) => {
+const Transaction = ({obj, accountId, showDelete=false, onClick=()=>{}}) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => filterDeleted(state.categories));
     const funds = useSelector(state => filterDeleted(state.funds));
@@ -82,12 +90,12 @@ const Transaction = ({obj, accountId, showDelete=false}) => {
     let description = getType(obj, accountId, categories, funds, accounts, currentPage);
 
     return (
-        <StyledComp>
+        <StyledComp onClick={onClick(obj)}>
             <table>
                 <tbody>
                     <tr>
                         <td>
-                            { description.length > 0 ? <div className='description'>{ getType(obj, accountId, categories, funds, accounts, currentPage) }</div> : null }
+                            { description.length > 0 ? <div className='description'>{ description }</div> : null }
                             { description.length > 0 ? <span className='date'>{ date }</span> : <div className='description'>{ date }</div>}
                         </td>
                         <td>{getAmount(obj, categories, accountId)}</td>
@@ -111,6 +119,11 @@ const getType = (transaction, accountId, categories, funds, accounts, page) => {
         }
     }
 
+    if (page === 'Funds') {
+        if (transaction.description && transaction.description.length > 0) return transaction.description;
+        else return '';
+    }
+
     if (accountId === undefined) return '';
 
     //get category name
@@ -127,7 +140,10 @@ const getType = (transaction, accountId, categories, funds, accounts, page) => {
     //get fund name
     if (transaction.fund !== undefined) {
         let fund = funds.find(obj => obj.id === transaction.fund);
-        if (fund !== undefined) return `${fund.name} Fund`;
+        if (fund !== undefined) {
+            if (transaction.description.length > 0) return `${fund.name} Fund - ${transaction.description}`;
+            return `${fund.name} Fund`;
+        }
     }
 
     //get transfer details
