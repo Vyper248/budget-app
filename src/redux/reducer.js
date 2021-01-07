@@ -151,7 +151,6 @@ const removeObject = (arr, id) => {
             return {id: obj.id, deleted: date};
         } else return obj;
     });
-    // return arr.filter(obj => obj.id !== id);
 }
 
 const replaceObject = (arr, object) => {
