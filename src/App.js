@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Header from './components/Header';
 import TopPopup from './components/TopPopup';
@@ -14,19 +14,34 @@ import Accounts from './containers/Accounts';
 import Footer from './containers/Footer';
 
 function App() {
+    const dispatch = useDispatch();
     const page = useSelector(state => state.currentPage);
     const addTransaction = useSelector(state => state.addTransaction);
+    const backupData = useSelector(state => {
+        return {
+            general: state.general,
+            accounts: state.accounts,
+            categories: state.categories,
+            budgets: state.budgets,
+            funds: state.funds,
+            fundAdditions: state.fundAdditions,
+            transactions: state.transactions
+        };
+    });
 
-    const test = () => {
-        fetch('http://localhost:3001/api/backup', {credentials: 'include'}).then(res => res.json()).then(data => {
-            console.log(data);
-        });
-
+    const sync = () => {
         fetch('http://localhost:3001/api/backup', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
-            body: JSON.stringify({data: 'test'})
+            body: JSON.stringify(backupData)
+        }).then(res => res.json()).then(data => {
+            if (data.status === 'success') {
+                console.log('Updating data: ', data.data);
+                dispatch({type: 'SYNC', payload: data.data});
+            } else {
+                console.log(data);
+            }
         });
     }
 
@@ -60,11 +75,11 @@ function App() {
 
     return (
         <div className="App">
-            <button onClick={test}>Test</button>
+            <Header/>
+            <button onClick={sync}>Sync</button>
             <button onClick={login}>Login</button>
             <button onClick={register}>Register</button>
             <button onClick={logout}>Logout</button>
-            <Header/>
             { page === 'Home' ? <SummaryTables/> : null }
             { page === 'Categories' ? <Categories/> : null }
             { page === 'Funds' ? <Funds/> : null }

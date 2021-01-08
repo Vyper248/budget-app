@@ -11,6 +11,7 @@ const initialState = {
         currencySymbol: '£',
         showDecimals: true,
         startDate: '2019-11-08',
+        updated: 20200220153001,
     },
     accounts: [],
     categories: [
@@ -71,17 +72,18 @@ const initialState = {
 
 export const reducer = (state = initialState, action) => {
     let value = action.payload;
+    let dataValue = Number(format(new Date(),'yyyyMMddHHmmss'));
     switch(action.type) {
         case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
 
-        case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value}};
+        case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value, updated: dataValue}};
         case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};
         case 'SET_TEXT_COLOR': return {...state, general: {...state.general, textColor: value}};
-        case 'SET_CURRENCY_SYMBOL': return {...state, general: {...state.general, currencySymbol: value}};
-        case 'SET_SHOW_DECIMALS': return {...state, general: {...state.general, showDecimals: value}};
-        case 'SET_START_DATE': return {...state, general: {...state.general, startDate: value}};
+        case 'SET_CURRENCY_SYMBOL': return {...state, general: {...state.general, currencySymbol: value, updated: dataValue}};
+        case 'SET_SHOW_DECIMALS': return {...state, general: {...state.general, showDecimals: value, updated: dataValue}};
+        case 'SET_START_DATE': return {...state, general: {...state.general, startDate: value, updated: dataValue}};
 
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
@@ -102,6 +104,8 @@ export const reducer = (state = initialState, action) => {
         case 'REMOVE_FUND': let removedFunds = removeObject(state.funds, value); return {...state, funds: removedFunds};
         case 'REMOVE_FUND_ADDITION': let removedFundAdditions = removeObject(state.fundAdditions, value); return {...state, fundAdditions: removedFundAdditions};
         case 'REMOVE_TRANSACTION': let removedTransactions = removeObject(state.transactions, value); return {...state, transactions: removedTransactions};
+
+        case 'SYNC': return {...state, ...value};
         default: return state;
     }
 }
