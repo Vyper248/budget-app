@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 import { useSelector, useDispatch } from 'react-redux';
+
+import { sync } from './redux/store';
 
 import Header from './components/Header';
 import TopPopup from './components/TopPopup';
@@ -29,20 +31,13 @@ function App() {
         };
     });
 
-    const sync = () => {
-        fetch('http://localhost:3001/api/backup', {
-            method: 'POST', 
-            headers: {'content-type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify(backupData)
-        }).then(res => res.json()).then(data => {
-            if (data.status === 'success') {
-                console.log('Updating data: ', data.data);
-                dispatch({type: 'SYNC', payload: data.data});
-            } else {
-                console.log(data);
-            }
-        });
+    //sync with server when starting app
+    useEffect(() => {
+        sync(backupData, dispatch);
+    }, []);
+
+    const manualSync = () => {
+        sync(backupData, dispatch);
     }
 
     const login = () => {
@@ -76,7 +71,7 @@ function App() {
     return (
         <div className="App">
             <Header/>
-            <button onClick={sync}>Sync</button>
+            <button onClick={manualSync}>Sync</button>
             <button onClick={login}>Login</button>
             <button onClick={register}>Register</button>
             <button onClick={logout}>Logout</button>
