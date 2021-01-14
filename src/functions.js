@@ -194,6 +194,10 @@ export const checkBudget = (budgets, date, categoryId, transactions, number=fals
 
 
 const getLatestBudget = (budgets, date, category) => {
+    budgets.sort((a,b) => {
+        return compareAsc(parseISO(a.startDate), parseISO(b.startDate));
+    });
+
     for (let i = budgets.length-1; i >= 0; i--) {
         let budget = budgets[i];
         if (budget.category !== category) continue;

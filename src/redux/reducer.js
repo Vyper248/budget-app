@@ -41,22 +41,7 @@ const initialState = {
             dateCreated: '2020-06-03'
         },
     ],
-    budgets: [
-        {
-            id: 1,
-            category: 20200723153102,
-            amount: 50,
-            startDate: '2020-01-03',
-            carryOver: true,
-        },
-        {
-            id: 2,
-            category: 20200723153102,
-            amount: 80,
-            startDate: '2020-02-28',
-            carryOver: true,
-        }
-    ],
+    budgets: [],
     funds: [
         {
             id: 20200723153130,
@@ -120,9 +105,9 @@ const updateBudget = (budgets, newBudget) => {
     let budget = budgets.find(obj => obj.startDate === newBudget.startDate && obj.category === newBudget.category);
     if (budget !== undefined) {
         //check if this budget is same as previous - then delete
-        // if (previousBudget !== undefined && previousBudget.amount === newBudget.amount) {
-        //     return removeObject(budgets, budget.id);
-        // }
+        if (previousBudget !== undefined && previousBudget.amount === newBudget.amount) {
+            return removeObject(budgets, budget.id);
+        }
 
         budget.amount = newBudget.amount;
         return replaceObject(budgets, budget);
