@@ -39,30 +39,7 @@
   --footer-border: #009fe8;
   
   --table-heading-bg-color: #666;
-  --table-heading-text-color: white;
-  
-  /* --bg-color: black;
-  --text-color: white;
-  --light-text-color: #CCC;
-  --input-height: 30px;
-
-  --menu-bg-color: black;
-  --menu-selected-bg-color: #555;
-  --menu-text-color: white;
-  --menu-selected-text-color: white;
-  --menu-border-color: #888;
-
-  --icon-color: white;
-  --group-heading-bg-color: gray;
-  --group-heading-text-color: white;
-  
-  --footer-bg: black;
-  --footer-border: white;
-  
-  --table-heading-bg-color: #333;
-  --table-heading-text-color: white; */
-  
- 
+  --table-heading-text-color: white; 
 }
 
 * {

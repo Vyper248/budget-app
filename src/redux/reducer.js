@@ -5,6 +5,7 @@ const initialState = {
     addTransaction: false,
     editMode: false,
     lastSync: 0,
+    user: null,
     general: {
         payPeriodType: 'fourWeekly',
         backgroundColor: 'black',
@@ -63,6 +64,7 @@ export const reducer = (state = initialState, action) => {
         case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
+        case 'SET_USER': return {...state, user: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value, updated: dateValue}};
         case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};

@@ -18,7 +18,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
-        const ignore = ['SET_EDIT_MODE', 'SET_BACKGROUND_COLOR', 'SET_TEXT_COLOR', 'SYNC'];
+        const ignore = ['SET_EDIT_MODE', 'SET_BACKGROUND_COLOR', 'SET_TEXT_COLOR', 'SYNC', 'SET_USER'];
         if (ignore.includes(action.type)) return result;
         sync(getState(), dispatch);
 
@@ -44,13 +44,15 @@ export const sync = (state, dispatch) => {
         body: JSON.stringify(backupData)
     }).then(res => res.json()).then(data => {
         if (data.status === 'success') {
-            console.log('Updating data: ', data.data);
+            console.log('Updating data: ', data);
             dispatch({type: 'SYNC', payload: data.data});
+            dispatch({type: 'SET_USER', payload: data.user});
         } else {
             console.log(data);
         }
     }).catch(err => {
         console.log('Error Syncing: ', err.message);
+        dispatch({type: 'SET_USER', payload: null});
     });
 }
 
