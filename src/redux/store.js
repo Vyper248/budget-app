@@ -27,6 +27,8 @@ const syncMiddleware = ({getState, dispatch}) => {
 };
 
 export const sync = (state, dispatch) => {
+    if (state.user === null) return;
+
     const backupData = {
         general: state.general,
         accounts: state.accounts,
