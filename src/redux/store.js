@@ -49,6 +49,8 @@ export const sync = (state, dispatch) => {
         } else {
             console.log(data);
         }
+    }).catch(err => {
+        console.log('Error Syncing: ', err.message);
     });
 }
 

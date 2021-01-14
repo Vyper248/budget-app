@@ -48,6 +48,8 @@ function App() {
             body: JSON.stringify({username: 'test', password: 'test'})
         }).then(res => res.json()).then(data => {
             console.log(data);
+        }).catch(err => {
+            console.log(err.message);
         });
     }
 
@@ -59,12 +61,16 @@ function App() {
             body: JSON.stringify({username: 'test', password: 'test'})
         }).then(res => res.json()).then(data => {
             console.log(data);
+        }).catch(err => {
+            console.log(err.message);
         });
     }
 
     const logout = () => {
         fetch('http://localhost:3001/api/logout', {credentials: 'include'}).then(res => res.json()).then(data => {
             console.log(data);
+        }).catch(err => {
+            console.log(err.message);
         });
     }
 
