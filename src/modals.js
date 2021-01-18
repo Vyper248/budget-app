@@ -11,6 +11,7 @@ const fund = {
     description: '',
     targetAmount: 0,
     complete: false,
+    startingBalance: 0
 }
 
 const account = {

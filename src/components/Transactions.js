@@ -153,7 +153,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     }, 0);        
 
     let negative = false;
-    if (currentObj && currentObj.startingBalance > 0) {
+    if (currentObj && currentObj.startingBalance !== undefined) {
         if (currentObj.type === 'expense') {
             total -= parseFloat(currentObj.startingBalance);
             negative = true;
@@ -202,7 +202,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
                 })
             }
             {
-                currentObj && currentObj.startingBalance > 0 ? (
+                currentObj && currentObj.startingBalance !== undefined ? (
                     <StyledGroup>
                         <strong>Opening Balance</strong>
                         <Transaction obj={{date: currentObj.dateOpened, amount: negative ? -currentObj.startingBalance : currentObj.startingBalance, description: ''}} accountId={accountId}/>
