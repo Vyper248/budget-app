@@ -11,7 +11,7 @@ import AmountGroup from '../components/AmountGroup';
 import IconButton from '../components/IconButton';
 import BudgetInput from '../components/BudgetInput';
 
-import { getLatestDates, getSummaryRows, getSummaryTotals, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
+import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -22,6 +22,7 @@ const SummaryTables = () => {
     const budgets = useSelector(state => filterDeleted(state.budgets));
     const funds = useSelector(state => filterDeleted(state.funds));
     const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
+    const accounts = useSelector(state => filterDeleted(state.accounts));
 
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
@@ -36,6 +37,7 @@ const SummaryTables = () => {
     const expenseCategories = categories.filter(obj => obj.type === 'expense');
 
     const summaryTotals = getSummaryTotals(transactions, funds, categories, fundAdditions);
+    const accountSummary = getAccountSummary(transactions, accounts, categories);
 
     const toggleEditCategory = (id) => () => {
         if (editCategory === id) setEditCategory(0);
@@ -99,6 +101,11 @@ const SummaryTables = () => {
                         { expenseCategories.map(obj => <AmountGroup key={'totals-heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='expense'/>) }
                         <AmountGroup title='Remaining' amount={parseCurrency(summaryTotals.remaining)} type='remaining'/>
                     </Grid>
+
+                    <h3>Accounts</h3>
+                    <Grid>
+                        { accountSummary.map(obj => <AmountGroup title={obj.name} amount={parseCurrency(obj.total)} type='account'/>) }
+                    </Grid>
                 </div>
             );
         }
@@ -150,6 +157,25 @@ const SummaryTables = () => {
                         { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
                         <td>{parseCurrency(summaryTotals.remaining)}</td>
                     </tr>
+                </tbody>
+            </Table>
+            <h4>Account Summaries</h4>
+            <Table>
+                <thead>
+                    <tr>
+                        <td>Account</td>
+                        <td>Total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    accountSummary.map(obj => 
+                        <tr>
+                            <td>{obj.name}</td>
+                            <td>{parseCurrency(obj.total)}</td>
+                        </tr>
+                    )
+                }
                 </tbody>
             </Table>
         </div>

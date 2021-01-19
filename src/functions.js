@@ -40,6 +40,9 @@ export const getLatestDates = (startDate, periodLength) => {
 export const getSummaryTotals = (transactions, funds, categories, fundAdditions) => {
     let obj = {};
 
+    //store names in object for quick lookup
+    let {categoryNames, fundNames} = createNameObjects(categories, funds);
+
     //make sure every key has a value even if no transactions for it
     funds.forEach(fund => {
         let saved = fund.startingBalance > 0 ? fund.startingBalance : 0;
@@ -48,7 +51,7 @@ export const getSummaryTotals = (transactions, funds, categories, fundAdditions)
     categories.forEach(category => obj[category.name] = category.startingBalance > 0 ? category.startingBalance : 0);
 
     const addToTotals = tr => {
-        let heading = getTransactionHeading(funds, categories, tr);
+        let heading = getTransactionHeading(fundNames, categoryNames, tr);
 
         if (tr.fund !== undefined) {
             let target = getFundTarget(funds, tr);            
@@ -89,6 +92,9 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     let obj = {};
     dates.forEach(date => obj[date] = {});
 
+    //store names in object for quick lookup
+    let {categoryNames, fundNames} = createNameObjects(categories, funds);
+
     //filter out transactions that happened before first date and those which are for funds
     let filteredTransactions = transactions.filter(tr => {
         if (tr.fund !== undefined) return false;
@@ -106,7 +112,7 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     //add transaction amounts to correct heading in object
     const addFunc = (tr) => {
         let periodDate = getPeriodOfTransaction(dates, tr.date);
-        let heading = getTransactionHeading(funds, categories, tr);
+        let heading = getTransactionHeading(fundNames, categoryNames, tr);
         if (obj[periodDate][heading] === undefined) obj[periodDate][heading] = 0;
         obj[periodDate][heading] += tr.amount;
     }
@@ -129,19 +135,53 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     return obj;
 };
 
+export const getAccountSummary = (transactions, accounts, categories) => {
+    let objs = [];
+
+    accounts.forEach(account => {
+        const filteredTransactions = transactions.filter(obj => {
+            if (obj.from !== undefined && obj.to !== undefined && (obj.from === account.id || obj.to === account.id)) return true; 
+            return obj.account !== undefined && obj.account === account.id ? true : false;
+        });   
+
+        let total = filteredTransactions.reduce((t,c) => {
+            t += getAmount(c, categories, account.id, false);
+            return t;
+        }, 0);        
+
+        if (account.startingBalance !== undefined) {
+            total += parseFloat(account.startingBalance);
+        }
+
+        objs.push({name: account.name, total: total});
+    });
+
+    return objs;
+}
+
+const createNameObjects = (categories, funds) => {
+    let categoryNames = {};
+    let fundNames = {};
+
+    categories.forEach(category => categoryNames[category.id] = category.name);
+    funds.forEach(fund => fundNames[fund.id] = fund.name);
+
+    return {categoryNames, fundNames};
+}
+
 const getFundTarget = (funds, tr) => {
     let fund = funds.find(obj => obj.id === tr.fund);
     if (fund !== undefined) return fund.targetAmount;
     return 0;
 }
 
-const getTransactionHeading = (funds, categories, tr) => {
+const getTransactionHeading = (fundNames, categoryNames, tr) => {
     if (tr.category !== undefined) {
-        let category = categories.find(obj => obj.id === tr.category);
-        if (category !== undefined) return category.name;
+        let name = categoryNames[tr.category];
+        if (name !== undefined) return name;
     } else if (tr.fund !== undefined) {
-        let fund = funds.find(obj => obj.id === tr.fund);
-        if (fund !== undefined) return fund.name;
+        let name = fundNames[tr.fund];
+        if (name !== undefined) return name;
     }
     return 'Un-Categorised';
 }

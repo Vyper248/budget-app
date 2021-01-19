@@ -28,6 +28,7 @@ const StyledComp = styled.div`
         ${props => props.type === 'expense' ? 'background-color: darkorange; color: black;' : ''};
         ${props => props.type === 'fund' ? 'background-color: lightsteelblue; color: black;' : ''};
         ${props => props.type === 'remaining' ? 'background-color: deepskyblue; color: black;' : ''};
+        ${props => props.type === 'account' ? 'background-color: deepskyblue; color: black;' : ''};
     }
 
     & > div:last-of-type {
