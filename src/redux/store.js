@@ -19,7 +19,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
-        const ignore = ['SET_EDIT_MODE', 'SYNC', 'SET_USER'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER'];
         if (ignore.includes(action.type)) return result;
         sync(getState(), dispatch);
 

@@ -11,6 +11,7 @@ import Button from '../components/Button';
 const Settings = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
+    const lastSync = useSelector(state => state.lastSync);
 
     const payPeriodType = useSelector(state => state.general.payPeriodType);
     const currencySymbol = useSelector(state => state.general.currencySymbol);
@@ -103,6 +104,9 @@ const Settings = () => {
     const onChangeUsername = (e) => setUsername(e.target.value);
     const onChangePassword = (e) => setPassword(e.target.value);
 
+    let lastSyncDate = lastSync.toFixed(0);
+    let lastSyncDisplay = `${lastSyncDate.slice(6,8)}/${lastSyncDate.slice(4,6)}/${lastSyncDate.slice(0,4)} at ${lastSyncDate.slice(8,10)}:${lastSyncDate.slice(10,12)}`;
+
     return (
         <div>
             <Container>
@@ -121,6 +125,7 @@ const Settings = () => {
 
                 <h4>Syncing</h4>
                 <p>This will allow you to upload your data to a server for backup and to sync with other devices.</p>
+                <p>Last synced on: {lastSyncDisplay}</p>
                 { user === null 
                 ?   <div>
                         <LabelledInput label="Username" value={username} onChange={onChangeUsername}/>
