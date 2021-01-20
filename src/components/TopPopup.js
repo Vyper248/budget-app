@@ -7,11 +7,11 @@ const StyledComp = styled.div`
     width: 100%;
 
     & > div {
-        border: 1px solid white;
+        border: 1px solid var(--menu-border-color);
         width: 300px;
         margin: auto;
         padding: 10px;
-        background-color: black;
+        background-color: var(--bg-color);
     }
 `;
 

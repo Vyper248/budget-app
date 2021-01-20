@@ -1,39 +1,15 @@
 :root {
-  /* --bg-color: white;
-  --text-color: black;
-  --light-text-color: #888;
-  --input-height: 30px;
-
-  --menu-bg-color: black;
-  --menu-selected-bg-color: #CCC;
-  --menu-text-color: black;
-  --menu-selected-text-color: black;
-  --menu-border-color: black;
-
-  --icon-color: black;
-  --group-heading-bg-color: gray;
-  --group-heading-text-color: white;
-  
-  --footer-bg: white;
-  --footer-border: black; 
-  
-  --table-heading-bg-color: #555;
-  --table-heading-text-color: white;*/
-
   --bg-color: #222;
   --text-color: white;
   --light-text-color: #CCC;
   --input-height: 30px;
+  --icon-color: #4dc6ff;
 
   --menu-bg-color: #009fe8;
   --menu-selected-bg-color: #0076ad;
   --menu-text-color: white;
   --menu-selected-text-color: white;
   --menu-border-color: #BBB;
-
-  --icon-color: #4dc6ff;
-  --group-heading-bg-color: #009fe8;
-  --group-heading-text-color: white;
   
   --footer-bg: #222;
   --footer-border: #009fe8;

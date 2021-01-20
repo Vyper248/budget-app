@@ -6,7 +6,7 @@ const StyledComp = styled.div`
     border: 1px solid white;
     position: fixed;
     top: 50px;
-    background-color: black;
+    background-color: var(--bg-color);
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);

@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import { reducer } from './reducer';
+import { changeColourScheme } from '../functions';
 
 const localStorageMiddleware = ({getState}) => {
     return (next) => (action) => {
@@ -18,7 +19,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
-        const ignore = ['SET_EDIT_MODE', 'SET_BACKGROUND_COLOR', 'SET_TEXT_COLOR', 'SYNC', 'SET_USER'];
+        const ignore = ['SET_EDIT_MODE', 'SYNC', 'SET_USER'];
         if (ignore.includes(action.type)) return result;
         sync(getState(), dispatch);
 
@@ -49,6 +50,7 @@ export const sync = (state, dispatch) => {
             console.log('Updating data: ', data);
             dispatch({type: 'SYNC', payload: data.data});
             dispatch({type: 'SET_USER', payload: data.user});
+            changeColourScheme(data.data.general.colourScheme);
         } else {
             console.log(data);
         }
@@ -65,6 +67,7 @@ const getFromLocalStorage = () => {
         state.currentPage = 'Home';
         state.editMode = false;
         state.addTransaction = false;
+        changeColourScheme(state.general.colourScheme);
         return state;
     }
 }

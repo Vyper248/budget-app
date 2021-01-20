@@ -8,9 +8,8 @@ const initialState = {
     user: null,
     general: {
         payPeriodType: 'fourWeekly',
-        backgroundColor: 'black',
-        textColor: 'white',
         currencySymbol: '£',
+        colourScheme: 'dark',
         showDecimals: true,
         startDate: '2019-11-08',
         updated: 20200220153001,
@@ -61,14 +60,13 @@ export const reducer = (state = initialState, action) => {
     let value = action.payload;
     let dateValue = Number(format(new Date(),'yyyyMMddHHmmss'));
     switch(action.type) {
-        case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false};
+        case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false, addTransaction: false};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
         case 'SET_USER': return {...state, user: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value, updated: dateValue}};
-        case 'SET_BACKGROUND_COLOR': return {...state, general: {...state.general, backgroundColor: value}};
-        case 'SET_TEXT_COLOR': return {...state, general: {...state.general, textColor: value}};
+        case 'SET_COLOUR_SCHEME': return {...state, general: {...state.general, colourScheme: value, updated: dateValue}};
         case 'SET_CURRENCY_SYMBOL': return {...state, general: {...state.general, currencySymbol: value, updated: dateValue}};
         case 'SET_SHOW_DECIMALS': return {...state, general: {...state.general, showDecimals: value, updated: dateValue}};
         case 'SET_START_DATE': return {...state, general: {...state.general, startDate: value, updated: dateValue}};

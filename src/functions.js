@@ -153,7 +153,7 @@ export const getAccountSummary = (transactions, accounts, categories) => {
             total += parseFloat(account.startingBalance);
         }
 
-        objs.push({name: account.name, total: total});
+        objs.push({name: account.name, total: total, id: account.id});
     });
 
     return objs;
@@ -356,4 +356,65 @@ export const parseTransaction = (tr) => {
     }
 
     return copyTr;
+}
+
+export const changeColourScheme = (scheme) => {
+    let root = document.documentElement;
+
+    if (scheme === 'dark') {
+        root.style.setProperty('--bg-color', '#222');
+        root.style.setProperty('--text-color', 'white');
+        root.style.setProperty('--light-text-color', '#CCC');
+        root.style.setProperty('--icon-color', '#4dc6ff');
+
+        root.style.setProperty('--menu-bg-color', '#009fe8');
+        root.style.setProperty('--menu-selected-bg-color', '#0076ad');
+        root.style.setProperty('--menu-text-color', 'white');
+        root.style.setProperty('--menu-selected-text-color', 'white');
+        root.style.setProperty('--menu-border-color', '#BBB');
+        
+        root.style.setProperty('--footer-bg', '#222');
+        root.style.setProperty('--footer-border', '#009fe8');
+        
+        root.style.setProperty('--table-heading-bg-color', '#555');
+        root.style.setProperty('--table-heading-text-color', 'white');
+    }
+
+    if (scheme === 'black') {
+        root.style.setProperty('--bg-color', 'black');
+        root.style.setProperty('--text-color', 'white');
+        root.style.setProperty('--light-text-color', '#CCC');
+        root.style.setProperty('--icon-color', '#4dc6ff');
+
+        root.style.setProperty('--menu-bg-color', '#009fe8');
+        root.style.setProperty('--menu-selected-bg-color', '#0076ad');
+        root.style.setProperty('--menu-text-color', 'white');
+        root.style.setProperty('--menu-selected-text-color', 'white');
+        root.style.setProperty('--menu-border-color', '#BBB');
+        
+        root.style.setProperty('--footer-bg', 'black');
+        root.style.setProperty('--footer-border', '#009fe8');
+        
+        root.style.setProperty('--table-heading-bg-color', '#555');
+        root.style.setProperty('--table-heading-text-color', 'white');
+    }
+
+    if (scheme === 'light') {
+        root.style.setProperty('--bg-color', 'white');
+        root.style.setProperty('--text-color', 'black');
+        root.style.setProperty('--light-text-color', '#555');
+        root.style.setProperty('--icon-color', 'black');
+
+        root.style.setProperty('--menu-bg-color', '#009fe8');
+        root.style.setProperty('--menu-selected-bg-color', '#0076ad');
+        root.style.setProperty('--menu-text-color', 'white');
+        root.style.setProperty('--menu-selected-text-color', 'white');
+        root.style.setProperty('--menu-border-color', 'black');
+        
+        root.style.setProperty('--footer-bg', 'white');
+        root.style.setProperty('--footer-border', 'black');
+        
+        root.style.setProperty('--table-heading-bg-color', '#AAA');
+        root.style.setProperty('--table-heading-text-color', 'black');
+    }
 }

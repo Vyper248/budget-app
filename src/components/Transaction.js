@@ -48,7 +48,7 @@ const StyledComp = styled.div`
 
     &:hover {
         cursor: pointer;
-        background-color: #555;
+        background-color: var(--table-heading-bg-color);
     }
 
     @media screen and (max-width: 700px) {        

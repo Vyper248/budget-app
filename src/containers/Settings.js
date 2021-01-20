@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { changeColourScheme } from '../functions';
 import { sync } from '../redux/store';
 
 import Container from '../components/Container';
@@ -10,6 +11,21 @@ import Button from '../components/Button';
 const Settings = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
+
+    const payPeriodType = useSelector(state => state.general.payPeriodType);
+    const currencySymbol = useSelector(state => state.general.currencySymbol);
+    const showDecimals = useSelector(state => state.general.showDecimals);
+    const startDate = useSelector(state => state.general.startDate);
+    const colourScheme = useSelector(state => state.general.colourScheme);
+
+    const setPayPeriodType = (e) => dispatch({type: 'SET_PAY_PERIOD_TYPE', payload: e.target.value});
+    const setCurrencySymbol = (e) => dispatch({type: 'SET_CURRENCY_SYMBOL', payload: e.target.value});
+    const setShowDecimals = (e) => {
+        let value = e.target.value === 'false' ? false : true;
+        dispatch({type: 'SET_SHOW_DECIMALS', payload: value});
+    }
+    const setStartDate = (e) => dispatch({type: 'SET_START_DATE', payload: e.target.value});
+    const setColourScheme = (value) => dispatch({type: 'SET_COLOUR_SCHEME', payload: value});
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -25,6 +41,12 @@ const Settings = () => {
             transactions: state.transactions
         };
     });
+
+    const onChangeColorScheme = (e) => {
+        let value = e.target.value;
+        changeColourScheme(value);
+        setColourScheme(value);
+    }
 
     const manualSync = () => {
         sync(backupData, dispatch);
@@ -86,6 +108,19 @@ const Settings = () => {
             <Container>
                 <h4>Settings</h4>
 
+                <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth='150px'/>
+                <LabelledInput label="Currency Symbol" value={currencySymbol} onChange={setCurrencySymbol} labelWidth='150px'/>
+                <LabelledInput label="Show Decimals" type="dropdown" value={showDecimals} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowDecimals} labelWidth='150px'/>
+                <LabelledInput label="Pay Period" type="dropdown" value={payPeriodType} onChange={setPayPeriodType} labelWidth='150px' options={[
+                    {value: 'monthly', display: 'Monthly'}, 
+                    {value: 'fourWeekly', display: '4-Weekly'}, 
+                    {value: 'twoWeekly', display: '2-Weekly'}, 
+                    {value: 'weekly', display: 'Weekly'}
+                ]}/>
+                <LabelledInput label="Colour Scheme" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth='150px'/>
+
+                <h4>Syncing</h4>
+                <p>This will allow you to upload your data to a server for backup and to sync with other devices.</p>
                 { user === null 
                 ?   <div>
                         <LabelledInput label="Username" value={username} onChange={onChangeUsername}/>

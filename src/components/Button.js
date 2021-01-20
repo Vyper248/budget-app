@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const StyledComp = styled.div`
     background-color: var(--menu-bg-color);
-    border: 1px solid var(--text-color);
+    color: var(--menu-text-color);
+    border: 1px solid var(--menu-border-color);
     ${props => props.color ? `border-color: ${props.color}` : ''};
     border-radius: 5px;
     height: var(--input-height);

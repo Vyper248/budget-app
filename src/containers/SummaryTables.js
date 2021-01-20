@@ -104,7 +104,7 @@ const SummaryTables = () => {
 
                     <h3>Accounts</h3>
                     <Grid>
-                        { accountSummary.map(obj => <AmountGroup title={obj.name} amount={parseCurrency(obj.total)} type='account'/>) }
+                        { accountSummary.map(obj => <AmountGroup key={'account-'+obj.id} title={obj.name} amount={parseCurrency(obj.total)} type='account'/>) }
                     </Grid>
                 </div>
             );
@@ -170,7 +170,7 @@ const SummaryTables = () => {
                 <tbody>
                 {
                     accountSummary.map(obj => 
-                        <tr>
+                        <tr key={'account-'+obj.id}>
                             <td>{obj.name}</td>
                             <td>{parseCurrency(obj.total)}</td>
                         </tr>

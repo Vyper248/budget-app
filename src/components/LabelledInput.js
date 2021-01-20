@@ -9,18 +9,18 @@ const StyledComp = styled.div`
     margin: 5px;
 
     & > label {
-        width: 120px;
+        width: ${props => props.labelWidth};
         display: inline-flex;
         justify-content: flex-end;
         align-items: center;
         height: var(--input-height);
         padding: 0px 10px;
-        border-left: 1px solid white;
-        border-top: 1px solid white;
-        border-bottom: 1px solid white;
+        border-left: 1px solid var(--menu-border-color);
+        border-top: 1px solid var(--menu-border-color);
+        border-bottom: 1px solid var(--menu-border-color);
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
-        background-color: #333;
+        background-color: var(--table-heading-bg-color);
     }
 
     & > input, & > select {
@@ -30,12 +30,12 @@ const StyledComp = styled.div`
     }
 `;
 
-const LabelledInput = ({label, type='text', value, placeholder='', onChange, options=[], groups=[]}) => {
+const LabelledInput = ({label, type='text', value, placeholder='', onChange, options=[], groups=[], labelWidth='120px'}) => {
     let inputValue = value;
     if (isNaN(inputValue) && type === 'number') inputValue = '';
 
     return (
-        <StyledComp>
+        <StyledComp labelWidth={labelWidth}>
             <label>{label}</label>
             <Input value={inputValue} type={type} onChange={onChange} placeholder={placeholder} options={options} groups={groups}/>
         </StyledComp>

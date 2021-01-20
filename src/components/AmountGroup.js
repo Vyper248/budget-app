@@ -24,7 +24,7 @@ const StyledComp = styled.div`
         font-weight: bold;
         padding: 2px;
         margin-bottom: 4px;
-        ${props => props.type === 'income' ? 'background-color: green' : ''};
+        ${props => props.type === 'income' ? 'background-color: green; color: white;' : ''};
         ${props => props.type === 'expense' ? 'background-color: darkorange; color: black;' : ''};
         ${props => props.type === 'fund' ? 'background-color: lightsteelblue; color: black;' : ''};
         ${props => props.type === 'remaining' ? 'background-color: deepskyblue; color: black;' : ''};

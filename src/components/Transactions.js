@@ -53,9 +53,9 @@ const StyledGroup = styled.div`
     & > strong {
         display: block;
         width: 100%;
-        background-color: var(--group-heading-bg-color);
+        background-color: var(--menu-bg-color);
         padding: 10px;
-        color: var(--group-heading-text-color);
+        color: var(--menu-text-color);
     }
 
     & > strong:hover {
