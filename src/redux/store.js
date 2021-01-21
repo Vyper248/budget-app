@@ -19,7 +19,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
-        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE'];
         if (ignore.includes(action.type)) return result;
         sync(getState(), dispatch);
 
@@ -27,7 +27,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     }
 };
 
-export const sync = (state, dispatch) => {
+export const sync = (state, dispatch, manual=false) => {
     if (state.user === null) return;
 
     const backupData = {
@@ -51,12 +51,15 @@ export const sync = (state, dispatch) => {
             dispatch({type: 'SYNC', payload: data.data});
             dispatch({type: 'SET_USER', payload: data.user});
             changeColourScheme(data.data.general.colourScheme);
+            if (manual) dispatch({type: 'SET_MESSAGE', payload: {text: 'Data successfully synced!', type: 'success'}});
         } else {
             console.log(data);
+            dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
         }
     }).catch(err => {
         console.log('Error Syncing: ', err.message);
         dispatch({type: 'SET_USER', payload: null});
+        dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server for syncing.', type: 'error'}});
     });
 }
 
@@ -65,6 +68,7 @@ const getFromLocalStorage = () => {
     if (state !== null) {
         state = JSON.parse(state);
         state.currentPage = 'Home';
+        state.message = {text: '', type: ''};
         state.editMode = false;
         state.addTransaction = false;
         changeColourScheme(state.general.colourScheme);

@@ -7,6 +7,7 @@ import { sync } from './redux/store';
 
 import Header from './components/Header';
 import TopPopup from './components/TopPopup';
+import MessagePopup from './components/MessagePopup';
 
 import SummaryTables from './containers/SummaryTables';
 import AddTransaction from './containers/AddTransaction';
@@ -20,6 +21,7 @@ function App() {
     const dispatch = useDispatch();
     const page = useSelector(state => state.currentPage);
     const addTransaction = useSelector(state => state.addTransaction);
+    const user = useSelector(state => state.user);
     const backupData = useSelector(state => {
         return {
             general: state.general,
@@ -34,12 +36,13 @@ function App() {
 
     //sync with server when starting app
     useEffect(() => {
-        sync(backupData, dispatch);
+        if (user !== null) sync(backupData, dispatch);
     }, []);
 
     return (
         <div className="App">
             <Header/>
+            <MessagePopup/>
             { page === 'Home' ? <SummaryTables/> : null }
             { page === 'Categories' ? <Categories/> : null }
             { page === 'Funds' ? <Funds/> : null }

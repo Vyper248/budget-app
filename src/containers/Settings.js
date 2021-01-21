@@ -50,10 +50,11 @@ const Settings = () => {
     }
 
     const manualSync = () => {
-        sync(backupData, dispatch);
+        sync(backupData, dispatch, true);
     }
 
     const login = () => {
+        dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('http://localhost:3001/api/login', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
@@ -66,15 +67,26 @@ const Settings = () => {
                 dispatch({type: 'SET_USER', payload: data.user});
             } else {
                 console.log(data);
+                dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
             }
         }).catch(err => {
             console.log(err.message);
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
         });
     }
 
     const register = () => {
-        if (username.length < 3 || password.length < 5) return;
+        if (username.length < 3) {
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Username should be 3 or more characters', type: 'error'}});
+            return;
+        }
 
+        if (password.length < 5) {
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Password should be 5 or more characters', type: 'error'}});
+            return;
+        }
+
+        dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('http://localhost:3001/api/register', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
@@ -85,19 +97,21 @@ const Settings = () => {
             setUsername('');
             setPassword('');
             if (data.status === 'success') dispatch({type: 'SET_USER', payload: data.user});
+            else dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
         }).catch(err => {
             console.log(err.message);
             dispatch({type: 'SET_USER', payload: null});
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
         });
     }
 
     const logout = () => {
         fetch('http://localhost:3001/api/logout', {credentials: 'include'}).then(res => res.json()).then(data => {
-            console.log(data);
             dispatch({type: 'SET_USER', payload: null});
         }).catch(err => {
             console.log(err.message);
             dispatch({type: 'SET_USER', payload: null});
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
         });
     }
 
@@ -106,6 +120,7 @@ const Settings = () => {
 
     let lastSyncDate = lastSync.toFixed(0);
     let lastSyncDisplay = `${lastSyncDate.slice(6,8)}/${lastSyncDate.slice(4,6)}/${lastSyncDate.slice(0,4)} at ${lastSyncDate.slice(8,10)}:${lastSyncDate.slice(10,12)}`;
+    if (lastSync === 0 || lastSync === undefined) lastSyncDisplay = 'Never';
 
     return (
         <div>

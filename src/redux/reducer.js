@@ -6,6 +6,10 @@ const initialState = {
     editMode: false,
     lastSync: 0,
     user: null,
+    message: {
+        text: '', 
+        type: ''
+    },
     general: {
         payPeriodType: 'fourWeekly',
         currencySymbol: '£',
@@ -60,10 +64,11 @@ export const reducer = (state = initialState, action) => {
     let value = action.payload;
     let dateValue = Number(format(new Date(),'yyyyMMddHHmmss'));
     switch(action.type) {
-        case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false, addTransaction: false};
+        case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false, addTransaction: false, message: {text: '', type: ''}};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
         case 'SET_USER': return {...state, user: value};
+        case 'SET_MESSAGE': return {...state, message: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value, updated: dateValue}};
         case 'SET_COLOUR_SCHEME': return {...state, general: {...state.general, colourScheme: value, updated: dateValue}};
