@@ -59,7 +59,7 @@ export const sync = (state, dispatch, manual=false) => {
     }).catch(err => {
         console.log('Error Syncing: ', err.message);
         dispatch({type: 'SET_USER', payload: null});
-        dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server for syncing.', type: 'error'}});
+        dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server for syncing. Please try to login again.', type: 'error'}});
     });
 }
 

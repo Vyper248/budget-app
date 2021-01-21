@@ -101,7 +101,7 @@ const Settings = () => {
         }).catch(err => {
             console.log(err.message);
             dispatch({type: 'SET_USER', payload: null});
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
+            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server. Please try again.', type: 'error'}});
         });
     }
 
@@ -111,7 +111,6 @@ const Settings = () => {
         }).catch(err => {
             console.log(err.message);
             dispatch({type: 'SET_USER', payload: null});
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
         });
     }
 
