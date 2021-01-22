@@ -40,7 +40,7 @@ export const sync = (state, dispatch, manual=false) => {
         transactions: state.transactions
     };
 
-    fetch('http://localhost:3001/api/backup', {
+    fetch('https://budget-app-ap1.herokuapp.com/api/backup', {
         method: 'POST', 
         headers: {'content-type': 'application/json'},
         credentials: 'include',

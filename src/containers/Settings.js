@@ -55,7 +55,7 @@ const Settings = () => {
 
     const login = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
-        fetch('http://localhost:3001/api/login', {
+        fetch('https://budget-app-ap1.herokuapp.com/api/login', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
@@ -87,7 +87,7 @@ const Settings = () => {
         }
 
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
-        fetch('http://localhost:3001/api/register', {
+        fetch('https://budget-app-ap1.herokuapp.com/api/register', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
@@ -106,7 +106,7 @@ const Settings = () => {
     }
 
     const logout = () => {
-        fetch('http://localhost:3001/api/logout', {credentials: 'include'}).then(res => res.json()).then(data => {
+        fetch('https://budget-app-ap1.herokuapp.com/api/logout', {credentials: 'include'}).then(res => res.json()).then(data => {
             dispatch({type: 'SET_USER', payload: null});
         }).catch(err => {
             console.log(err.message);
