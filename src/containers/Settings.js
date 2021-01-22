@@ -57,6 +57,7 @@ const Settings = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('https://budget-app-ap1.herokuapp.com/api/login', {
             method: 'POST', 
+            mode: 'cors',
             headers: {'content-type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({username, password})
@@ -89,6 +90,7 @@ const Settings = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('https://budget-app-ap1.herokuapp.com/api/register', {
             method: 'POST', 
+            mode: 'cors',
             headers: {'content-type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({username, password})

@@ -42,6 +42,7 @@ export const sync = (state, dispatch, manual=false) => {
 
     fetch('https://budget-app-ap1.herokuapp.com/api/backup', {
         method: 'POST', 
+        mode: 'cors',
         headers: {'content-type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(backupData)
