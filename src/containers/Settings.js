@@ -57,7 +57,6 @@ const Settings = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('https://budget-app-ap1.herokuapp.com/api/login', {
             method: 'POST', 
-            mode: 'cors',
             headers: {'content-type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({username, password})
@@ -67,7 +66,7 @@ const Settings = () => {
                 setPassword('');
                 dispatch({type: 'SET_USER', payload: data.user});
             } else {
-                console.log(data);
+                if (data.type === 'logout') dispatch({type: 'SET_USER', payload: null});
                 dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
             }
         }).catch(err => {
@@ -90,7 +89,6 @@ const Settings = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         fetch('https://budget-app-ap1.herokuapp.com/api/register', {
             method: 'POST', 
-            mode: 'cors',
             headers: {'content-type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({username, password})

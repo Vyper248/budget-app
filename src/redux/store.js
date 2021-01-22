@@ -42,7 +42,6 @@ export const sync = (state, dispatch, manual=false) => {
 
     fetch('https://budget-app-ap1.herokuapp.com/api/backup', {
         method: 'POST', 
-        mode: 'cors',
         headers: {'content-type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(backupData)
@@ -55,6 +54,7 @@ export const sync = (state, dispatch, manual=false) => {
             if (manual) dispatch({type: 'SET_MESSAGE', payload: {text: 'Data successfully synced!', type: 'success'}});
         } else {
             console.log(data);
+            if (data.type === 'logout') dispatch({type: 'SET_USER', payload: null});
             dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
         }
     }).catch(err => {
