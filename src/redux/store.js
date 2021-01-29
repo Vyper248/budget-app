@@ -2,6 +2,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { reducer } from './reducer';
 import { changeColourScheme } from '../functions';
 
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
+
 const localStorageMiddleware = ({getState}) => {
     return (next) => (action) => {
         const result = next(action);
@@ -28,7 +30,7 @@ const syncMiddleware = ({getState, dispatch}) => {
 };
 
 export const sync = (state, dispatch, manual=false) => {
-    if (state.user === null) return;
+    if (!state.user) return;
 
     const backupData = {
         general: state.general,
@@ -37,17 +39,17 @@ export const sync = (state, dispatch, manual=false) => {
         budgets: state.budgets,
         funds: state.funds,
         fundAdditions: state.fundAdditions,
-        transactions: state.transactions
+        transactions: state.transactions,
+        user: state.user
     };
 
-    fetch('https://budget-app-ap1.herokuapp.com/api/backup', {
+    fetch(url+'api/backup', {
         method: 'POST', 
         headers: {'content-type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(backupData)
     }).then(res => res.json()).then(data => {
         if (data.status === 'success') {
-            console.log('Updating data: ', data);
             dispatch({type: 'SYNC', payload: data.data});
             dispatch({type: 'SET_USER', payload: data.user});
             changeColourScheme(data.data.general.colourScheme);

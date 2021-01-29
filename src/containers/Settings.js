@@ -8,6 +8,8 @@ import Container from '../components/Container';
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
 
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
+
 const Settings = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
@@ -39,7 +41,8 @@ const Settings = () => {
             budgets: state.budgets,
             funds: state.funds,
             fundAdditions: state.fundAdditions,
-            transactions: state.transactions
+            transactions: state.transactions,
+            user: state.user
         };
     });
 
@@ -55,7 +58,7 @@ const Settings = () => {
 
     const login = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
-        fetch('https://budget-app-ap1.herokuapp.com/api/login', {
+        fetch(url+'api/login', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
@@ -87,7 +90,7 @@ const Settings = () => {
         }
 
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
-        fetch('https://budget-app-ap1.herokuapp.com/api/register', {
+        fetch(url+'api/register', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
@@ -106,12 +109,7 @@ const Settings = () => {
     }
 
     const logout = () => {
-        fetch('https://budget-app-ap1.herokuapp.com/api/logout', {credentials: 'include'}).then(res => res.json()).then(data => {
-            dispatch({type: 'SET_USER', payload: null});
-        }).catch(err => {
-            console.log(err.message);
-            dispatch({type: 'SET_USER', payload: null});
-        });
+        dispatch({type: 'SET_USER', payload: null});
     }
 
     const onChangeUsername = (e) => setUsername(e.target.value);
