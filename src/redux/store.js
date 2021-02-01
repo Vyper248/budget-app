@@ -8,7 +8,7 @@ const localStorageMiddleware = ({getState}) => {
     return (next) => (action) => {
         const result = next(action);
         
-        const ignore = ['SET_CURRENT_PAGE', 'SET_ADD_TRANSACTION', 'SET_EDIT_MODE'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_ADD_TRANSACTION', 'SET_EDIT_MODE', 'SET_FETCHING'];
         if (ignore.includes(action.type)) return result;
 
         localStorage.setItem('budgetState', JSON.stringify(getState()));
@@ -21,7 +21,7 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
-        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING'];
         if (ignore.includes(action.type)) return result;
         sync(getState(), dispatch);
 
@@ -31,6 +31,9 @@ const syncMiddleware = ({getState, dispatch}) => {
 
 export const sync = (state, dispatch, manual=false) => {
     if (!state.user) return;
+    const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
+    const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
+    const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
 
     const backupData = {
         general: state.general,
@@ -43,26 +46,29 @@ export const sync = (state, dispatch, manual=false) => {
         user: state.user
     };
 
+    setFetching(true);
     fetch(url+'api/backup', {
         method: 'POST', 
         headers: {'content-type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(backupData)
     }).then(res => res.json()).then(data => {
+        setFetching(false);
         if (data.status === 'success') {
             dispatch({type: 'SYNC', payload: data.data});
-            dispatch({type: 'SET_USER', payload: data.user});
+            setUser(data.user);
             changeColourScheme(data.data.general.colourScheme);
-            if (manual) dispatch({type: 'SET_MESSAGE', payload: {text: 'Data successfully synced!', type: 'success'}});
+            if (manual) setMessage({text: 'Data successfully synced!', type: 'success'});
         } else {
             console.log(data);
-            if (data.type === 'logout') dispatch({type: 'SET_USER', payload: null});
-            dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
+            if (data.type === 'logout') setUser(null);
+            setMessage({text: data.message, type: 'error'});
         }
     }).catch(err => {
         console.log('Error Syncing: ', err.message);
-        dispatch({type: 'SET_USER', payload: null});
-        dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server for syncing. Please try to login again.', type: 'error'}});
+        setFetching(false);
+        setUser(null);
+        setMessage({text: 'Failed to contact server for syncing. Please try to login again.', type: 'error'});
     });
 }
 
@@ -74,6 +80,7 @@ const getFromLocalStorage = () => {
         state.message = {text: '', type: ''};
         state.editMode = false;
         state.addTransaction = false;
+        state.fetching = false;
         changeColourScheme(state.general.colourScheme);
         return state;
     }

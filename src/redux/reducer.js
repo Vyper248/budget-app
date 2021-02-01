@@ -6,6 +6,7 @@ const initialState = {
     editMode: false,
     lastSync: 0,
     user: null,
+    fetching: false,
     message: {
         text: '', 
         type: ''
@@ -68,6 +69,7 @@ export const reducer = (state = initialState, action) => {
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
         case 'SET_USER': return {...state, user: value};
+        case 'SET_FETCHING': return {...state, fetching: value};
         case 'SET_MESSAGE': return {...state, message: value};
 
         case 'SET_PAY_PERIOD_TYPE': return {...state, general: {...state.general, payPeriodType: value, updated: dateValue}};

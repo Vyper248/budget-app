@@ -13,6 +13,7 @@ const StyledComp = styled.div`
     align-items: center;
     width: ${props => props.width};
     margin: auto;
+    position: relative;
 
     :hover {
         cursor: pointer;
@@ -21,10 +22,45 @@ const StyledComp = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}}) => {
-    return (
-        <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style}>{value}</StyledComp>
-    );
+const Loader = styled.div`
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 5px;
+    cursor: default;
+
+    :after {
+        content: ' ';
+        position: relative;
+        top: 2px;
+        border: 3px solid black;
+        border-radius: 50%;
+        border-top: none;
+        border-left: none;
+        width: 20px;
+        height: 20px;
+        display: block;
+        margin: auto;
+        animation-name: spin;
+        animation-duration: 0.9s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    @keyframes spin {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+    }
+`;
+
+const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}, loading=false}) => {
+    if (loading) return <StyledComp width={width} inline={inline} color={color} style={style}><Loader/>{value}</StyledComp>
+
+    return <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style}>{value}</StyledComp>
 }
 
 export default Button;

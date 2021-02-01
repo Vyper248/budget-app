@@ -14,6 +14,7 @@ const Settings = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const lastSync = useSelector(state => state.lastSync);
+    const fetching = useSelector(state => state.fetching);
 
     const payPeriodType = useSelector(state => state.general.payPeriodType);
     const currencySymbol = useSelector(state => state.general.currencySymbol);
@@ -29,6 +30,9 @@ const Settings = () => {
     }
     const setStartDate = (e) => dispatch({type: 'SET_START_DATE', payload: e.target.value});
     const setColourScheme = (value) => dispatch({type: 'SET_COLOUR_SCHEME', payload: value});
+    const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
+    const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
+    const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -58,38 +62,42 @@ const Settings = () => {
 
     const login = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
+        setFetching(true);
         fetch(url+'api/login', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({username, password})
         }).then(res => res.json()).then(data => {
+            setFetching(false);
             if (data.status === 'success') {
                 setUsername('');
                 setPassword('');
-                dispatch({type: 'SET_USER', payload: data.user});
+                setUser(data.user);
             } else {
-                if (data.type === 'logout') dispatch({type: 'SET_USER', payload: null});
-                dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
+                if (data.type === 'logout') setUser(null);
+                setMessage({text: data.message, type: 'error'});
             }
         }).catch(err => {
             console.log(err.message);
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server.', type: 'error'}});
+            setMessage({text: 'Failed to contact server.', type: 'error'});
+            setFetching(false);
         });
     }
 
     const register = () => {
         if (username.length < 3) {
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Username should be 3 or more characters', type: 'error'}});
+            setMessage({text: 'Username should be 3 or more characters', type: 'error'});
             return;
         }
 
         if (password.length < 5) {
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Password should be 5 or more characters', type: 'error'}});
+            setMessage({text: 'Password should be 5 or more characters', type: 'error'});
             return;
         }
 
-        dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
+        setMessage({text: '', type: ''});
+        setFetching(true);
         fetch(url+'api/register', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
@@ -99,17 +107,19 @@ const Settings = () => {
             console.log(data);
             setUsername('');
             setPassword('');
+            setFetching(false);
             if (data.status === 'success') dispatch({type: 'SET_USER', payload: data.user});
-            else dispatch({type: 'SET_MESSAGE', payload: {text: data.message, type: 'error'}});
+            else setMessage({text: data.message, type: 'error'});
         }).catch(err => {
             console.log(err.message);
-            dispatch({type: 'SET_USER', payload: null});
-            dispatch({type: 'SET_MESSAGE', payload: {text: 'Failed to contact server. Please try again.', type: 'error'}});
+            setUser(null);
+            setMessage({text: 'Failed to contact server. Please try again.', type: 'error'});
+            setFetching(false);
         });
     }
 
     const logout = () => {
-        dispatch({type: 'SET_USER', payload: null});
+        setUser(null);
     }
 
     const onChangeUsername = (e) => setUsername(e.target.value);
@@ -142,11 +152,11 @@ const Settings = () => {
                 ?   <div>
                         <LabelledInput label="Username" value={username} onChange={onChangeUsername}/>
                         <LabelledInput label="Password" value={password} onChange={onChangePassword} type="password"/>
-                        <Button value="Login" width="120px"inline={true} onClick={login}/> <Button value="Register" width="120px"inline={true} onClick={register}/>
+                        <Button value="Login" width="120px"inline={true} onClick={login} loading={fetching}/> <Button value="Register" width="120px"inline={true} onClick={register} loading={fetching}/>
                     </div>
 
                 :   <div>
-                        <Button value="Sync Now" width="120px"inline={true} onClick={manualSync}/> <Button value="Logout" width="120px"inline={true} onClick={logout}/>
+                        <Button value="Sync Now" width="120px"inline={true} onClick={manualSync} loading={fetching}/> <Button value="Logout" width="120px"inline={true} onClick={logout}/>
                     </div>
                 }
             </Container>
