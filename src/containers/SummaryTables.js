@@ -33,8 +33,8 @@ const SummaryTables = () => {
 
     const rows = getSummaryRows(dates, transactions, funds, categories, fundAdditions);
 
-    const incomeCategories = categories.filter(obj => obj.type === 'income');
-    const expenseCategories = categories.filter(obj => obj.type === 'expense');
+    const incomeCategories = categories.filter(obj => obj.type === 'income' && obj.hidden === false);
+    const expenseCategories = categories.filter(obj => obj.type === 'expense' && obj.hidden === false);
 
     const summaryTotals = getSummaryTotals(transactions, funds, categories, fundAdditions);
     const accountSummary = getAccountSummary(transactions, accounts, categories);

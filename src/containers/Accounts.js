@@ -15,7 +15,8 @@ const Accounts = () => {
 
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
-    const accounts = useSelector(state => filterDeleted(state.accounts));
+    const allAccounts = useSelector(state => filterDeleted(state.accounts));
+    const accounts = allAccounts.filter(account => !account.closed);
     const firstAccount = accounts[0];
     let firstAccountId = firstAccount !== undefined ? firstAccount.id : undefined;
     let firstAccountName = firstAccount !== undefined ? firstAccount.name : '';
@@ -49,7 +50,7 @@ const Accounts = () => {
                 <ListContainer>
                     { isMobile ? null : <List heading={'Accounts'} array={accounts} onClickObj={onClickObj} selected={account}/> }
                     { editMode 
-                        ? <EditList array={accounts} vertical={true} onClickDropdown={onClickObj} id={account}/>
+                        ? <EditList array={allAccounts} vertical={true} onClickDropdown={onClickObj} id={account}/>
                         : <Transactions transactions={filteredTransactions} heading={accountName} id={account} onClickDropdown={onClickObj} objArray={accounts}/> 
                     }
                 </ListContainer>

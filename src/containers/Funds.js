@@ -15,7 +15,8 @@ const Funds = () => {
 
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
-    const funds = useSelector(state => filterDeleted(state.funds));
+    const allFunds = useSelector(state => filterDeleted(state.funds));
+    const funds = allFunds.filter(fund => !fund.complete);
     const firstFund = funds[0];
     let firstFundId = firstFund !== undefined ? firstFund.id : undefined;
     let firstFundName = firstFund !== undefined ? firstFund.name : '';
@@ -24,6 +25,7 @@ const Funds = () => {
     const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
     const [fund, setFund] = useState(firstFundId);
     const [fundName, setFundName] = useState(firstFundName);
+
 
     React.useEffect(() => {
         //If there's no object in the array, then go straight to edit mode
@@ -55,7 +57,7 @@ const Funds = () => {
                 <ListContainer>
                     { isMobile ? null : <List heading={'Funds'} array={funds} onClickObj={onClickObj} selected={fund}/> }
                     { editMode 
-                        ? <EditList array={funds} onClickDropdown={onClickObj} id={fund}/>
+                        ? <EditList array={allFunds} onClickDropdown={onClickObj} id={fund}/>
                         : <Transactions transactions={combined} heading={fundName} onClickDropdown={onClickObj} objArray={funds} id={fund}/> 
                     }
                 </ListContainer>

@@ -139,6 +139,8 @@ export const getAccountSummary = (transactions, accounts, categories) => {
     let objs = [];
 
     accounts.forEach(account => {
+        if (account.closed) return;
+
         const filteredTransactions = transactions.filter(obj => {
             if (obj.from !== undefined && obj.to !== undefined && (obj.from === account.id || obj.to === account.id)) return true; 
             return obj.account !== undefined && obj.account === account.id ? true : false;
@@ -322,7 +324,7 @@ export const filterDeleted = (arr) => {
 
 export const formatDate = (date, formatMethod='MMM d, yyyy') => {
     if (date === undefined) return '';
-    if (date.length == 0) return '';
+    if (date.length === 0) return '';
     return format(parseISO(date), formatMethod);
 } 
 

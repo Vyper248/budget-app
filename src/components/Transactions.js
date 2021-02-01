@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { format, parseISO, parse, compareAsc } from 'date-fns';
-import { FaEdit } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 
 import { getAmount, filterDeleted } from '../functions';
 
 import Transaction from './Transaction';
-import IconButton from './IconButton';
 import HeaderDropdown from './HeaderDropdown';
 import TotalsDisplay from './TotalsDisplay';
 import Modal from './Modal';
@@ -78,23 +76,11 @@ const StyledGroup = styled.div`
     }
 `;
 
-const EditButton = styled.div`
-    position: absolute;
-    right: 12px;
-    top: 10px;
-    font-size: 1.5em;
-
-    @media screen and (max-width: 700px) {
-        top: 15px;
-    }
-`;
-
 const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[]}) => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
     const categories = useSelector(state => filterDeleted(state.categories));
     const currentPage = useSelector(state => state.currentPage);
-    const [showDelete, setShowDelete] = useState(false);
     const [closed, setClosed] = useState({});
 
     const [details, setDetails] = useState({});
@@ -123,10 +109,6 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         let second = parse(b.month, 'MMMM yyyy', new Date());
         return compareAsc(second, first);
     });
-
-    const toggleDelete = () => {
-        setShowDelete(!showDelete);
-    }
 
     const onChangePage = (id) => {
         onClickDropdown(Number(id))();
@@ -194,7 +176,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
                         <StyledGroup key={'transactionGroup-'+group.month+id} open={closed[group.month] !== true} qty={group.transactions.length}>
                             <strong onClick={onToggleGroup(group.month)}>{group.month}</strong>
                             <div>
-                                { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={showDelete} onClick={onToggleDetails}/>) }
+                                { group.transactions.map(obj => <Transaction key={'transaction-'+obj.id} obj={obj} accountId={accountId} showDelete={false} onClick={onToggleDetails}/>) }
                             </div>
                         </StyledGroup>
                     )
