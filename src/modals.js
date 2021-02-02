@@ -22,8 +22,6 @@ const account = {
     defaultAccount: false,
     closed: false,
     extraCharges: 0,
-    currency: '£',
-    dateOpened: 'date'
 }
 
 const budget = {

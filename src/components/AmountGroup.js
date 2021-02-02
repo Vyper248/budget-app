@@ -55,7 +55,7 @@ const AmountGroup = ({title, amount, type, budget=0, editBudget=false, id, date}
     }
 
     return (
-        <StyledComp type={type} className={title === 'Earnings' || title === 'Remaining' ? 'fullRow' : ''}>
+        <StyledComp type={type} className={title === 'Earnings' || title === 'Remaining' || title === 'Total' ? 'fullRow' : ''}>
             <div>
                 { title }
                 { editBudget ? <div className="budgetIcon" onClick={toggleEditMode}><FaPiggyBank/></div> : null }

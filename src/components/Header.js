@@ -42,10 +42,12 @@ const StyledComp = styled.div`
 
     & > div.spacer {
         flex-grow: 1;
+        border: none;
     }
 
     & > div.right {
         border-right: none;
+        border-left: 1px solid var(--menu-border-color);
     }
 
     & > div > svg {
@@ -53,6 +55,18 @@ const StyledComp = styled.div`
         top: 3px;
     }
 `;
+
+const HeaderButton = ({page, alignment='', icon=null}) => {
+    const dispatch = useDispatch();
+    const currentPage = useSelector(state => state.currentPage);
+    const Icon = icon !== null ? React.createElement('FaHome', {}) : null;
+    let className = currentPage === page ? 'selected' : '';
+    if (alignment.length > 0) className += ` ${alignment}`;
+
+    return  <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: page})} className={className}>
+                { icon === null ? page : icon }
+            </div>;
+}
 
 const Header = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -63,17 +77,14 @@ const Header = () => {
 
     return (
         <StyledComp isMobile={isMobile}>
-            <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Home'})} className={currentPage === 'Home' ? 'selected' : ''}>
-                { isMobile ? <FaHome/> : 'Home' }
-            </div>
-            <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Categories'})} className={currentPage === 'Categories' ? 'selected' : ''}>Categories</div>
-            <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Funds'})} className={currentPage === 'Funds' ? 'selected' : ''}>Funds</div>
-            <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Accounts'})} className={currentPage === 'Accounts' ? 'selected' : ''}>Accounts</div>
+            <HeaderButton page='Home' icon={isMobile ? <FaHome/> : null}/>
+            <HeaderButton page='Categories'/>
+            <HeaderButton page='Funds'/>
+            <HeaderButton page='Accounts'/>
+            { !isMobile ? <HeaderButton page='Tools'/> : null }
             { !isMobile ? <div onClick={() => dispatch({type: 'SET_ADD_TRANSACTION', payload: !addTransaction})}>Add Transaction</div> : null }
             { !isMobile ? <div className="spacer"></div> : null }
-            <div onClick={() => dispatch({type: 'SET_CURRENT_PAGE', payload: 'Settings'})} className={currentPage === 'Settings' ? 'selected right' : 'right'}>
-                { isMobile ? <MdSettings/> : 'Settings' }
-            </div>
+            <HeaderButton page='Settings' icon={isMobile ? <MdSettings/> : null} alignment='right'/>
         </StyledComp>
     )
 }

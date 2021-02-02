@@ -38,6 +38,7 @@ const SummaryTables = () => {
 
     const summaryTotals = getSummaryTotals(transactions, funds, categories, fundAdditions);
     const accountSummary = getAccountSummary(transactions, accounts, categories);
+    const accountTotal = accountSummary.reduce((a,c) => { return a+c.total; }, 0);
 
     const toggleEditCategory = (id) => () => {
         if (editCategory === id) setEditCategory(0);
@@ -105,6 +106,7 @@ const SummaryTables = () => {
                     <h3>Accounts</h3>
                     <Grid>
                         { accountSummary.map(obj => <AmountGroup key={'account-'+obj.id} title={obj.name} amount={parseCurrency(obj.total)} type='account'/>) }
+                        <AmountGroup title='Total' amount={parseCurrency(accountTotal)} type='remaining'/>
                     </Grid>
                 </div>
             );
@@ -163,8 +165,8 @@ const SummaryTables = () => {
             <Table>
                 <thead>
                     <tr>
-                        <td>Account</td>
-                        <td>Total</td>
+                        <td className="remaining">Account</td>
+                        <td className="remaining">Total</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,6 +178,10 @@ const SummaryTables = () => {
                         </tr>
                     )
                 }
+                    <tr>
+                        <td>Total</td>
+                        <td>{parseCurrency(accountTotal)}</td>
+                    </tr>
                 </tbody>
             </Table>
         </div>

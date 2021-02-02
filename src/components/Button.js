@@ -15,8 +15,13 @@ const StyledComp = styled.div`
     margin: auto;
     position: relative;
 
-    :hover {
+    &:hover {
         cursor: pointer;
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
+    }
+
+    &.selected {
         background-color: var(--menu-selected-bg-color);
         color: var(--menu-selected-text-color);
     }
@@ -57,10 +62,10 @@ const Loader = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}, loading=false}) => {
-    if (loading) return <StyledComp width={width} inline={inline} color={color} style={style}><Loader/>{value}</StyledComp>
+const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}, loading=false, selected=false}) => {
+    if (loading) return <StyledComp width={width} inline={inline} color={color} style={style} className={selected ? 'selected' : ''}><Loader/>{value}</StyledComp>
 
-    return <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style}>{value}</StyledComp>
+    return <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style} className={selected ? 'selected' : ''}>{value}</StyledComp>
 }
 
 export default Button;

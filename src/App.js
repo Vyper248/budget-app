@@ -15,6 +15,7 @@ import Categories from './containers/Categories';
 import Funds from './containers/Funds';
 import Accounts from './containers/Accounts';
 import Settings from './containers/Settings';
+import Tools from './containers/Tools';
 import Footer from './containers/Footer';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
             { page === 'Funds' ? <Funds/> : null }
             { page === 'Accounts' ? <Accounts/> : null }
             { page === 'Settings' ? <Settings/> : null }
+            { page === 'Tools' ? <Tools/> : null }
             { addTransaction ? <TopPopup><AddTransaction/></TopPopup> : null }
             <Footer/>
         </div>
