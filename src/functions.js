@@ -1,15 +1,8 @@
 import { add, compareAsc, compareDesc, parseISO, format } from 'date-fns';
 import store from './redux/store';
 
-export const getLatestDates = (startDate, periodLength) => {
-    let daysInPeriod = 0;
-    switch (periodLength) {
-        case 'monthly': daysInPeriod = 30; break;
-        case 'weekly': daysInPeriod = 7; break;
-        case 'twoWeekly': daysInPeriod = 14; break;
-        case 'fourWeekly': daysInPeriod = 28; break;
-        default: daysInPeriod = 30; break;
-    }
+export const getLatestDates = (startDate, periodLength, periods=0) => {
+    let daysInPeriod = getDaysInPeriod(periodLength);
 
     //go forwards from starting date to todays date
     let currentDate = parseISO(startDate);
@@ -26,6 +19,7 @@ export const getLatestDates = (startDate, periodLength) => {
     //go back and add to array previous pay periods (up to 12/13);
     let latestDates = [];
     let numberOfPeriods = periodLength === 'fourWeekly' ? 13 : 12;
+    if (periods > 0) numberOfPeriods = periods;
     for (let i = 0; i < numberOfPeriods; i++) {
         latestDates.push(format(latestDate, 'yyyy-MM-dd'));
         latestDate = periodLength === 'monthly' ? add(latestDate, {months: -1}) : add(latestDate, {days: -daysInPeriod});
@@ -36,6 +30,34 @@ export const getLatestDates = (startDate, periodLength) => {
 
     return latestDates;
 };
+
+export const getAllDates = (startDate, periodLength) => {
+    let daysInPeriod = getDaysInPeriod(periodLength);
+
+    //go forwards from starting date to todays date
+    let currentDate = parseISO(startDate);
+    let today = new Date();
+
+    let dates = [];
+
+    while (compareAsc(today, currentDate) === 1) {
+        dates.push(format(currentDate, 'yyyy-MM-dd'));
+        if (periodLength === 'monthly') currentDate = add(currentDate, {months: 1});
+        else currentDate = add(currentDate, {days: daysInPeriod});
+    }
+
+    return dates;
+}
+
+export const getDaysInPeriod = (periodLength) => {
+    switch (periodLength) {
+        case 'monthly': return 30;
+        case 'weekly': return 7;
+        case 'twoWeekly': return 14;
+        case 'fourWeekly': return 28;
+        default: return 30;
+    }
+}
 
 export const getSummaryTotals = (transactions, funds, categories, fundAdditions) => {
     let obj = {};
@@ -188,7 +210,7 @@ const getTransactionHeading = (fundNames, categoryNames, tr) => {
     return 'Un-Categorised';
 }
 
-const getPeriodOfTransaction = (dates, trDate) => {
+export const getPeriodOfTransaction = (dates, trDate) => {
     let periodDate = dates[0];
 
     for (let date of dates) {
@@ -197,7 +219,7 @@ const getPeriodOfTransaction = (dates, trDate) => {
     }
     
     return periodDate;
-};
+}
 
 export const parseCurrency = (value) => {
     let { general } = store.getState();    
@@ -327,6 +349,10 @@ export const formatDate = (date, formatMethod='MMM d, yyyy') => {
     if (date.length === 0) return '';
     return format(parseISO(date), formatMethod);
 } 
+
+export const today = () => {
+    return format(new Date(), 'yyyy-MM-dd');
+}
 
 export const parseTransaction = (tr) => {
     let { categories, accounts, funds } = store.getState();
