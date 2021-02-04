@@ -59,7 +59,6 @@ const StyledComp = styled.div`
 const HeaderButton = ({page, alignment='', icon=null}) => {
     const dispatch = useDispatch();
     const currentPage = useSelector(state => state.currentPage);
-    const Icon = icon !== null ? React.createElement('FaHome', {}) : null;
     let className = currentPage === page ? 'selected' : '';
     if (alignment.length > 0) className += ` ${alignment}`;
 
@@ -73,7 +72,6 @@ const Header = () => {
 
     const dispatch = useDispatch();
     const addTransaction = useSelector(state => state.addTransaction);
-    const currentPage = useSelector(state => state.currentPage);
 
     return (
         <StyledComp isMobile={isMobile}>
