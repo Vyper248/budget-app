@@ -22,7 +22,7 @@ const StyledComp = styled.input`
     }
 `;
 
-const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[], width="100px", noBorder=false}) => {
+const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[], width="100px", noBorder=false, ...others}) => {
     if (type === 'dropdown' && (options.length > 0 || groups.length > 0)) return (
         <StyledComp as='select' onChange={onChange} value={value} width={width} noBorder={noBorder}>
             <option hidden value={undefined}>Select an Option</option>
@@ -53,7 +53,7 @@ const Input = ({value, type='text', placeholder='', onChange, options=[], groups
     if (type === 'number' && isNaN(value)) value = '';
 
     return (
-        <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder}/>
+        <StyledComp value={value} type={type} onChange={onChange} placeholder={placeholder} width={width} noBorder={noBorder} {...others}/>
     );
 }
 
