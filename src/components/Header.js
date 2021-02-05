@@ -8,9 +8,12 @@ import { MdSettings } from 'react-icons/md';
 
 const StyledComp = styled.div`
     display: flex;
+    position: fixed;
+    top: 0px;
     border-bottom: 1px solid var(--menu-border-color);
     width: 100%;
     background-color: var(--menu-bg-color);
+    z-index: 10;
 
     & > div {
         color: var(--menu-text-color);

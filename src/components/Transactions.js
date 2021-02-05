@@ -21,6 +21,7 @@ const StyledComp = styled.div`
     @media screen and (max-width: 700px) {
         margin: 0px;
         border: none;
+        padding-bottom: 40px;
     }
 `;
 

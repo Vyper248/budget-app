@@ -43,6 +43,7 @@ function App() {
     return (
         <div className="App">
             <Header/>
+            <div style={{height: '40px'}}></div>
             <MessagePopup/>
             { page === 'Home' ? <SummaryTables/> : null }
             { page === 'Categories' ? <Categories/> : null }

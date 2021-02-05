@@ -10,12 +10,14 @@ const BottomArea = styled.div`
     bottom: -275px;
     transition: 0.3s;
     width: 100%;
-    height: 288px;
+    height: 308px;
     background-color: var(--footer-bg);
     padding: 10px;
+    padding-top: 30px;
     border: 2px solid var(--footer-bg);
     z-index: 3;
     ${props => props.open ? 'transform: translateY(-275px);' : ''};
+    ${props => props.open ? 'padding-top: 10px' : ''};
 
     & > div {
         margin: auto;
@@ -35,7 +37,7 @@ const MobileAddButton = styled.div`
         position: fixed;
         bottom: 5px;
         left: 50%;
-        transform: translate(-50%,${props => props.open ? '-275px' : '0px'});
+        transform: translate(-50%,${props => props.open ? '-295px' : '-20px'});
         z-index: 4;
         fill: var(--footer-border);
     }
@@ -43,7 +45,7 @@ const MobileAddButton = styled.div`
     & > div.left, & > div.right {
         border-bottom: 3px solid var(--footer-border);
         position: fixed;
-        bottom: 11px;
+        bottom: 31px;
         width: calc(50% - 22.5px);
         height: 20px;
         z-index: 4;
@@ -69,7 +71,7 @@ const MobileAddButton = styled.div`
         width: 55px;
         height: 55px;
         left: 50%;
-        transform: translate(-50%,${props => props.open ? '-275px' : '0px'}) rotate(-45deg);
+        transform: translate(-50%,${props => props.open ? '-295px' : '-20px'}) rotate(-45deg);
         bottom: -16px;
         border-radius: 0px 51px 0px 100%;
     }

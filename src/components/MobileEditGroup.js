@@ -45,6 +45,7 @@ const StyledComp = styled.div`
         align-items: center;
         transform: scale(${props => props.open ? '1.0' : '0.0'});
         transition: 0.3s;
+        z-index: 5;
     }
 
     & > div.popup > div {
