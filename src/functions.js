@@ -340,8 +340,14 @@ export const checkIfCanDelete = (obj) => {
     return true;
 }
 
-export const filterDeleted = (arr) => {
-    return arr.filter(obj => obj.deleted !== undefined ? false : true);
+export const filterDeleted = (arr, ignoreHidden=false) => {
+    return arr.filter(obj => {
+        if (obj.deleted !== undefined) return false;
+        if (ignoreHidden && obj.hidden) return false;
+        if (ignoreHidden && obj.closed) return false;
+        if (ignoreHidden && obj.complete) return false;
+        return true;
+    });
 }
 
 export const formatDate = (date, formatMethod='MMM d, yyyy') => {
@@ -349,6 +355,10 @@ export const formatDate = (date, formatMethod='MMM d, yyyy') => {
     if (date.length === 0) return '';
     return format(parseISO(date), formatMethod);
 } 
+
+export const reverseDate = (date) => {
+    return formatDate(date, 'dd-MM-yyyy');
+}
 
 export const today = () => {
     return format(new Date(), 'yyyy-MM-dd');
@@ -404,7 +414,7 @@ export const changeColourScheme = (scheme) => {
         root.style.setProperty('--footer-bg', '#222');
         root.style.setProperty('--footer-border', '#009fe8');
         
-        root.style.setProperty('--table-heading-bg-color', '#555');
+        root.style.setProperty('--table-heading-bg-color', '#009fe8');
         root.style.setProperty('--table-heading-text-color', 'white');
     }
 
@@ -423,7 +433,7 @@ export const changeColourScheme = (scheme) => {
         root.style.setProperty('--footer-bg', 'black');
         root.style.setProperty('--footer-border', '#009fe8');
         
-        root.style.setProperty('--table-heading-bg-color', '#555');
+        root.style.setProperty('--table-heading-bg-color', '#009fe8');
         root.style.setProperty('--table-heading-text-color', 'white');
     }
 
