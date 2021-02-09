@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { parseISO, compareAsc } from 'date-fns';
 
-import { today, getAllDates, getPeriodOfTransaction, filterDeleted, parseCurrency } from '../functions';
+import { today, getAllDates, getPeriodOfTransaction, filterDeleted, parseCurrency, reverseDate } from '../functions';
 
 import Container from '../components/Container';
 import Grid from '../components/Grid';
@@ -68,7 +68,7 @@ const Breakdown = () => {
     const getTableRow = (date) => {
         let dateObj = tableObj[date];
         return <tr key={'table-row-date-'+date}>
-            <td>{date}</td>
+            <td>{reverseDate(date)}</td>
             {
                 accounts.map(account => <td key={'table-row-data-'+account.id}>{parseCurrency(dateObj[account.id])}</td>)
             }

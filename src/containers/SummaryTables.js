@@ -11,7 +11,7 @@ import AmountGroup from '../components/AmountGroup';
 import IconButton from '../components/IconButton';
 import BudgetInput from '../components/BudgetInput';
 
-import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
+import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted, reverseDate } from '../functions';
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -143,7 +143,7 @@ const SummaryTables = () => {
                         dates.map(date => {
                             return (
                                 <tr key={'summaryDate-'+date}>
-                                    <td>{date}</td>
+                                    <td>{reverseDate(date)}</td>
                                     { incomeCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
                                     { filteredFunds.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
                                     { expenseCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}{editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions)}</td>) }
