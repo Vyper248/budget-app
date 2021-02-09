@@ -134,16 +134,16 @@ const Settings = () => {
             <Container>
                 <h4>Settings</h4>
 
-                <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth='150px'/>
-                <LabelledInput label="Currency Symbol" value={currencySymbol} onChange={setCurrencySymbol} labelWidth='150px'/>
-                <LabelledInput label="Show Decimals" type="dropdown" value={showDecimals} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowDecimals} labelWidth='150px'/>
-                <LabelledInput label="Pay Period" type="dropdown" value={payPeriodType} onChange={setPayPeriodType} labelWidth='150px' options={[
+                <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth='170px'/>
+                <LabelledInput label="Currency Symbol" value={currencySymbol} onChange={setCurrencySymbol} labelWidth='170px'/>
+                <LabelledInput label="Show Decimals" type="dropdown" value={showDecimals} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowDecimals} labelWidth='170px'/>
+                <LabelledInput label="Pay Period" type="dropdown" value={payPeriodType} onChange={setPayPeriodType} labelWidth='170px' options={[
                     {value: 'monthly', display: 'Monthly'}, 
                     {value: 'fourWeekly', display: '4-Weekly'}, 
                     {value: 'twoWeekly', display: '2-Weekly'}, 
                     {value: 'weekly', display: 'Weekly'}
                 ]}/>
-                <LabelledInput label="Colour Scheme" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth='150px'/>
+                <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth='170px'/>
 
                 <h4>Syncing</h4>
                 <p>This will allow you to upload your data to a server for backup and to sync with other devices.</p>
