@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getAccountSummary, filterDeleted, parseCurrency } from '../functions';
 
 import Container from '../components/Container';
 import Table from '../components/Table';
+import Input from '../components/Input';
 
 const InterestCalc = () => {
     const transactions = useSelector(state => filterDeleted(state.transactions));
     const accounts = useSelector(state => filterDeleted(state.accounts));
     const categories = useSelector(state => filterDeleted(state.categories));
 
+    const [customInterest, setCustomInterest] = useState(0);
+    const [customAmount, setCustomAmount] = useState(0);
+    const [customCharges, setCustomCharges] = useState(0);
+    let yearlyInterest = customAmount * (customInterest/100);
+    const monthlyInterest = (yearlyInterest / 12) - customCharges;
+    yearlyInterest = monthlyInterest * 12;
+
     const accountSummary = getAccountSummary(transactions, accounts, categories);
     const { totalYearly, totalMonthly } = addExtras(accountSummary, accounts);
+
+    const onChangeCustomInterest = (e) => {
+        setCustomInterest(e.target.value);
+    }
+
+    const onChangeCustomAmount = (e) => {
+        setCustomAmount(e.target.value);
+    }
+
+    const onChangeCustomCharges = (e) => {
+        setCustomCharges(e.target.value);
+    }
     
     return (
         <div>
@@ -26,7 +46,7 @@ const InterestCalc = () => {
                             <td>Interest Rate</td>
                             <td>Amount</td>
                             <td>Extra Charges</td>
-                            <td>Yearly Interst</td>
+                            <td>Yearly Interest</td>
                             <td>Monthly Interest</td>
                         </tr>
                     </thead>
@@ -51,6 +71,28 @@ const InterestCalc = () => {
                             <th colSpan='4' style={{textAlign: 'right'}}>Totals</th>
                             <td>{parseCurrency(totalYearly)}</td>
                             <td>{parseCurrency(totalMonthly)}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <h4>Custom</h4>
+                <p>Use this to check how much interest you'll get with different amounts and interest rates etc.</p>
+                <Table>
+                    <thead>
+                        <tr>
+                            <td>Interest Rate</td>
+                            <td>Amount</td>
+                            <td>Extra Charges</td>
+                            <td>Yearly Interest</td>
+                            <td>Monthly Interest</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="input"><Input type="number" width="120px" value={customInterest} onChange={onChangeCustomInterest}/></td>
+                            <td className="input"><Input type="number" width="120px" value={customAmount} onChange={onChangeCustomAmount}/></td>
+                            <td className="input"><Input type="number" width="130px" value={customCharges} onChange={onChangeCustomCharges}/></td>
+                            <td>{parseCurrency(yearlyInterest)}</td>
+                            <td>{parseCurrency(monthlyInterest)}</td>
                         </tr>
                     </tbody>
                 </Table>
