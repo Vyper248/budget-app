@@ -89,6 +89,10 @@ const Table = styled.table`
     & .budgetIcon:hover {
         cursor: pointer;
     }
+
+    & td.input {
+        padding: 2px;
+    }
 `;
 
 export default Table;
