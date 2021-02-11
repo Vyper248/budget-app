@@ -152,11 +152,13 @@ const Settings = () => {
                 ?   <div>
                         <LabelledInput label="Username" value={username} onChange={onChangeUsername}/>
                         <LabelledInput label="Password" value={password} onChange={onChangePassword} type="password"/>
-                        <Button value="Login" width="120px"inline={true} onClick={login} loading={fetching}/> <Button value="Register" width="120px"inline={true} onClick={register} loading={fetching}/>
+                        <Button value="Login" width="120px"inline={true} onClick={login} loading={fetching}/> 
+                        <Button value="Register" width="120px"inline={true} onClick={register} loading={fetching}/>
                     </div>
 
                 :   <div>
-                        <Button value="Sync Now" width="120px"inline={true} onClick={manualSync} loading={fetching}/> <Button value="Logout" width="120px"inline={true} onClick={logout}/>
+                        <Button value="Sync Now" width="120px"inline={true} onClick={manualSync} loading={fetching}/> 
+                        <Button value="Logout" width="120px"inline={true} onClick={logout}/>
                     </div>
                 }
             </Container>
