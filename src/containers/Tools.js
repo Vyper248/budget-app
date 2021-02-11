@@ -6,11 +6,12 @@ import Button from '../components/Button';
 import InterestCalc from './InterestCalc';
 import Breakdown from './Breakdown';
 import FundList from './FundList';
+import Spendings from './Spendings';
 import SavingGoal from './SavingGoal';
 import VisaTool from './VisaTool';
 
 const Tools = () => {
-    const [subPage, setSubPage] = useState('VisaTool');
+    const [subPage, setSubPage] = useState('Breakdown');
 
     const onClickSubMenu = (page) => () => {
         setSubPage(page);
@@ -20,8 +21,9 @@ const Tools = () => {
         <div>
             <Container>
                 <h4>Tools</h4>
-                <Button value='Fund List' width='100px' inline={true} onClick={onClickSubMenu('FundList')} selected={subPage === 'FundList' ? true : false}/>
                 <Button value='Category Breakdown' width='180px' inline={true} onClick={onClickSubMenu('Breakdown')} selected={subPage === 'Breakdown' ? true : false}/>
+                <Button value='Fund List' width='100px' inline={true} onClick={onClickSubMenu('FundList')} selected={subPage === 'FundList' ? true : false}/>
+                <Button value='Spendings' width='120px' inline={true} onClick={onClickSubMenu('Spendings')} selected={subPage === 'Spendings' ? true : false}/>
                 <Button value='Interest' width='100px' inline={true} onClick={onClickSubMenu('Interest')} selected={subPage === 'Interest' ? true : false}/>
                 <Button value='Savings Goal' width='120px' inline={true} onClick={onClickSubMenu('SavingsGoal')} selected={subPage === 'SavingsGoal' ? true : false}/>
                 <Button value='Visa Tool' width='120px' inline={true} onClick={onClickSubMenu('VisaTool')} selected={subPage === 'VisaTool' ? true : false}/>
@@ -31,6 +33,7 @@ const Tools = () => {
             { subPage === 'FundList' ? <FundList/> : null }
             { subPage === 'SavingsGoal' ? <SavingGoal/> : null }
             { subPage === 'VisaTool' ? <VisaTool/> : null }
+            { subPage === 'Spendings' ? <Spendings/> : null }
         </div> 
     );
 }
