@@ -53,6 +53,8 @@ const Breakdown = () => {
         tableObj.totals[tr.account] += tr.amount;
     });
 
+    let totalAmount = Object.values(tableObj.totals).reduce((a,c) => a+c, 0);
+
     const onChangeCategory = (e) => {
         setCategory(Number(e.target.value));
     }
@@ -67,8 +69,10 @@ const Breakdown = () => {
 
     const getTableRow = (date) => {
         let dateObj = tableObj[date];
+        let total = Object.values(dateObj).reduce((a,c) => a+c, 0);
         return <tr key={'table-row-date-'+date}>
             <td>{reverseDate(date)}</td>
+            <td>{parseCurrency(total)}</td>
             {
                 accounts.map(account => <td key={'table-row-data-'+account.id}>{parseCurrency(dateObj[account.id])}</td>)
             }
@@ -88,6 +92,7 @@ const Breakdown = () => {
                     <thead>
                         <tr>
                             <td></td>
+                            <td>Total</td>
                             {
                                 accounts.map(obj => <td key={'table-head-'+obj.id}>{obj.name}</td>)
                             }
@@ -99,6 +104,7 @@ const Breakdown = () => {
                         }
                         <tr>
                             <th>Totals</th>
+                            <td>{parseCurrency(totalAmount)}</td>
                             {
                                 accounts.map(account => <td key={'table-totals-'+account.id}>{parseCurrency(tableObj.totals[account.id])}</td>)
                             }
