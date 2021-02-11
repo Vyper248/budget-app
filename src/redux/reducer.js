@@ -19,6 +19,7 @@ const initialState = {
         startDate: '2019-11-08',
         savingsGoalDate: '2019-11-08',
         savingsGoalTarget: 0,
+        salary: 0,
         updated: 20200220153001,
     },
     accounts: [],
@@ -81,6 +82,7 @@ export const reducer = (state = initialState, action) => {
         case 'SET_START_DATE': return {...state, general: {...state.general, startDate: value, updated: dateValue}};
         case 'SET_SAVINGS_GOAL_DATE': return {...state, general: {...state.general, savingsGoalDate: value, updated: dateValue}};
         case 'SET_SAVINGS_GOAL_TARGET': return {...state, general: {...state.general, savingsGoalTarget: value, updated: dateValue}};
+        case 'SET_SALARY': return {...state, general: {...state.general, salary: value, updated: dateValue}};
 
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};
