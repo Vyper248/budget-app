@@ -13,6 +13,7 @@ const StyledComp = styled.div`
     align-items: center;
     width: ${props => props.width};
     margin: auto;
+    ${props => props.inline ? 'margin: 3px' : ''};
     position: relative;
 
     &:hover {
