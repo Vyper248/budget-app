@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { format } from 'date-fns';
 
 import { changeColourScheme } from '../functions';
 import { sync } from '../redux/store';
@@ -7,6 +8,7 @@ import { sync } from '../redux/store';
 import Container from '../components/Container';
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
+import Input from '../components/Input';
 
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
 
@@ -33,9 +35,14 @@ const Settings = () => {
     const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
     const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
     const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
+    const importBackup = (value) => dispatch({type: 'IMPORT_BACKUP', payload: value});
 
+    const [importData, setImportData] = useState(null);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [restoreMessage, setRestoreMessage] = useState('');
+    const fileInput = useRef(null);
+
 
     const backupData = useSelector(state => {
         return {
@@ -49,6 +56,53 @@ const Settings = () => {
             user: state.user
         };
     });
+
+    const downloadJson = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+
+        const link = document.createElement("a");
+        link.setAttribute("href", dataStr);
+        link.setAttribute("download", `Budget Backup - ${format(new Date(),'yyyy-MM-dd')}.json`);
+        link.click();
+    }
+
+    const onFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file === undefined) return;
+
+        if (file.type.match('application/json')) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                let text = reader.result;
+                let obj = JSON.parse(text);
+
+                let newObj = {};
+
+                if (obj.general !== undefined) newObj.general = obj.general;
+                if (obj.accounts !== undefined) newObj.accounts = obj.accounts;
+                if (obj.categories !== undefined) newObj.categories = obj.categories;
+                if (obj.budgets !== undefined) newObj.budgets = obj.budgets;
+                if (obj.funds !== undefined) newObj.funds = obj.funds;
+                if (obj.fundAdditions !== undefined) newObj.fundAdditions = obj.fundAdditions;
+                if (obj.transactions !== undefined) newObj.transactions = obj.transactions;
+                if (obj.user !== undefined) newObj.user = obj.user;
+                
+                setImportData(newObj);
+            }
+
+            reader.readAsText(file);
+        } else {
+            setImportData(null);
+        }
+    }
+
+    const onImportBackup = () => {
+        importBackup(importData);
+        setImportData(null);
+        setRestoreMessage('Data Restored.')
+        fileInput.current.value = '';
+    }
 
     const onChangeColorScheme = (e) => {
         let value = e.target.value;
@@ -145,6 +199,16 @@ const Settings = () => {
                 ]}/>
                 <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth='170px'/>
 
+                <h4>Backup</h4>
+                <p>This will download a backup of all data as a JSON file, and allow you to restore from a backup if needed.</p>
+                <Button value="Backup" width="120px" inline={true} onClick={downloadJson}/>
+
+                <h4>Restore</h4>
+                <p>Use this to restore from a previously taken backup JSON file. This will overwrite any current data and replace it with the backup data.</p>
+                <p style={{color: '#0F0'}}>{restoreMessage}</p>
+                <input type="file" onChange={onFileChange} ref={fileInput}/>
+                { importData !== null ? <Button value="Import" width="120px" inline={true} onClick={onImportBackup}/> : null }
+
                 <h4>Syncing</h4>
                 <p>This will allow you to upload your data to a server for backup and to sync with other devices.</p>
                 <p>Last synced on: {lastSyncDisplay}</p>
@@ -152,13 +216,13 @@ const Settings = () => {
                 ?   <div>
                         <LabelledInput label="Username" value={username} onChange={onChangeUsername}/>
                         <LabelledInput label="Password" value={password} onChange={onChangePassword} type="password"/>
-                        <Button value="Login" width="120px"inline={true} onClick={login} loading={fetching}/> 
-                        <Button value="Register" width="120px"inline={true} onClick={register} loading={fetching}/>
+                        <Button value="Login" width="120px" inline={true} onClick={login} loading={fetching}/> 
+                        <Button value="Register" width="120px" inline={true} onClick={register} loading={fetching}/>
                     </div>
 
                 :   <div>
-                        <Button value="Sync Now" width="120px"inline={true} onClick={manualSync} loading={fetching}/> 
-                        <Button value="Logout" width="120px"inline={true} onClick={logout}/>
+                        <Button value="Sync Now" width="120px" inline={true} onClick={manualSync} loading={fetching}/> 
+                        <Button value="Logout" width="120px" inline={true} onClick={logout}/>
                     </div>
                 }
             </Container>

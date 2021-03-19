@@ -105,6 +105,7 @@ export const reducer = (state = initialState, action) => {
         case 'REMOVE_TRANSACTION': let removedTransactions = removeObject(state.transactions, value); return {...state, transactions: removedTransactions};
 
         case 'SYNC': return {...state, ...value, lastSync: dateValue};
+        case 'IMPORT_BACKUP': return {...state, ...value};
         default: return state;
     }
 }
