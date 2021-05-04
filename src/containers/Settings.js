@@ -185,7 +185,7 @@ const Settings = () => {
 
     return (
         <div>
-            <Container>
+            <Container paddingBottom='100px'>
                 <h4>Settings</h4>
 
                 <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth='170px'/>

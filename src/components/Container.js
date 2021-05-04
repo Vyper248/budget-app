@@ -8,6 +8,7 @@ const Container = styled.div`
     @media screen and (max-width: 700px) {
         width: 100%;
         margin: 0px;
+        ${props => props.paddingBottom ? `padding-bottom: ${props.paddingBottom}` : ''};
     }
 `;
 

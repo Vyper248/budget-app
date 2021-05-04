@@ -94,7 +94,7 @@ const SummaryTables = () => {
         //when user goes foward from starting date, they can see the totals for each category
         if (latestDate === 'Totals') {
             return (
-                <div style={{marginBottom: '90px'}}>
+                <div style={{marginBottom: '100px'}}>
                     <Grid>
                         { getHeading() }
                         { incomeCategories.map(obj => <AmountGroup key={'totals-heading-'+obj.id} title={obj.name} amount={parseCurrency(summaryTotals[obj.name])} type='income'/>) }
@@ -113,7 +113,7 @@ const SummaryTables = () => {
         }
         
         return (
-            <div style={{marginBottom: '90px'}}>
+            <div style={{marginBottom: '100px'}}>
                 <Grid>
                     { getHeading() }
                     { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='income'/>) }
