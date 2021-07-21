@@ -128,18 +128,25 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     let filteredFundAdditions = fundAdditions.filter(tr => {
         if (compareAsc(parseISO(tr.date), parseISO(dates[0])) >= 0) return true;
         return false;
-    })
-    
+    });
+
+    //filter out transactions for funds, to be added after remaining amounts have been calculated
+    let filteredFundTransactions = transactions.filter(tr => {
+        if (compareAsc(parseISO(tr.date), parseISO(dates[0])) < 0) return false;
+        if (tr.fund !== undefined) return true;
+        return false;
+    });
 
     //add transaction amounts to correct heading in object
-    const addFunc = (tr) => {
+    const addFunc = (negative) => (tr) => {
         let periodDate = getPeriodOfTransaction(dates, tr.date);
         let heading = getTransactionHeading(fundNames, categoryNames, tr);
         if (obj[periodDate][heading] === undefined) obj[periodDate][heading] = 0;
-        obj[periodDate][heading] += tr.amount;
+        if (negative === true) obj[periodDate][heading] -= tr.amount;
+        else obj[periodDate][heading] += tr.amount;
     }
-    filteredTransactions.forEach(addFunc);
-    filteredFundAdditions.forEach(addFunc);
+    filteredTransactions.forEach(addFunc(false));
+    filteredFundAdditions.forEach(addFunc(false));
 
     //calculate remaining amount in each period
     Object.values(obj).forEach(row => {        
@@ -153,6 +160,9 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
         
         row.remaining = remaining;
     });
+
+    //add fund transactions, shouldn't have any effect on remaining amount as they come out of the fund instead
+    filteredFundTransactions.forEach(addFunc(true));
     
     return obj;
 };
