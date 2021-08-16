@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
     width: 200px;
+    min-width: 200px;
     margin: 5px;
     padding: 0px 5px;
     overflow: scroll;
