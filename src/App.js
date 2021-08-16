@@ -21,7 +21,7 @@ import Footer from './containers/Footer';
 function App() {
     const dispatch = useDispatch();
     const page = useSelector(state => state.currentPage);
-    const addTransaction = useSelector(state => state.addTransaction);
+    let addTransaction = useSelector(state => state.addTransaction);
     const user = useSelector(state => state.user);
     const backupData = useSelector(state => {
         return {

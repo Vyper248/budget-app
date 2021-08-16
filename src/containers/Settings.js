@@ -8,7 +8,6 @@ import { sync } from '../redux/store';
 import Container from '../components/Container';
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
-import Input from '../components/Input';
 
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
 

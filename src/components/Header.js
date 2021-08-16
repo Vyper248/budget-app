@@ -76,6 +76,10 @@ const Header = () => {
     const dispatch = useDispatch();
     const addTransaction = useSelector(state => state.addTransaction);
 
+    const onClickAddTransaction = () => {
+        dispatch({type: 'SET_ADD_TRANSACTION', payload: !addTransaction});
+    }
+
     return (
         <StyledComp isMobile={isMobile}>
             <HeaderButton page='Home' icon={isMobile ? <FaHome/> : null}/>
@@ -83,7 +87,7 @@ const Header = () => {
             <HeaderButton page='Funds'/>
             <HeaderButton page='Accounts'/>
             { !isMobile ? <HeaderButton page='Tools'/> : null }
-            { !isMobile ? <div onClick={() => dispatch({type: 'SET_ADD_TRANSACTION', payload: !addTransaction})}>Add Transaction</div> : null }
+            { !isMobile ? <div onClick={onClickAddTransaction}>Add Transaction</div> : null }
             { !isMobile ? <div className="spacer"></div> : null }
             <HeaderButton page='Settings' icon={isMobile ? <MdSettings/> : null} alignment='right'/>
         </StyledComp>
