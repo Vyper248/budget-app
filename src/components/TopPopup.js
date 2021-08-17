@@ -4,21 +4,18 @@ import { MdClose } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 
 const StyledComp = styled.div`
-    position: fixed;
+    position: absolute;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
+    width: 400px;
+    height: 385px;
 `;
 
-const StyledInnerComp = styled.div.attrs(props => ({
-    style: {
-        top: props.y,
-        left: props.x
-    }
-}))`
+const StyledInnerComp = styled.div`
     position: absolute;
     width: max-content;
+    top: 50px;
+    left: 50px;
 
     & > div:first-child {
         position: absolute;
@@ -58,8 +55,8 @@ const TopPopup = ({children}) => {
     const [startClientY, setStartClientY] = useState(0);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(100);
-    const [x, setX] = useState(300);
-    const [y, setY] = useState(28);
+    const [x, setX] = useState(250);
+    const [y, setY] = useState(-23);
 
     const onMouseDown = (e) => {
         setStartClientX(e.clientX);
@@ -79,10 +76,13 @@ const TopPopup = ({children}) => {
             let yDiff = e.clientY - startClientY;
             let newX = startX + xDiff;
             let newY = startY + yDiff;
-            if (newY < 28) newY = 28;
-            if (newY > window.innerHeight-285) newY = window.innerHeight-285;
-            if (newX < 0) newX = 0;
-            if (newX > window.innerWidth-300) newX = window.innerWidth-300;
+
+            //prevent going off the side
+            if (newY < -23) newY = -23;
+            if (newY > window.innerHeight-336) newY = window.innerHeight-336;
+            if (newX < -50) newX = -50;
+            if (newX > window.innerWidth-351) newX = window.innerWidth-351;
+            
             setX(newX);
             setY(newY);
         }
@@ -93,8 +93,8 @@ const TopPopup = ({children}) => {
     }
 
     return (
-        <StyledComp onMouseUp={onMouseUp} onMouseMove={onMouseMove}>
-            <StyledInnerComp x={x} y={y}>
+        <StyledComp onMouseUp={onMouseUp} onMouseMove={onMouseMove} style={{top: y, left: x}}>
+            <StyledInnerComp>
                 <div onMouseDown={onMouseDown}></div>
                 <MdClose onClick={onClose}/>
                 {children}
