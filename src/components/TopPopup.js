@@ -5,8 +5,6 @@ import { useDispatch } from 'react-redux';
 
 const StyledComp = styled.div`
     position: absolute;
-    top: 0px;
-    left: 0px;
     width: 400px;
     height: 385px;
 `;

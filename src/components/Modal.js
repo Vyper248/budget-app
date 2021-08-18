@@ -5,7 +5,6 @@ const StyledComp = styled.div`
     width: ${props => props.width+'px'};
     border: 1px solid white;
     position: fixed;
-    top: 50px;
     background-color: var(--bg-color);
     left: 50%;
     top: 50%;

@@ -126,6 +126,10 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         setShowDetails(true);
     }
 
+    const onEditTransaction = (obj) => {
+        setDetails(obj);
+    }
+
     const onCloseDetails = () => {
         setShowDetails(false);
     }
@@ -162,7 +166,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         <StyledComp>
             { isMobile ? null : <h4>{heading}</h4> }
             { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
-            <Modal visible={showDetails}><TransactionDetails obj={details} onClose={onCloseDetails}/></Modal>
+            <Modal visible={showDetails}><TransactionDetails obj={details} onClose={onCloseDetails} onEdit={onEditTransaction}/></Modal>
             {/* <EditButton><IconButton Icon={FaEdit} onClick={toggleDelete}/></EditButton> */}
             { currentPage === 'Accounts' ? <TotalsDisplay label="Balance" value={total}/> : null }
             { currentPage === 'Categories' && categoryType === 'expense' ? <TotalsDisplay label="Total Spent" value={-total}/> : null }

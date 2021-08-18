@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import { formatDate, parseTransaction, parseCurrency } from '../functions';
 
 import Button from './Button';
 import IconButton from './IconButton';
 import Grid from './Grid';
+import TransactionForm from './TransactionForm';
 
 const StyledComp = styled.div`    
     padding: 10px;
@@ -38,26 +39,9 @@ const getTableRow = (heading, value) => {
     return <tr><td>{heading}</td><td>{value}</td></tr>
 }
 
-const TransactionDetails = ({obj, onClose, onDelete}) => {
-    const dispatch = useDispatch();
-
-    if (obj === null) return null;
-    let parsedObj = parseTransaction(obj);
-
-    const remove = () => {     
-        if (parsedObj.type === undefined) dispatch({type: 'REMOVE_FUND_ADDITION', payload: parsedObj.id});
-        else dispatch({type: 'REMOVE_TRANSACTION', payload: parsedObj.id});
-        onClose();
-    }
-
-    return (
-        <StyledComp>
-            <Grid template="50px auto 50px">
-                <div style={{textAlign: 'left'}}><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px' size="1.3em"/></div>
-                <strong>Transaction Details</strong>
-            </Grid>
-
-            <table>
+const getTable = (parsedObj) => {
+    if (parsedObj.type === undefined) parsedObj.type = 'Add to Fund';
+    return <table>
                 <tbody>
                     { getTableRow('Type', parsedObj.type) }
                     { getTableRow('From', parsedObj.from) }
@@ -70,10 +54,52 @@ const TransactionDetails = ({obj, onClose, onDelete}) => {
                     { getTableRow('Amount', parseCurrency(parsedObj.amount)) }
                 </tbody>
             </table>
+}
+
+const TransactionDetails = ({obj, onClose, onDelete, onEdit=()=>{}}) => {
+    const dispatch = useDispatch();
+    const [editMode, setEditMode] = useState(false);
+
+    if (obj === null) return null;
+    let parsedObj = parseTransaction(obj);
+
+    const edit = () => {
+        setEditMode(!editMode);
+    }
+
+    const remove = () => {     
+        if (parsedObj.type === undefined) dispatch({type: 'REMOVE_FUND_ADDITION', payload: parsedObj.id});
+        else dispatch({type: 'REMOVE_TRANSACTION', payload: parsedObj.id});
+        onClose();
+    }
+
+    const onChangeTransaction = (newObj) => {
+        if (newObj.type === undefined) dispatch({type: 'UPDATE_FUND_ADDITION', payload: newObj});
+        else dispatch({type: 'UPDATE_TRANSACTION', payload: newObj});
+        onEdit(newObj);
+        setEditMode(false);
+    }
+
+    const onClickClose = () => {
+        setTimeout(() => {
+            setEditMode(false);
+        }, 400);
+        onClose();
+    }
+
+    return (
+        <StyledComp>
+            <Grid template="50px auto 50px">
+                <div style={{textAlign: 'left'}}><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px' size="1.3em"/></div>
+                <strong>Transaction Details</strong>
+                <div style={{textAlign: 'right'}}><IconButton Icon={FaEdit} onClick={edit} color='white' topAdjust='1px' size="1.3em"/></div>
+            </Grid>
+
+            { editMode ? <TransactionForm obj={obj} onChange={onChangeTransaction}/> : getTable(parsedObj) }
 
             <br/>
 
-            <Button onClick={onClose} value="Close"/>
+            <Button onClick={onClickClose} value="Close"/>
         </StyledComp>
     );
 }

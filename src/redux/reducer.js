@@ -96,6 +96,7 @@ export const reducer = (state = initialState, action) => {
         case 'UPDATE_BUDGET': let updatedBudgets = updateBudget(state.budgets, value); return {...state, budgets: updatedBudgets};
         case 'UPDATE_FUND': let updatedFunds = replaceObject(state.funds, value); return {...state, funds: updatedFunds};
         case 'UPDATE_FUND_ADDITION': let updatedFundAdditions = replaceObject(state.fundAdditions, value); return {...state, fundAdditions: updatedFundAdditions};
+        case 'UPDATE_TRANSACTION': let updatedTransactions = replaceObject(state.transactions, value); return {...state, transactions: updatedTransactions, addTransaction: false};
 
         case 'REMOVE_ACCOUNT': let removedAccounts = removeObject(state.accounts, value); return {...state, accounts: removedAccounts};
         case 'REMOVE_CATEGORY': let removedCategories = removeObject(state.categories, value); return {...state, categories: removedCategories};
