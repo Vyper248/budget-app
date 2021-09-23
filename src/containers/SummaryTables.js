@@ -10,6 +10,7 @@ import Grid from '../components/Grid';
 import AmountGroup from '../components/AmountGroup';
 import IconButton from '../components/IconButton';
 import BudgetInput from '../components/BudgetInput';
+import AccountSummary from '../components/AccountSummary';
 
 import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted, reverseDate } from '../functions';
 
@@ -27,7 +28,7 @@ const SummaryTables = () => {
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
     const dates = getLatestDates(general.startDate, general.payPeriodType);
-    const [latestDate, setLatestDate] = useState(dates[dates.length-1]);
+    const [latestDate, setLatestDate] = useState('Totals');
 
     const [editCategory, setEditCategory] = useState(0);
 
@@ -76,7 +77,7 @@ const SummaryTables = () => {
     if (isMobile) {
         let displayDate = latestDate;
         if (latestDate !== 'Totals') {
-            displayDate = format(new Date(latestDate), 'do MMMM yyyy');
+            displayDate = format(new Date(latestDate), 'do MMM yyyy');
         }
 
         let index = dates.indexOf(latestDate);
@@ -162,28 +163,7 @@ const SummaryTables = () => {
                 </tbody>
             </Table>
             <h4>Account Summaries</h4>
-            <Table>
-                <thead>
-                    <tr>
-                        <td className="remaining">Account</td>
-                        <td className="remaining">Total</td>
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    accountSummary.map(obj => 
-                        <tr key={'account-'+obj.id}>
-                            <td>{obj.name}</td>
-                            <td>{parseCurrency(obj.total)}</td>
-                        </tr>
-                    )
-                }
-                    <tr>
-                        <td>Total</td>
-                        <td>{parseCurrency(accountTotal)}</td>
-                    </tr>
-                </tbody>
-            </Table>
+            <AccountSummary arr={accountSummary} total={accountTotal}/>
         </div>
     );
 }

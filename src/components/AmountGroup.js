@@ -20,9 +20,9 @@ const StyledComp = styled.div`
 
     & > div:first-of-type {
         position: relative;
-        font-size: 1.2em;
+        font-size: 1em;
         font-weight: bold;
-        padding: 2px;
+        padding: 5px;
         margin-bottom: 4px;
         ${props => props.type === 'income' ? 'background-color: green; color: white;' : ''};
         ${props => props.type === 'expense' ? 'background-color: darkorange; color: black;' : ''};
@@ -44,6 +44,13 @@ const StyledComp = styled.div`
 
     & .budgetIcon:hover {
         cursor: pointer;
+    }
+
+    @media only screen and (min-width: 701px) {
+        &.fullRow {
+            grid-column-start: 1;
+            grid-column-end: 5;
+        }
     }
 `;
 
