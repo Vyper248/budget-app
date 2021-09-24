@@ -44,7 +44,7 @@ const StyledGroup = styled.div`
 
     & > div {
         border-bottom: ${props => props.open === false ? '1px solid var(--menu-border-color)' : '1px solid var(--bg-color)'};
-        ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*51}px`};
+        ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*50}px`};
         overflow: hidden;
         transition: 0.3s;
     }
@@ -70,7 +70,7 @@ const StyledGroup = styled.div`
 
         & > div {
             border-bottom: ${props => props.open === false ? '1px solid var(--menu-border-color)' : '1px solid var(--bg-color)'};
-            ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*45}px`};
+            ${props => props.open === false ? 'height: 0px' : `height: ${props.qty*47}px`};
             overflow: hidden;
             transition: 0.3s;
         }
@@ -162,10 +162,15 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         }
     }
 
+    let headerOptions = objArray.map(obj => {
+        let hidden = obj.hidden || obj.complete || obj.closed;
+        return {display: obj.name, value: obj.id, hidden: hidden};
+    });
+
     return (
         <StyledComp>
             { isMobile ? null : <h4>{heading}</h4> }
-            { isMobile ? <HeaderDropdown value={id} options={objArray.map(obj => ({display: obj.name, value: obj.id}))} onChange={onChangePage} /> : null }
+            { isMobile ? <HeaderDropdown value={id} options={headerOptions} onChange={onChangePage} /> : null }
             <Modal visible={showDetails}><TransactionDetails obj={details} onClose={onCloseDetails} onEdit={onEditTransaction}/></Modal>
             {/* <EditButton><IconButton Icon={FaEdit} onClick={toggleDelete}/></EditButton> */}
             { currentPage === 'Accounts' ? <TotalsDisplay label="Balance" value={total}/> : null }

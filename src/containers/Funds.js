@@ -17,6 +17,7 @@ const Funds = () => {
     const editMode = useSelector(state => state.editMode);
     const allFunds = useSelector(state => filterDeleted(state.funds));
     const funds = allFunds.filter(fund => !fund.complete);
+    const hiddenFunds = allFunds.filter(fund => fund.complete);
     const firstFund = funds[0];
     let firstFundId = firstFund !== undefined ? firstFund.id : undefined;
     let firstFundName = firstFund !== undefined ? firstFund.name : '';
@@ -35,7 +36,7 @@ const Funds = () => {
     });
 
     const onClickObj = (id) => () => {
-        let fund = funds.find(obj => obj.id === id);
+        let fund = allFunds.find(obj => obj.id === id);
         setFund(id);
         setFundName(fund.name);
         dispatch({type: 'SET_EDIT_MODE', payload: false});
@@ -55,10 +56,10 @@ const Funds = () => {
         <div>  
             <Container>
                 <ListContainer>
-                    { isMobile ? null : <List heading={'Funds'} array={funds} onClickObj={onClickObj} selected={fund}/> }
+                    { isMobile ? null : <List heading={'Funds'} array={funds} hiddenArray={hiddenFunds} onClickObj={onClickObj} selected={fund}/> }
                     { editMode 
                         ? <EditList array={allFunds} onClickDropdown={onClickObj} id={fund}/>
-                        : <Transactions transactions={combined} heading={fundName} onClickDropdown={onClickObj} objArray={funds} id={fund}/> 
+                        : <Transactions transactions={combined} heading={fundName} onClickDropdown={onClickObj} objArray={allFunds} id={fund}/> 
                     }
                 </ListContainer>
             </Container>

@@ -17,6 +17,7 @@ const Accounts = () => {
     const editMode = useSelector(state => state.editMode);
     const allAccounts = useSelector(state => filterDeleted(state.accounts));
     const accounts = allAccounts.filter(account => !account.closed);
+    const closedAccounts = allAccounts.filter(account => account.closed);
     const firstAccount = accounts[0];
     let firstAccountId = firstAccount !== undefined ? firstAccount.id : undefined;
     let firstAccountName = firstAccount !== undefined ? firstAccount.name : '';
@@ -33,7 +34,7 @@ const Accounts = () => {
     });
 
     const onClickObj = (id) => () => {
-        let account = accounts.find(obj => obj.id === id);
+        let account = allAccounts.find(obj => obj.id === id);
         setAccount(id);
         setAccountName(account.name);
         dispatch({type: 'SET_EDIT_MODE', payload: false});
@@ -48,10 +49,10 @@ const Accounts = () => {
         <div>  
             <Container>
                 <ListContainer>
-                    { isMobile ? null : <List heading={'Accounts'} array={accounts} onClickObj={onClickObj} selected={account}/> }
+                    { isMobile ? null : <List heading={'Accounts'} array={accounts} hiddenArray={closedAccounts} onClickObj={onClickObj} selected={account}/> }
                     { editMode 
                         ? <EditList array={allAccounts} vertical={true} onClickDropdown={onClickObj} id={account}/>
-                        : <Transactions transactions={filteredTransactions} heading={accountName} id={account} onClickDropdown={onClickObj} objArray={accounts}/> 
+                        : <Transactions transactions={filteredTransactions} heading={accountName} id={account} onClickDropdown={onClickObj} objArray={allAccounts}/> 
                     }
                 </ListContainer>
             </Container>

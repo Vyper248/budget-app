@@ -52,6 +52,10 @@ const StyledComp = styled.div`
     & div.dropdownItem:last-child {
         border-bottom: none;
     }
+
+    & div.dropdownItem.hidden {
+        color: #888;
+    }
 `;
 
 const HeaderDropdown = ({value, options=[], onChange}) => {
@@ -80,13 +84,19 @@ const HeaderDropdown = ({value, options=[], onChange}) => {
 
     let maxHeight = (options.length * 40) + 40;
     if (maxHeight > 300) maxHeight = 300;
+
+    let visibleOptions = options.filter(obj => !obj.hidden);
+    let hiddenOptions = options.filter(obj => obj.hidden);
     
     return (
         <StyledComp open={open} maxHeight={maxHeight+'px'}>
             <div className='dropdownDisplay' onClick={toggleOpen}>{currentValue.display}<TiArrowSortedDown/></div>
             <div className='dropdownGroup'>
             {
-                options.map(obj => <div key={'headerDropdown-'+obj.value} className='dropdownItem' onClick={onClickItem(obj.value)}>{obj.display}</div>)
+                visibleOptions.map(obj => <div key={'headerDropdown-'+obj.value} className='dropdownItem' onClick={onClickItem(obj.value)}>{obj.display}</div>)
+            }
+            {
+                hiddenOptions.map(obj => <div key={'headerDropdown-'+obj.value} className='dropdownItem hidden' onClick={onClickItem(obj.value)}>{obj.display}</div>)
             }
                 <div className='dropdownItem' onClick={onClickEdit}>Edit</div>
             </div>

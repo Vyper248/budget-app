@@ -31,6 +31,21 @@ const StyledComp = styled.div`
         color: var(--menu-selected-text-color);
     }
 
+    & > div.hidden {
+        background-color: #999;
+        color: white;
+    }
+
+    & > div.hidden.selected {
+        background-color: #777;
+        color: white;
+    }
+
+    & > div.hidden:hover {
+        background-color: #777;
+        color: white;
+    }
+
     & > div:last-child {
         position: absolute;
         bottom: 0px;
@@ -39,7 +54,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const List = ({heading='', array=[], onClickObj, selected}) => {
+const List = ({heading='', array=[], hiddenArray=[], onClickObj, selected}) => {
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
 
@@ -55,6 +70,15 @@ const List = ({heading='', array=[], onClickObj, selected}) => {
                     if (obj.name.length === 0) return null;
                     return (
                         <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
+                    );
+                })
+            }
+            { hiddenArray.length > 0 ? <hr/> : null }
+            {
+                hiddenArray.map(obj => {
+                    if (obj.name.length === 0) return null;
+                    return (
+                        <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected hidden': 'hidden'}>{obj.name}</div>
                     );
                 })
             }

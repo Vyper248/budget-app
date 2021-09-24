@@ -17,6 +17,7 @@ const Categories = () => {
     const editMode = useSelector(state => state.editMode);
     const allCategories = useSelector(state => filterDeleted(state.categories));
     const categories = allCategories.filter(cat => !cat.hidden);
+    const hiddenCategories = allCategories.filter(cat => cat.hidden);
     const firstCategory = categories[0];
     let firstCategoryId = firstCategory !== undefined ? firstCategory.id : undefined;
     let firstCategoryName = firstCategory !== undefined ? firstCategory.name : '';
@@ -33,7 +34,7 @@ const Categories = () => {
     });
 
     const onClickObj = (id) => () => {
-        let category = categories.find(obj => obj.id === id);
+        let category = allCategories.find(obj => obj.id === id);
         setCategory(id);
         setCategoryName(category.name);
         dispatch({type: 'SET_EDIT_MODE', payload: false});
@@ -47,10 +48,10 @@ const Categories = () => {
         <div>  
             <Container>
                 <ListContainer>
-                    { isMobile ? null : <List heading={'Categories'} array={categories} onClickObj={onClickObj} selected={category}/> }
+                    { isMobile ? null : <List heading={'Categories'} array={categories} hiddenArray={hiddenCategories} onClickObj={onClickObj} selected={category}/> }
                     { editMode 
                         ? <EditList array={allCategories} onClickDropdown={onClickObj} id={category}/>
-                        : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={categories} id={category}/> 
+                        : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={allCategories} id={category}/> 
                     }
                 </ListContainer>
             </Container>
