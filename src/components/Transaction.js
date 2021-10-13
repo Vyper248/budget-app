@@ -35,7 +35,7 @@ const StyledComp = styled.div`
     }
 
     & div.description {
-        max-width: 540px;
+        max-width: ${props => props.maxDescWidth};
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -47,8 +47,8 @@ const StyledComp = styled.div`
     }
 
     &:hover {
-        cursor: pointer;
-        background-color: var(--table-heading-bg-color);
+        ${props => props.hover ? 'cursor: pointer;' : ''};
+        ${props => props.hover ? 'background-color: var(--table-heading-bg-color);' : ''};
     }
 
     @media screen and (max-width: 700px) {        
@@ -74,7 +74,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const Transaction = ({obj, accountId, showDelete=false, onClick=()=>{}}) => {
+const Transaction = ({obj, accountId, showDelete=false, hover=true, maxDescWidth='540px', onClick=()=>{}}) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => filterDeleted(state.categories));
     const funds = useSelector(state => filterDeleted(state.funds));
@@ -90,7 +90,7 @@ const Transaction = ({obj, accountId, showDelete=false, onClick=()=>{}}) => {
     let description = getType(obj, accountId, categories, funds, accounts, currentPage);
 
     return (
-        <StyledComp onClick={onClick(obj)}>
+        <StyledComp onClick={onClick(obj)} hover={hover} maxDescWidth={maxDescWidth}>
             <table>
                 <tbody>
                     <tr>
@@ -108,14 +108,14 @@ const Transaction = ({obj, accountId, showDelete=false, onClick=()=>{}}) => {
 }
 
 const getType = (transaction, accountId, categories, funds, accounts, page) => {
-    if (page === 'Categories') {
+    if (page === 'Categories' || page === 'Home') {
         let id = transaction.account;
         let account = accounts.find(obj => obj.id === id);
         if (account !== undefined) {
-            if (transaction.description.length > 0) return account.name + ' - ' + transaction.description;
+            if (transaction.description && transaction.description.length > 0) return account.name + ' - ' + transaction.description;
             return account.name;
         } else {
-            if (transaction.description.length > 0) return transaction.description;
+            if (transaction.description && transaction.description.length > 0) return transaction.description;
         }
     }
 

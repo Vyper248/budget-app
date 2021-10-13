@@ -11,6 +11,8 @@ import AmountGroup from '../components/AmountGroup';
 import IconButton from '../components/IconButton';
 import BudgetInput from '../components/BudgetInput';
 import AccountSummary from '../components/AccountSummary';
+import TopPopup from '../components/TopPopup';
+import TransactionList from '../components/TransactionList';
 
 import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted, reverseDate } from '../functions';
 
@@ -31,6 +33,13 @@ const SummaryTables = () => {
     const [latestDate, setLatestDate] = useState('Totals');
 
     const [editCategory, setEditCategory] = useState(0);
+
+    const [showTransactions, setShowTransactions] = useState(false);
+    const [transactionArray, setTransactionArray] = useState([]);
+    const [transactionHeading, setTransactionHeading] = useState('');
+    const [transactionPos, setTransactionPos] = useState({x: 0, y: 0});
+    const [transactionId, setTransactionId] = useState(0);
+    const [transactionType, setTransactionType] = useState('');
 
     const rows = getSummaryRows(dates, transactions, funds, categories, fundAdditions);
 
@@ -72,6 +81,30 @@ const SummaryTables = () => {
 
         let newDate = dates[newIndex];
         setLatestDate(newDate);
+    }
+
+    const onClickValue = (obj, heading='', type='', id) => (e) => {
+        if (obj === undefined) return;
+        let transactions = obj.transactions;
+        setShowTransactions(true);
+        setTransactionArray(transactions);
+        setTransactionHeading(heading);
+        setTransactionType(type);
+        setTransactionId(id);
+
+        let leftPos = e.target.offsetLeft-500;
+        if (leftPos < 0) leftPos = e.target.offsetLeft + e.target.offsetWidth - 51;
+        let topPos = e.target.offsetTop - 51;
+        setTransactionPos({x: leftPos, y: topPos});
+    }
+
+    const onCloseTransactions = () => {
+        setShowTransactions(false);
+        setTransactionArray([]);
+        setTransactionHeading('');
+        setTransactionPos(0);
+        setTransactionType('');
+        setTransactionId(0);
     }
 
     if (isMobile) {
@@ -117,9 +150,9 @@ const SummaryTables = () => {
             <div style={{marginBottom: '100px'}}>
                 <Grid>
                     { getHeading() }
-                    { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='income'/>) }
-                    { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='fund'/>) }
-                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={parseCurrency(rows[latestDate][obj.name])} type='expense' editBudget={true} budget={checkBudget(budgets, latestDate, obj.id, transactions, true)} id={obj.id} date={latestDate}/>) }
+                    { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='income'/>) }
+                    { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='fund'/>) }
+                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='expense' editBudget={true} budget={checkBudget(budgets, latestDate, obj.id, transactions, true)} id={obj.id} date={latestDate}/>) }
                     <AmountGroup title='Remaining' amount={parseCurrency(rows[latestDate].remaining)} type='remaining'/>
                 </Grid>
             </div>
@@ -129,6 +162,9 @@ const SummaryTables = () => {
     return (
         <div>
             <h4>Period Summaries</h4>
+            { showTransactions ? <TopPopup onClose={onCloseTransactions} posX={transactionPos.x} posY={transactionPos.y} width={'550px'}>
+                <TransactionList heading={transactionHeading} transactions={transactionArray} type={transactionType}/>
+            </TopPopup> : null }
             <Table>
                 <thead>
                     <tr>
@@ -145,9 +181,9 @@ const SummaryTables = () => {
                             return (
                                 <tr key={'summaryDate-'+date}>
                                     <td>{reverseDate(date)}</td>
-                                    { incomeCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
-                                    { filteredFunds.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}</td>) }
-                                    { expenseCategories.map(obj => <td key={obj.id}>{parseCurrency(rows[date][obj.name])}{editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions)}</td>) }
+                                    { incomeCategories.map(obj => <td key={obj.id} className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'income', obj.id+date)}>{getAmount(rows, date, obj.name)}</td>) }
+                                    { filteredFunds.map(obj => <td key={obj.id}className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'fund', obj.id+date)}>{getAmount(rows, date, obj.name)}</td>) }
+                                    { expenseCategories.map(obj => <td key={obj.id} className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'expense', obj.id+date)}>{getAmount(rows, date, obj.name)}{editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions)}</td>) }
                                     <td>{ parseCurrency(rows[date].remaining) }</td>
                                 </tr>
                             )
@@ -166,6 +202,12 @@ const SummaryTables = () => {
             <AccountSummary arr={accountSummary} total={accountTotal}/>
         </div>
     );
+}
+
+const getAmount = (rows, date, name) => {
+    let valueObj = rows[date][name];
+    if (valueObj === undefined) return '£0.00';
+    return parseCurrency(valueObj.amount);
 }
 
 export default SummaryTables;

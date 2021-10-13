@@ -16,6 +16,9 @@
   
   --table-heading-bg-color: #009fe8;
   --table-heading-text-color: white; 
+
+  --obj-highlight-bg: #444;
+  --obj-highlight-text: white;
 }
 
 * {

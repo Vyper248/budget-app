@@ -120,6 +120,7 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     //filter out transactions that happened before first date and those which are for funds
     let filteredTransactions = transactions.filter(tr => {
         if (tr.fund !== undefined) return false;
+        if (tr.type === 'transfer') return false;
         if (compareAsc(parseISO(tr.date), parseISO(dates[0])) >= 0) return true;
         return false;
     });
@@ -141,9 +142,11 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
     const addFunc = (negative) => (tr) => {
         let periodDate = getPeriodOfTransaction(dates, tr.date);
         let heading = getTransactionHeading(fundNames, categoryNames, tr);
-        if (obj[periodDate][heading] === undefined) obj[periodDate][heading] = 0;
-        if (negative === true) obj[periodDate][heading] -= tr.amount;
-        else obj[periodDate][heading] += tr.amount;
+        if (obj[periodDate][heading] === undefined) obj[periodDate][heading] = {amount: 0, transactions: []};
+        if (negative === true) obj[periodDate][heading].amount -= tr.amount;
+        else obj[periodDate][heading].amount += tr.amount;
+
+        obj[periodDate][heading].transactions.push(tr);
     }
     filteredTransactions.forEach(addFunc(false));
     filteredFundAdditions.forEach(addFunc(false));
@@ -154,9 +157,9 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
         const expenseCategories = categories.filter(obj => obj.type === 'expense');
 
         let remaining = 0;
-        incomeCategories.forEach(obj => remaining += row[obj.name] !== undefined ? row[obj.name] : 0);
-        expenseCategories.forEach(obj => remaining -= row[obj.name] !== undefined ? row[obj.name] : 0);
-        funds.forEach(obj => remaining -= row[obj.name] !== undefined ? row[obj.name] : 0);
+        incomeCategories.forEach(obj => remaining += row[obj.name] !== undefined ? row[obj.name].amount : 0);
+        expenseCategories.forEach(obj => remaining -= row[obj.name] !== undefined ? row[obj.name].amount : 0);
+        funds.forEach(obj => remaining -= row[obj.name] !== undefined ? row[obj.name].amount : 0);
         
         row.remaining = remaining;
     });
@@ -426,6 +429,9 @@ export const changeColourScheme = (scheme) => {
         
         root.style.setProperty('--table-heading-bg-color', '#009fe8');
         root.style.setProperty('--table-heading-text-color', 'white');
+        
+        root.style.setProperty('--obj-highlight-bg', '#444');
+        root.style.setProperty('--obj-highlight-text', 'white');
     }
 
     if (scheme === 'black') {
@@ -445,6 +451,9 @@ export const changeColourScheme = (scheme) => {
         
         root.style.setProperty('--table-heading-bg-color', '#009fe8');
         root.style.setProperty('--table-heading-text-color', 'white');
+
+        root.style.setProperty('--obj-highlight-bg', '#444');
+        root.style.setProperty('--obj-highlight-text', 'white');
     }
 
     if (scheme === 'light') {
@@ -464,5 +473,8 @@ export const changeColourScheme = (scheme) => {
         
         root.style.setProperty('--table-heading-bg-color', '#AAA');
         root.style.setProperty('--table-heading-text-color', 'black');
+
+        root.style.setProperty('--obj-highlight-bg', '#CCC');
+        root.style.setProperty('--obj-highlight-text', 'black');
     }
 }

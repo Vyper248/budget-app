@@ -73,7 +73,7 @@ const List = ({heading='', array=[], hiddenArray=[], onClickObj, selected}) => {
                     );
                 })
             }
-            { hiddenArray.length > 0 ? <hr/> : null }
+            {   hiddenArray.length > 0 ? <hr/> : null   }
             {
                 hiddenArray.map(obj => {
                     if (obj.name.length === 0) return null;

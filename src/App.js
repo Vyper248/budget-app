@@ -40,6 +40,10 @@ function App() {
         if (user !== null) sync(backupData, dispatch);
     }, []);
 
+    const onClosePopup = () => {
+        dispatch({type: 'SET_ADD_TRANSACTION', payload: false});
+    }
+
     return (
         <div className="App">
             <Header/>
@@ -51,7 +55,7 @@ function App() {
             { page === 'Accounts' ? <Accounts/> : null }
             { page === 'Settings' ? <Settings/> : null }
             { page === 'Tools' ? <Tools/> : null }
-            { addTransaction ? <TopPopup><AddTransaction/></TopPopup> : null }
+            { addTransaction ? <TopPopup onClose={onClosePopup}><AddTransaction/></TopPopup> : null }
             <Footer/>
         </div>
     );

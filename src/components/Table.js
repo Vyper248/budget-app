@@ -93,6 +93,17 @@ const Table = styled.table`
     & td.input {
         padding: 2px;
     }
+
+    & td.trValue:hover {
+        cursor: pointer;
+        background-color: var(--obj-highlight-bg);
+        color: var(--obj-highlight-text);
+    }
+
+    & td.trValue.selected {
+        background-color: var(--obj-highlight-bg);
+        color: var(--obj-highlight-text);
+    }
 `;
 
 export default Table;
