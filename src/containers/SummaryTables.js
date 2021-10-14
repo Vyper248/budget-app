@@ -92,9 +92,9 @@ const SummaryTables = () => {
         setTransactionType(type);
         setTransactionId(id);
 
-        let leftPos = e.target.offsetLeft-500;
-        if (leftPos < 0) leftPos = e.target.offsetLeft + e.target.offsetWidth - 51;
-        let topPos = e.target.offsetTop - 51;
+        let leftPos = e.target.offsetLeft-550;
+        if (leftPos < 0) leftPos = e.target.offsetLeft + e.target.offsetWidth - 101;
+        let topPos = e.target.offsetTop - 101;
         setTransactionPos({x: leftPos, y: topPos});
     }
 
@@ -162,7 +162,7 @@ const SummaryTables = () => {
     return (
         <div>
             <h4>Period Summaries</h4>
-            { showTransactions ? <TopPopup onClose={onCloseTransactions} posX={transactionPos.x} posY={transactionPos.y} width={'550px'}>
+            { showTransactions ? <TopPopup onClose={onCloseTransactions} posX={transactionPos.x} posY={transactionPos.y} width={'450px'}>
                 <TransactionList heading={transactionHeading} transactions={transactionArray} type={transactionType}/>
             </TopPopup> : null }
             <Table>
