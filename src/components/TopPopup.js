@@ -28,19 +28,21 @@ const StyledInnerComp = styled.div`
 
     & > svg {
         position: absolute;
-        right: 8px;
-        top: 8px;
+        right: 2px;
+        top: 2px;
         font-size: 1.5em;
         cursor: pointer;
         color: var(--text-color);
         background-color: var(--bg-color);
-        width: 35px;
-        height: 35px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
         ${props => props.dragging ? 'pointer-events: none' : 'pointer-events: all'};
     }
 
     & > svg:hover {
-        filter: brightness(0.8);
+        // filter: brightness(0.8);
+        color: var(--light-text-color);
     }
 
     & > div:last-child {

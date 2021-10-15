@@ -6,6 +6,12 @@ import Table from './Table';
 import Transaction from './Transaction';
 
 const StyledComp = styled.div`
+    ${props => props.type === 'income' ? 'border-color: green !important' : ''};
+    ${props => props.type === 'expense' ? 'border-color: darkorange !important' : ''};
+    ${props => props.type === 'fund' ? 'border-color: lightsteelblue !important' : ''};
+    box-shadow: 0px 1px 4px gray;
+    padding: 0px !important;
+
     & > div {
         font-weight: bold;
         padding: 5px;
@@ -24,6 +30,19 @@ const StyledComp = styled.div`
     & > div.fund {
         background-color: lightsteelblue;
     }
+
+    & > span > div {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    & > span > div:first-child {
+        margin-top: 5px;
+    }
+
+    & > span > div:last-child {
+        margin-bottom: 5px;
+    }
 `
 
 const TransactionList = ({heading, transactions, type}) => {
@@ -32,7 +51,7 @@ const TransactionList = ({heading, transactions, type}) => {
     });
 
     return (
-        <StyledComp>
+        <StyledComp type={type}>
             <div className={type}>{heading}</div>
             <span>
                 {

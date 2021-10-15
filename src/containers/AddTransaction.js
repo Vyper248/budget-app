@@ -8,6 +8,7 @@ const StyledComp = styled.div`
     & > div:first-child {
         font-weight: bold;
         padding: 5px;
+        margin-top: -9px;
     }
 `;
 
