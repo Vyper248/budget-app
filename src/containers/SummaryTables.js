@@ -206,7 +206,7 @@ const SummaryTables = () => {
 
 const getAmount = (rows, date, name) => {
     let valueObj = rows[date][name];
-    if (valueObj === undefined) return '£0.00';
+    if (valueObj === undefined) return ' - ';
     return parseCurrency(valueObj.amount);
 }
 
