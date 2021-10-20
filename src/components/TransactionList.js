@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { compareDesc, parseISO } from 'date-fns';
 
-import Table from './Table';
 import Transaction from './Transaction';
 
 const StyledComp = styled.div`

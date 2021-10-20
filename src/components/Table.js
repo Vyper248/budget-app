@@ -14,22 +14,22 @@ const Table = styled.table`
         color: var(--table-heading-text-color);
     }
 
-    & thead td.income {
+    & td.income {
         background-color: green;
         color: white;
     }
 
-    & thead td.expense {
+    & td.expense {
         background-color: darkorange;
         color: black;
     }
 
-    & thead td.fund {
+    & td.fund {
         background-color: lightsteelblue;
         color: black;
     }
 
-    & thead td.remaining {
+    & td.remaining {
         background-color: deepskyblue;
         color: black;
     }

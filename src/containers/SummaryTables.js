@@ -3,19 +3,16 @@ import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { FaPiggyBank } from 'react-icons/fa';
 
-import Table from '../components/Table';
 import Grid from '../components/Grid';
 import AmountGroup from '../components/AmountGroup';
 import IconButton from '../components/IconButton';
-import BudgetInput from '../components/BudgetInput';
 import AccountSummary from '../components/AccountSummary';
 import TopPopup from '../components/TopPopup';
 import TransactionList from '../components/TransactionList';
 import SummaryTable from '../components/SummaryTable';
 
-import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted, reverseDate } from '../functions';
+import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -30,7 +27,7 @@ const SummaryTables = () => {
 
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
-    const dates = getLatestDates(general.startDate, general.payPeriodType);
+    const dates = getLatestDates(general.startDate, general.payPeriodType, general.periodsToDisplay);
     const [latestDate, setLatestDate] = useState('Totals');
 
     const [editCategory, setEditCategory] = useState(0);
@@ -194,7 +191,7 @@ const SummaryTables = () => {
 
 const getAmount = (rows, date, name) => {
     let valueObj = rows[date][name];
-    if (valueObj === undefined) return ' - ';
+    if (valueObj === undefined) return '-';
     return parseCurrency(valueObj.amount);
 }
 

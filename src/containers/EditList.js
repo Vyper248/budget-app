@@ -1,13 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { FaTrashAlt } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 import { format } from 'date-fns';
 
 import Table from '../components/Table';
 import Button from '../components/Button';
-import IconButton from '../components/IconButton';
 import HeaderDropdown from '../components/HeaderDropdown';
 import EditInput from '../components/EditInput';
 import MobileEditGroup from '../components/MobileEditGroup';
