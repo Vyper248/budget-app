@@ -348,6 +348,8 @@ export const checkIfCanDelete = (obj) => {
         if (obj.category === id) return false;
         if (obj.fund === id) return false;
         if (obj.account === id) return false;
+        if (obj.from === id) return false;
+        if (obj.to === id) return false;
     }
 
     return true;

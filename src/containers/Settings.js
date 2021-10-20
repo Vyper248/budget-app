@@ -22,6 +22,9 @@ const Settings = () => {
     const showDecimals = useSelector(state => state.general.showDecimals);
     const startDate = useSelector(state => state.general.startDate);
     const colourScheme = useSelector(state => state.general.colourScheme);
+    const swapSummaries = useSelector(state => state.general.swapSummaries);
+    const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
+    const reverseSummaryTable = useSelector(state => state.general.reverseSummaryTable);
 
     const setPayPeriodType = (e) => dispatch({type: 'SET_PAY_PERIOD_TYPE', payload: e.target.value});
     const setCurrencySymbol = (e) => dispatch({type: 'SET_CURRENCY_SYMBOL', payload: e.target.value});
@@ -31,6 +34,10 @@ const Settings = () => {
     }
     const setStartDate = (e) => dispatch({type: 'SET_START_DATE', payload: e.target.value});
     const setColourScheme = (value) => dispatch({type: 'SET_COLOUR_SCHEME', payload: value});
+    const setSwapSummaries = (e) => dispatch({type: 'SET_SWAP_SUMMARIES', payload: e.target.value === 'false' ? false : true});
+    const setPeriodsToDisplay = (e) => dispatch({type: 'SET_PERIODS_TO_DISPLAY', payload: parseInt(e.target.value)});
+    const setReverseSummaryTable = (e) => dispatch({type: 'SET_REVERSE_SUMMARY_TABLE', payload: e.target.value === 'false' ? false : true});
+
     const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
     const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
     const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
@@ -182,21 +189,26 @@ const Settings = () => {
     let lastSyncDisplay = `${lastSyncDate.slice(6,8)}/${lastSyncDate.slice(4,6)}/${lastSyncDate.slice(0,4)} at ${lastSyncDate.slice(8,10)}:${lastSyncDate.slice(10,12)}`;
     if (lastSync === 0 || lastSync === undefined) lastSyncDisplay = 'Never';
 
+    const labelWidth = '200px';
+
     return (
         <div>
             <Container paddingBottom='100px'>
                 <h4>Settings</h4>
 
-                <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth='170px'/>
-                <LabelledInput label="Currency Symbol" value={currencySymbol} onChange={setCurrencySymbol} labelWidth='170px'/>
-                <LabelledInput label="Show Decimals" type="dropdown" value={showDecimals} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowDecimals} labelWidth='170px'/>
-                <LabelledInput label="Pay Period" type="dropdown" value={payPeriodType} onChange={setPayPeriodType} labelWidth='170px' options={[
+                <LabelledInput label="Start Date" type="date" value={startDate} onChange={setStartDate} labelWidth={labelWidth}/>
+                <LabelledInput label="Currency Symbol" value={currencySymbol} onChange={setCurrencySymbol} labelWidth={labelWidth}/>
+                <LabelledInput label="Show Decimals" type="dropdown" value={showDecimals} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowDecimals} labelWidth={labelWidth}/>
+                <LabelledInput label="Pay Period" type="dropdown" value={payPeriodType} onChange={setPayPeriodType} labelWidth={labelWidth} options={[
                     {value: 'monthly', display: 'Monthly'}, 
                     {value: 'fourWeekly', display: '4-Weekly'}, 
                     {value: 'twoWeekly', display: '2-Weekly'}, 
                     {value: 'weekly', display: 'Weekly'}
                 ]}/>
-                <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth='170px'/>
+                <LabelledInput label="Periods to Display" type="number" value={periodsToDisplay} onChange={setPeriodsToDisplay} labelWidth={labelWidth}/>
+                <LabelledInput label="Swap Summaries" type="dropdown" value={swapSummaries} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setSwapSummaries} labelWidth={labelWidth}/>
+                <LabelledInput label="Reverse Summary Table" type="dropdown" value={reverseSummaryTable} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setReverseSummaryTable} labelWidth={labelWidth}/>
+                <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth={labelWidth}/>
 
                 <h4>Backup</h4>
                 <p>This will download a backup of all data as a JSON file, and allow you to restore from a backup if needed.</p>

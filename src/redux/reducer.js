@@ -17,6 +17,9 @@ const initialState = {
         colourScheme: 'dark',
         showDecimals: true,
         startDate: '2019-11-08',
+        swapSummaries: false,
+        periodsToDisplay: 6,
+        reverseSummaryTable: false,
         savingsGoalDate: '2019-11-08',
         savingsGoalTarget: 0,
         salary: 0,
@@ -83,6 +86,9 @@ export const reducer = (state = initialState, action) => {
         case 'SET_SAVINGS_GOAL_DATE': return {...state, general: {...state.general, savingsGoalDate: value, updated: dateValue}};
         case 'SET_SAVINGS_GOAL_TARGET': return {...state, general: {...state.general, savingsGoalTarget: value, updated: dateValue}};
         case 'SET_SALARY': return {...state, general: {...state.general, salary: value, updated: dateValue}};
+        case 'SET_PERIODS_TO_DISPLAY': return {...state, general: {...state.general, periodsToDisplay: value, updated: dateValue}};
+        case 'SET_SWAP_SUMMARIES': return {...state, general: {...state.general, swapSummaries: value, updated: dateValue}};
+        case 'SET_REVERSE_SUMMARY_TABLE': return {...state, general: {...state.general, reverseSummaryTable: value, updated: dateValue}};
 
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};

@@ -81,7 +81,7 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
         </StyledComp>
     );
 
-    if (true || isMobile) return (
+    return (
         <StyledComp>
             <h4>Edit {currentPage}</h4>
             {
@@ -111,44 +111,6 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
                     );
                 })
             }
-            <Button value="Add New" width="150px" onClick={onAdd} color='#0F0'/>
-        </StyledComp>
-    );
-
-    return (
-        <StyledComp>
-            <h4>Edit {currentPage}</h4>
-            <Table padding='2px'>
-                <thead>
-                    <tr>
-                    {
-                        Object.keys(modal).map(key => {
-                            return <td key={"EditListHeading-"+key}>{fromCamelCase(key)}</td>
-                        })
-                    }
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    array.map((obj, i) => {
-                        return (
-                            <tr key={"EditListRow-"+i}>
-                            {
-                                Object.keys(modal).map((key,j) => {
-                                    return (
-                                        <td key={"EditListData-"+key+i}><EditInput label={key} defaultValue={modal[key]} value={obj[key]} onChange={onChange(obj, key)}/></td>
-                                    );
-                                })
-                            }
-                                { checkIfCanDelete(obj) ? <td><IconButton Icon={FaTrashAlt} onClick={onDelete(obj.id)} color='red'/></td> : <td></td> }
-                            </tr>
-                        );
-                    })
-                }
-                </tbody>
-            </Table>
-
             <Button value="Add New" width="150px" onClick={onAdd} color='#0F0'/>
         </StyledComp>
     );

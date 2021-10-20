@@ -161,6 +161,12 @@ const SummaryTables = () => {
 
     return (
         <div>
+            {
+                general.swapSummaries ? (<div>
+                    <h4>Account Summaries</h4>
+                    <AccountSummary arr={accountSummary} total={accountTotal}/>
+                </div>) : null
+            }
             <h4>Period Summaries</h4>
             { showTransactions ? <TopPopup onClose={onCloseTransactions} posX={transactionPos.x} posY={transactionPos.y} width={'450px'}>
                 <TransactionList heading={transactionHeading} transactions={transactionArray} type={transactionType}/>
@@ -198,8 +204,12 @@ const SummaryTables = () => {
                     </tr>
                 </tbody>
             </Table>
-            <h4>Account Summaries</h4>
-            <AccountSummary arr={accountSummary} total={accountTotal}/>
+            {
+                !general.swapSummaries ? (<div>
+                    <h4>Account Summaries</h4>
+                    <AccountSummary arr={accountSummary} total={accountTotal}/>
+                </div>) : null
+            }
         </div>
     );
 }
