@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { format } from 'date-fns';
 
 import { changeColourScheme } from '../functions';
@@ -12,6 +13,8 @@ import Button from '../components/Button';
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
 
 const Settings = () => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
+
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const lastSync = useSelector(state => state.lastSync);
@@ -208,9 +211,9 @@ const Settings = () => {
                     {value: 'weekly', display: 'Weekly'}
                 ]}/>
                 <LabelledInput label="Periods to Display" type="number" value={periodsToDisplay} onChange={setPeriodsToDisplay} labelWidth={labelWidth}/>
-                <LabelledInput label="Swap Summaries" type="dropdown" value={swapSummaries} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setSwapSummaries} labelWidth={labelWidth}/>
-                <LabelledInput label="Reverse Summary Table" type="dropdown" value={reverseSummaryTable} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setReverseSummaryTable} labelWidth={labelWidth}/>
-                <LabelledInput label="Display Months" type="dropdown" value={displayMonths} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayMonths} labelWidth={labelWidth}/>
+                { isMobile ? null : <LabelledInput label="Swap Summaries" type="dropdown" value={swapSummaries} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setSwapSummaries} labelWidth={labelWidth}/> }
+                { isMobile ? null : <LabelledInput label="Reverse Summary Table" type="dropdown" value={reverseSummaryTable} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setReverseSummaryTable} labelWidth={labelWidth}/> }
+                { isMobile ? null : <LabelledInput label="Display Months" type="dropdown" value={displayMonths} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayMonths} labelWidth={labelWidth}/> }
                 <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth={labelWidth}/>
 
                 <h4>Backup</h4>
