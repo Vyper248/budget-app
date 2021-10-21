@@ -18,26 +18,28 @@ const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories
         return <div className="budgetIcon" onClick={toggleEditCategory(id)}><FaPiggyBank/></div>;
     }
 
-    const getValueRow = (arr, className) => {
+    const getTD = (obj, date, type) => {
+        let amount = getAmount(rows, date, obj.name);
+        let tdClassName = transactionId === obj.id+date ? 'trValue selected' : 'trValue';
+        //only give class name if it's a cell user can click on
+        if (amount === '-') tdClassName = '';
+        return  <td key={obj.id+date} className={tdClassName} onClick={onClickValue(rows[date][obj.name], obj.name, type, obj.id+date)}>
+                    { amount }
+                    { editCategory === obj.id 
+                        ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> 
+                        : checkBudget(budgets, date, obj.id, transactions) }
+                </td>
+    }
+
+    const getValueRow = (arr, type) => {
         return arr.map(obj => {
             return  <tr key={obj.id}>
-                        <td className={className} style={{minWidth: '120px'}}>{obj.name}{className === 'expense' ? budgetIcon(obj.id) : null}</td>
-                        {
-                            dates.map(date =>   {
-                                let amount = getAmount(rows, date, obj.name);
-                                let tdClassName = transactionId === obj.id+date ? 'trValue selected' : 'trValue';
-                                //only give class name if it's a cell user can click on
-                                if (amount === '-') tdClassName = '';
-                                return  <td key={obj.id+date} className={tdClassName} onClick={onClickValue(rows[date][obj.name], obj.name, className, obj.id+date)}>
-                                            { amount }
-                                            { editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions) }
-                                        </td>
-                            })
-                        }
+                        <td className={type} style={{minWidth: '120px'}}>{obj.name}{type === 'expense' ? budgetIcon(obj.id) : null}</td>
+                        { dates.map(date => getTD(obj, date, type)) }
                         { 
-                            className === 'fund' 
+                            type === 'fund' 
                                 ? <td>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td> 
-                                : <td>{parseCurrency(summaryTotals[obj.name])}</td> 
+                                : <td>{parseCurrency(summaryTotals[obj.name])}</td>
                         }
                     </tr>
         });
@@ -73,6 +75,10 @@ const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories
         );
     }
 
+    const getValue = (arr, date, type) => {
+        return arr.map(obj => getTD(obj, date, type));
+    }
+
     return (
         <Table>
             <thead>
@@ -90,9 +96,9 @@ const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories
                         return (
                             <tr key={'summaryDate-'+date}>
                                 <td>{formatDate(date)}</td>
-                                { incomeCategories.map(obj => <td key={obj.id+date} className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'income', obj.id+date)}>{getAmount(rows, date, obj.name)}</td>) }
-                                { filteredFunds.map(obj => <td key={obj.id+date}className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'fund', obj.id+date)}>{getAmount(rows, date, obj.name)}</td>) }
-                                { expenseCategories.map(obj => <td key={obj.id+date} className={transactionId === obj.id+date ? 'trValue selected' : 'trValue'} onClick={onClickValue(rows[date][obj.name], obj.name, 'expense', obj.id+date)}>{getAmount(rows, date, obj.name)}{editCategory === obj.id ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> : checkBudget(budgets, date, obj.id, transactions)}</td>) }
+                                { getValue(incomeCategories, date, 'income') }
+                                { getValue(filteredFunds, date, 'fund') }
+                                { getValue(expenseCategories, date, 'expense') }
                                 <td>{ parseCurrency(rows[date].remaining) }</td>
                             </tr>
                         )
