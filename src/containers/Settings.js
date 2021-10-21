@@ -25,6 +25,7 @@ const Settings = () => {
     const swapSummaries = useSelector(state => state.general.swapSummaries);
     const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
     const reverseSummaryTable = useSelector(state => state.general.reverseSummaryTable);
+    const displayMonths = useSelector(state => state.general.displayMonths);
 
     const setPayPeriodType = (e) => dispatch({type: 'SET_PAY_PERIOD_TYPE', payload: e.target.value});
     const setCurrencySymbol = (e) => dispatch({type: 'SET_CURRENCY_SYMBOL', payload: e.target.value});
@@ -37,6 +38,7 @@ const Settings = () => {
     const setSwapSummaries = (e) => dispatch({type: 'SET_SWAP_SUMMARIES', payload: e.target.value === 'false' ? false : true});
     const setPeriodsToDisplay = (e) => dispatch({type: 'SET_PERIODS_TO_DISPLAY', payload: parseInt(e.target.value)});
     const setReverseSummaryTable = (e) => dispatch({type: 'SET_REVERSE_SUMMARY_TABLE', payload: e.target.value === 'false' ? false : true});
+    const setDisplayMonths = (e) => dispatch({type: 'SET_DISPLAY_MONTHS', payload: e.target.value === 'false' ? false : true});
 
     const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
     const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
@@ -208,6 +210,7 @@ const Settings = () => {
                 <LabelledInput label="Periods to Display" type="number" value={periodsToDisplay} onChange={setPeriodsToDisplay} labelWidth={labelWidth}/>
                 <LabelledInput label="Swap Summaries" type="dropdown" value={swapSummaries} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setSwapSummaries} labelWidth={labelWidth}/>
                 <LabelledInput label="Reverse Summary Table" type="dropdown" value={reverseSummaryTable} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setReverseSummaryTable} labelWidth={labelWidth}/>
+                <LabelledInput label="Display Months" type="dropdown" value={displayMonths} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayMonths} labelWidth={labelWidth}/>
                 <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth={labelWidth}/>
 
                 <h4>Backup</h4>
