@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { parseISO, compareAsc } from 'date-fns';
 
-import { today, getAllDates, getPeriodOfTransaction, filterDeleted, parseCurrency, reverseDate } from '../functions';
+import { today, getAllDates, getLatestDates, getPeriodOfTransaction, filterDeleted, parseCurrency, reverseDate } from '../functions';
 
 import Container from '../components/Container';
 import Grid from '../components/Grid';
@@ -15,11 +15,13 @@ const Breakdown = () => {
     const transactions = useSelector(state => filterDeleted(state.transactions));
     const startDate = useSelector(state => state.general.startDate);
     const payPeriodType = useSelector(state => state.general.payPeriodType);
+    const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
 
     const firstCategory = categories.length > 0 ? categories[0].id : 0;
     const [category, setCategory] = useState(firstCategory);
 
-    const [fromDate, setFromDate] = useState(startDate);
+    let latestDates = getLatestDates(startDate, payPeriodType, periodsToDisplay);
+    const [fromDate, setFromDate] = useState(latestDates[0]);
     const [toDate, setToDate] = useState(today());
     
     if (categories.length === 0) return <div>Please add a category to use this feature.</div>;
@@ -71,7 +73,7 @@ const Breakdown = () => {
         let dateObj = tableObj[date];
         let total = Object.values(dateObj).reduce((a,c) => a+c, 0);
         return <tr key={'table-row-date-'+date}>
-            <td>{reverseDate(date)}</td>
+            <td style={{minWidth: '125px'}}>{reverseDate(date)}</td>
             <td>{parseCurrency(total)}</td>
             {
                 accounts.map(account => <td key={'table-row-data-'+account.id}>{parseCurrency(dateObj[account.id])}</td>)
