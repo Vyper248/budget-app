@@ -76,9 +76,10 @@ const TopPopup = ({children, onClose, posX=200, posY=-73, width='300px'}) => {
 
     const checkYPos = () => {
         let height = ref.current.offsetHeight;
+        let offsetY = window.pageYOffset;
         let newPos = (posY - height/2) + 20; //move to a centered position
-        if (newPos < -73) newPos = -73; //if it then goes off the top, move to 0
-        else if (newPos + height + 50 > window.innerHeight) newPos = -73; //if it goes off the bottom after moving up, move to 0
+        if (newPos < -72 + offsetY) newPos = -72 + offsetY; //if it then goes off the top, move to 0
+        else if (newPos + height + 50 > window.innerHeight + offsetY) newPos = -72 + offsetY; //if it goes off the bottom after moving up, move to 0
         setY(newPos);
     }
 
