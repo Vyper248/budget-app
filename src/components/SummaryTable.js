@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaPiggyBank } from "react-icons/fa";
+import { MdUnfoldMore, MdUnfoldLess } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { format } from "date-fns";
 
@@ -8,11 +9,22 @@ import { reverseDate, parseCurrency, checkBudget, filterDeleted } from "../funct
 import Table from "./Table";
 import BudgetInput from "./BudgetInput";
 
-const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories, summaryTotals, rows, editCategory, toggleEditCategory, onClickValue, checkFundTarget, transactionId, getAmount}) => {
+const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expenseCategories, summaryTotals, rows, onClickValue, checkFundTarget, transactionId, getAmount, showMorePeriods, showLessPeriods}) => {
     const budgets = useSelector(state => filterDeleted(state.budgets));
     const transactions = useSelector(state => filterDeleted(state.transactions));
     const reverseSummaryTable = useSelector(state => state.general.reverseSummaryTable);
     const displayMonths = useSelector(state => state.general.displayMonths);
+    const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
+
+    const [editCategory, setEditCategory] = useState(0);
+
+    const showLessBtn = dates.length > periodsToDisplay;
+    const showMoreBtn = dates.length < allDates.length;
+
+    const toggleEditCategory = (id) => () => {
+        if (editCategory === id) setEditCategory(0);
+        else setEditCategory(id);
+    }
 
     const budgetIcon = (id) => {
         return <div className="budgetIcon" onClick={toggleEditCategory(id)}><FaPiggyBank/></div>;
@@ -56,7 +68,11 @@ const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories
             <Table>
                 <thead>
                     <tr>
-                        <td>Dates</td>
+                        <td>
+                            <div className={`lessPeriodIcon reversed ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
+                            Date 
+                            <div className={`morePeriodIcon reversed ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
+                        </td>
                         { dates.map(date => <td key={'date-'+date} style={{minWidth: minWidth}}>{formatDate(date)}</td>) }
                         <td>Total</td>
                     </tr>    
@@ -83,7 +99,11 @@ const SummaryTable = ({dates, incomeCategories, filteredFunds, expenseCategories
         <Table>
             <thead>
                 <tr>
-                    <td>Date</td>
+                    <td>
+                        <div className={`lessPeriodIcon ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
+                        Date 
+                        <div className={`morePeriodIcon ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
+                    </td>
                     { incomeCategories.map(obj => <td key={'heading-'+obj.id} className="income">{obj.name}</td>) }
                     { filteredFunds.map(obj => <td key={'heading-'+obj.id} className="fund">{obj.name}</td>) }
                     { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}<div className="budgetIcon" onClick={toggleEditCategory(obj.id)}><FaPiggyBank/></div></td>) }

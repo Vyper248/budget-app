@@ -80,14 +80,33 @@ const Table = styled.table`
         position: relative;
     }
 
-    & .budgetIcon {
-        ${'' /* position: absolute; */}
+    & .budgetIcon, & .morePeriodIcon {
         float: right;
         margin-left: 5px;
     }
 
-    & .budgetIcon:hover {
+    & .lessPeriodIcon {
+        float: left;
+        margin-right: 5px;
+    }
+
+    & .morePeriodIcon, & .lessPeriodIcon {
+        position: relative;
+        top: 2px;
+    }
+
+    & .budgetIcon:hover, & .morePeriodIcon:hover, & .lessPeriodIcon:hover {
         cursor: pointer;
+    }
+
+    & .lessPeriodIcon.hidden, & .morePeriodIcon.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    & .lessPeriodIcon.reversed, & .morePeriodIcon.reversed {
+        transform: rotate(90deg);
+        top: 1px;
     }
 
     & td.input {

@@ -12,7 +12,7 @@ import TopPopup from '../components/TopPopup';
 import TransactionList from '../components/TransactionList';
 import SummaryTable from '../components/SummaryTable';
 
-import { getLatestDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
+import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -27,18 +27,19 @@ const SummaryTables = () => {
 
     const filteredFunds = funds.filter(obj => obj.complete === false);
 
-    const dates = getLatestDates(general.startDate, general.payPeriodType, general.periodsToDisplay);
     const [latestDate, setLatestDate] = useState('Totals');
-
-    const [editCategory, setEditCategory] = useState(0);
-
+        
     const [showTransactions, setShowTransactions] = useState(false);
     const [transactionArray, setTransactionArray] = useState([]);
     const [transactionHeading, setTransactionHeading] = useState('');
     const [transactionPos, setTransactionPos] = useState({x: 0, y: 0});
     const [transactionId, setTransactionId] = useState(0);
     const [transactionType, setTransactionType] = useState('');
-
+    const [extraDates, setExtraDates] = useState(general.periodsToDisplay);
+    
+    let periodsToDisplay = extraDates > general.periodsToDisplay ? extraDates : general.periodsToDisplay;
+    const dates = getLatestDates(general.startDate, general.payPeriodType, periodsToDisplay);
+    const allDates = getAllDates(general.startDate, general.payPeriodType);
     const rows = getSummaryRows(dates, transactions, funds, categories, fundAdditions);
 
     const incomeCategories = categories.filter(obj => obj.type === 'income' && obj.hidden === false);
@@ -48,9 +49,18 @@ const SummaryTables = () => {
     const accountSummary = getAccountSummary(transactions, accounts, categories);
     const accountTotal = accountSummary.reduce((a,c) => { return a+c.total; }, 0);
 
-    const toggleEditCategory = (id) => () => {
-        if (editCategory === id) setEditCategory(0);
-        else setEditCategory(id);
+    const showMorePeriods = () => {
+        let add = general.periodsToDisplay > 0 ? general.periodsToDisplay : 12;
+        let qty = extraDates + add;
+        if (qty > allDates.length) qty = allDates.length;
+        setExtraDates(qty);
+    }
+
+    const showLessPeriods = () => {
+        let subtract = general.periodsToDisplay > 0 ? general.periodsToDisplay : 12;
+        let qty = extraDates-subtract;
+        if (qty < general.periodsToDisplay) qty = general.periodsToDisplay;
+        setExtraDates(qty);
     }
 
     const setPreviousDate = () => {
@@ -172,12 +182,12 @@ const SummaryTables = () => {
                     </TopPopup> : null 
             }
             <SummaryTable 
-                dates={dates} 
+                dates={dates} allDates={allDates}
                 incomeCategories={incomeCategories} filteredFunds={filteredFunds} expenseCategories={expenseCategories} 
                 summaryTotals={summaryTotals} rows={rows} 
-                editCategory={editCategory} toggleEditCategory={toggleEditCategory} 
                 onClickValue={onClickValue} checkFundTarget={checkFundTarget} 
                 transactionId={transactionId} getAmount={getAmount}
+                showMorePeriods={showMorePeriods} showLessPeriods={showLessPeriods}
             />
             {
                 !general.swapSummaries ? (<div>
