@@ -76,7 +76,10 @@ const Breakdown = () => {
             <td style={{minWidth: '125px'}}>{reverseDate(date)}</td>
             <td>{parseCurrency(total)}</td>
             {
-                accounts.map(account => <td key={'table-row-data-'+account.id}>{parseCurrency(dateObj[account.id])}</td>)
+                accounts.map(account => {
+                    if (tableObj.totals[account.id] === 0) return null;
+                    return <td key={'table-row-data-'+account.id}>{parseCurrency(dateObj[account.id])}</td>
+                })
             }
         </tr>;
     }
@@ -96,7 +99,10 @@ const Breakdown = () => {
                             <td></td>
                             <td>Total</td>
                             {
-                                accounts.map(obj => <td key={'table-head-'+obj.id}>{obj.name}</td>)
+                                accounts.map(obj => {
+                                    if (tableObj.totals[obj.id] === 0) return null;
+                                    return <td key={'table-head-'+obj.id}>{obj.name}</td>
+                                })
                             }
                         </tr>
                     </thead>
@@ -108,7 +114,10 @@ const Breakdown = () => {
                             <th>Totals</th>
                             <td>{parseCurrency(totalAmount)}</td>
                             {
-                                accounts.map(account => <td key={'table-totals-'+account.id}>{parseCurrency(tableObj.totals[account.id])}</td>)
+                                accounts.map(account => {
+                                    if (tableObj.totals[account.id] === 0) return null;
+                                    return <td key={'table-totals-'+account.id}>{parseCurrency(tableObj.totals[account.id])}</td>
+                                })
                             }
                         </tr>
                     </tbody>
