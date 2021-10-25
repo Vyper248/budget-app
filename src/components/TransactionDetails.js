@@ -21,6 +21,7 @@ const StyledComp = styled.div`
         border: 1px solid var(--menu-border-color);
         padding: 5px;
         text-transform: capitalize;
+        word-break: break-word;
     }
 
     & > table tr > td:first-child {
@@ -92,7 +93,7 @@ const TransactionDetails = ({obj, onClose, onDelete, onEdit=()=>{}}) => {
             <Grid template="50px auto 50px">
                 <div style={{textAlign: 'left'}}><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px' size="1.3em"/></div>
                 <strong>Transaction Details</strong>
-                <div style={{textAlign: 'right'}}><IconButton Icon={FaEdit} onClick={edit} color='white' topAdjust='1px' size="1.3em"/></div>
+                <div style={{textAlign: 'right'}}><IconButton Icon={FaEdit} onClick={edit} topAdjust='1px' size="1.3em"/></div>
             </Grid>
 
             { editMode ? <TransactionForm obj={obj} onChange={onChangeTransaction}/> : getTable(parsedObj) }
