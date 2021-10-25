@@ -98,11 +98,21 @@ export const getSummaryTotals = (transactions, funds, categories, fundAdditions)
     const incomeCategories = categories.filter(obj => obj.type === 'income');
     const expenseCategories = categories.filter(obj => obj.type === 'expense');
 
+    //calculate total remaining
     let totalRemaining = 0;
     incomeCategories.forEach(category => totalRemaining += obj[category.name]);
     expenseCategories.forEach(category => totalRemaining -= obj[category.name]);
     funds.forEach(fund => totalRemaining -= obj[fund.name].saved);
     obj.remaining = totalRemaining;
+
+    //calculate totals for income and expenses
+    let totalIncome = 0;
+    incomeCategories.forEach(category => totalIncome += obj[category.name]);
+    obj.totalIncome = totalIncome;
+
+    let totalExpenses = 0;
+    expenseCategories.forEach(category => totalExpenses += obj[category.name]);
+    obj.totalExpenses = totalExpenses;
 
     return obj;
 }
@@ -162,6 +172,15 @@ export const getSummaryRows = (dates, transactions, funds, categories, fundAddit
         funds.forEach(obj => remaining -= row[obj.name] !== undefined ? row[obj.name].amount : 0);
         
         row.remaining = remaining;
+
+        //calculate income and expense totals
+        let incomeTotal = 0;
+        incomeCategories.forEach(obj => incomeTotal += row[obj.name] !== undefined ? row[obj.name].amount : 0);
+        row.incomeTotal = incomeTotal;
+
+        let expenseTotal = 0;
+        expenseCategories.forEach(obj => expenseTotal += row[obj.name] !== undefined ? row[obj.name].amount : 0);
+        row.expenseTotal = expenseTotal;
     });
 
     //add fund transactions, shouldn't have any effect on remaining amount as they come out of the fund instead

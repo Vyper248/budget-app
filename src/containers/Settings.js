@@ -29,6 +29,8 @@ const Settings = () => {
     const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
     const reverseSummaryTable = useSelector(state => state.general.reverseSummaryTable);
     const displayMonths = useSelector(state => state.general.displayMonths);
+    const displayIncomeTotal = useSelector(state => state.general.displayIncomeTotal);
+    const displayExpenseTotal = useSelector(state => state.general.displayExpenseTotal);
 
     const setPayPeriodType = (e) => dispatch({type: 'SET_PAY_PERIOD_TYPE', payload: e.target.value});
     const setCurrencySymbol = (e) => dispatch({type: 'SET_CURRENCY_SYMBOL', payload: e.target.value});
@@ -42,6 +44,8 @@ const Settings = () => {
     const setPeriodsToDisplay = (e) => dispatch({type: 'SET_PERIODS_TO_DISPLAY', payload: parseInt(e.target.value)});
     const setReverseSummaryTable = (e) => dispatch({type: 'SET_REVERSE_SUMMARY_TABLE', payload: e.target.value === 'false' ? false : true});
     const setDisplayMonths = (e) => dispatch({type: 'SET_DISPLAY_MONTHS', payload: e.target.value === 'false' ? false : true});
+    const setDisplayIncomeTotal = (e) => dispatch({type: 'SET_DISPLAY_INCOME_TOTAL', payload: e.target.value === 'false' ? false : true});
+    const setDisplayExpenseTotal = (e) => dispatch({type: 'SET_DISPLAY_EXPENSE_TOTAL', payload: e.target.value === 'false' ? false : true});
 
     const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
     const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
@@ -214,6 +218,8 @@ const Settings = () => {
                 { isMobile ? null : <LabelledInput label="Swap Summaries" type="dropdown" value={swapSummaries} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setSwapSummaries} labelWidth={labelWidth}/> }
                 { isMobile ? null : <LabelledInput label="Reverse Summary Table" type="dropdown" value={reverseSummaryTable} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setReverseSummaryTable} labelWidth={labelWidth}/> }
                 { isMobile ? null : <LabelledInput label="Display Months" type="dropdown" value={displayMonths} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayMonths} labelWidth={labelWidth}/> }
+                { isMobile ? null : <LabelledInput label="Show Income Total" type="dropdown" value={displayIncomeTotal} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayIncomeTotal} labelWidth={labelWidth}/> }
+                { isMobile ? null : <LabelledInput label="Show Expense Total" type="dropdown" value={displayExpenseTotal} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayExpenseTotal} labelWidth={labelWidth}/> }
                 <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth={labelWidth}/>
 
                 <h4>Backup</h4>

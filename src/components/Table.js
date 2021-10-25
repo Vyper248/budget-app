@@ -24,6 +24,14 @@ const Table = styled.table`
         color: black;
     }
 
+    & td.bold {
+        font-weight: bold;
+    }
+
+    td.date {
+        min-width: 125px;
+    }
+
     & td.fund {
         background-color: lightsteelblue;
         color: black;
