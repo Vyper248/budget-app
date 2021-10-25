@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/budget-app/static/css/main.3e6af1a3.chunk.css",
-    "main.js": "/budget-app/static/js/main.58512a54.chunk.js",
-    "main.js.map": "/budget-app/static/js/main.58512a54.chunk.js.map",
+    "main.js": "/budget-app/static/js/main.867c70e6.chunk.js",
+    "main.js.map": "/budget-app/static/js/main.867c70e6.chunk.js.map",
     "runtime-main.js": "/budget-app/static/js/runtime-main.bb5cb9cb.js",
     "runtime-main.js.map": "/budget-app/static/js/runtime-main.bb5cb9cb.js.map",
     "static/js/2.c5bdbef0.chunk.js": "/budget-app/static/js/2.c5bdbef0.chunk.js",
     "static/js/2.c5bdbef0.chunk.js.map": "/budget-app/static/js/2.c5bdbef0.chunk.js.map",
     "index.html": "/budget-app/index.html",
-    "precache-manifest.a57cb38bfebe7cdb4199c7e1ed4fa082.js": "/budget-app/precache-manifest.a57cb38bfebe7cdb4199c7e1ed4fa082.js",
+    "precache-manifest.8aa2e85a9e518dc63cf8aa442dcce099.js": "/budget-app/precache-manifest.8aa2e85a9e518dc63cf8aa442dcce099.js",
     "service-worker.js": "/budget-app/service-worker.js",
     "static/css/main.3e6af1a3.chunk.css.map": "/budget-app/static/css/main.3e6af1a3.chunk.css.map",
     "static/js/2.c5bdbef0.chunk.js.LICENSE.txt": "/budget-app/static/js/2.c5bdbef0.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.bb5cb9cb.js",
     "static/js/2.c5bdbef0.chunk.js",
     "static/css/main.3e6af1a3.chunk.css",
-    "static/js/main.58512a54.chunk.js"
+    "static/js/main.867c70e6.chunk.js"
   ]
 }
