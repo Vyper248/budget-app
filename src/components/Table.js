@@ -42,6 +42,10 @@ const Table = styled.table`
         color: black;
     }
 
+    & tr.summary:hover td:not(.expense, .income, .fund) {
+        background-color: var(--obj-highlight-bg);
+    }
+
     & tbody th {
         background-color: var(--table-heading-bg-color);
         color: var(--table-heading-text-color);

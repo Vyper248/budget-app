@@ -47,7 +47,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
 
     const getValueRow = (arr, type) => {
         return arr.map(obj => {
-            return  <tr key={obj.id}>
+            return  <tr key={obj.id} className='summary'>
                         <td className={type} style={{minWidth: '120px'}}>{obj.name}{type === 'expense' ? budgetIcon(obj.id) : null}</td>
                         { dates.map(date => getTD(obj, date, type)) }
                         { 
@@ -82,7 +82,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                 <tbody>
                     { getValueRow(incomeCategories, 'income') }
                     { displayIncomeTotal 
-                        ? <tr>
+                        ? <tr className='summary'>
                             <td className='income bold'>Total</td>
                             {
                                 dates.map(date => <td>{parseCurrency(rows[date].incomeTotal)}</td>)
@@ -93,7 +93,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                     { getValueRow(filteredFunds, 'fund') }
                     { getValueRow(expenseCategories, 'expense') }
                     { displayExpenseTotal 
-                        ? <tr>
+                        ? <tr className='summary'>
                             <td className='expense bold'>Total</td>
                             {
                                 dates.map(date => <td>{parseCurrency(rows[date].expenseTotal)}</td>)
@@ -136,7 +136,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                 {
                     dates.map(date => {
                         return (
-                            <tr key={'summaryDate-'+date}>
+                            <tr className='summary' key={'summaryDate-'+date}>
                                 <td>{formatDate(date)}</td>
                                 { getValue(incomeCategories, date, 'income') }
                                 { displayIncomeTotal ? <td>{parseCurrency(rows[date].incomeTotal)}</td> : null }
