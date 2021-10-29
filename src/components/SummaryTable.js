@@ -83,22 +83,22 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                     { getValueRow(incomeCategories, 'income') }
                     { displayIncomeTotal 
                         ? <tr className='summary'>
-                            <td className='income bold'>Total</td>
+                            <td className='income bold'>Total Income</td>
                             {
-                                dates.map(date => <td>{parseCurrency(rows[date].incomeTotal)}</td>)
+                                dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td>)
                             }
-                            <td>{parseCurrency(summaryTotals.totalIncome)}</td>
+                            <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td>
                         </tr> 
                         : null }
                     { getValueRow(filteredFunds, 'fund') }
                     { getValueRow(expenseCategories, 'expense') }
                     { displayExpenseTotal 
                         ? <tr className='summary'>
-                            <td className='expense bold'>Total</td>
+                            <td className='expense bold'>Total Expenses</td>
                             {
-                                dates.map(date => <td>{parseCurrency(rows[date].expenseTotal)}</td>)
+                                dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td>)
                             }
-                            <td>{parseCurrency(summaryTotals.totalExpenses)}</td>
+                            <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td>
                         </tr> 
                         : null }
                     <tr>
@@ -125,10 +125,10 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                         <div className={`morePeriodIcon ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
                     </td>
                     { incomeCategories.map(obj => <td key={'heading-'+obj.id} className="income">{obj.name}</td>) }
-                    { displayIncomeTotal ? <td className='income bold'>Total</td> : null }
+                    { displayIncomeTotal ? <td className='income bold'>Total Income</td> : null }
                     { filteredFunds.map(obj => <td key={'heading-'+obj.id} className="fund">{obj.name}</td>) }
                     { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}<div className="budgetIcon" onClick={toggleEditCategory(obj.id)}><FaPiggyBank/></div></td>) }
-                    { displayExpenseTotal ? <td className='expense bold'>Total</td> : null }
+                    { displayExpenseTotal ? <td className='expense bold'>Total Expenses</td> : null }
                     <td className="remaining bold">Remaining</td>
                 </tr>
             </thead>
@@ -139,10 +139,10 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                             <tr className='summary' key={'summaryDate-'+date}>
                                 <td>{formatDate(date)}</td>
                                 { getValue(incomeCategories, date, 'income') }
-                                { displayIncomeTotal ? <td>{parseCurrency(rows[date].incomeTotal)}</td> : null }
+                                { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td> : null }
                                 { getValue(filteredFunds, date, 'fund') }
                                 { getValue(expenseCategories, date, 'expense') }
-                                { displayExpenseTotal ? <td>{parseCurrency(rows[date].expenseTotal)}</td> : null }
+                                { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td> : null }
                                 <td>{ parseCurrency(rows[date].remaining) }</td>
                             </tr>
                         )
@@ -151,10 +151,10 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                 <tr>
                     <td>Total</td>
                     { incomeCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
-                    { displayIncomeTotal ? <td>{parseCurrency(summaryTotals.totalIncome)}</td> : null }
+                    { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td> : null }
                     { filteredFunds.map(obj => <td key={'fundHeading-'+obj.id}>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td>) }
                     { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
-                    { displayExpenseTotal ? <td>{parseCurrency(summaryTotals.totalExpenses)}</td> : null }
+                    { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td> : null }
                     <td>{parseCurrency(summaryTotals.remaining)}</td>
                 </tr>
             </tbody>

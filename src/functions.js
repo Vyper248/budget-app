@@ -453,6 +453,8 @@ export const changeColourScheme = (scheme) => {
         
         root.style.setProperty('--obj-highlight-bg', '#444');
         root.style.setProperty('--obj-highlight-text', 'white');
+
+        root.style.setProperty('--mild-highlight', '#333');
     }
 
     if (scheme === 'black') {
@@ -475,6 +477,8 @@ export const changeColourScheme = (scheme) => {
 
         root.style.setProperty('--obj-highlight-bg', '#444');
         root.style.setProperty('--obj-highlight-text', 'white');
+
+        root.style.setProperty('--mild-highlight', '#222');
     }
 
     if (scheme === 'light') {
@@ -497,5 +501,7 @@ export const changeColourScheme = (scheme) => {
 
         root.style.setProperty('--obj-highlight-bg', '#CCC');
         root.style.setProperty('--obj-highlight-text', 'black');
+
+        root.style.setProperty('--mild-highlight', '#EEE');
     }
 }

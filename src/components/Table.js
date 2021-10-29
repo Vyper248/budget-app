@@ -28,6 +28,10 @@ const Table = styled.table`
         font-weight: bold;
     }
 
+    & td.highlighted {
+        background-color: var(--mild-highlight);
+    }
+
     td.date {
         min-width: 125px;
     }
