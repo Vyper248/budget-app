@@ -12,7 +12,7 @@ const StyledComp = styled.div`
 
 `
 
-const TransactionForm = ({onChange, obj={}, buttonLabel='Save'}) => {
+const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
     const accounts = useSelector(state => filterDeleted(state.accounts));
     const funds = useSelector(state => filterDeleted(state.funds));
     const categories = useSelector(state => filterDeleted(state.categories));
@@ -37,6 +37,7 @@ const TransactionForm = ({onChange, obj={}, buttonLabel='Save'}) => {
     }, [obj]);
 
     const reset = () => {
+        if (obj === undefined) obj = {};
         let type = obj.type || 'spend';
         if (obj.amount !== undefined && obj.type === undefined) type = 'fundAddition';
         if (obj.amount !== undefined) setEditMode(true);

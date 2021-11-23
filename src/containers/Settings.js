@@ -173,7 +173,6 @@ const Settings = () => {
             credentials: 'include',
             body: JSON.stringify({username, password})
         }).then(res => res.json()).then(data => {
-            console.log(data);
             setUsername('');
             setPassword('');
             setFetching(false);

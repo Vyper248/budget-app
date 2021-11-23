@@ -32,7 +32,7 @@ const AddTransaction = ({onAdd=()=>{}}) => {
     return (
         <StyledComp>
             <div>Add Transaction</div>
-            <TransactionForm onChange={onClickAdd} obj={{}}/>
+            <TransactionForm onChange={onClickAdd}/>
         </StyledComp>
     );
 }
