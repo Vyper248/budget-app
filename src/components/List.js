@@ -2,6 +2,41 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+const StyledButton = styled.div`
+    border: 1px solid var(--menu-border-color);
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 5px;
+    background-color: var(--menu-bg-color);
+    color: var(--menu-text-color);
+
+    &:hover {
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
+        cursor: pointer;
+    }
+
+    &.selected {
+        background-color: var(--menu-selected-bg-color);
+        color: var(--menu-selected-text-color);
+    }
+
+    &.hidden {
+        background-color: #999;
+        color: white;
+    }
+
+    &.hidden.selected {
+        background-color: #777;
+        color: white;
+    }
+
+    &.hidden:hover {
+        background-color: #777;
+        color: white;
+    }
+`;
+
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
     width: 200px;
@@ -11,39 +46,9 @@ const StyledComp = styled.div`
     overflow: scroll;
     position: relative;
 
-    & > div {
-        border: 1px solid var(--menu-border-color);
-        padding: 5px;
-        width: 100%;
-        margin-bottom: 5px;
-        background-color: var(--menu-bg-color);
-        color: var(--menu-text-color);
-    }
-
-    & > div:hover {
-        background-color: var(--menu-selected-bg-color);
-        color: var(--menu-selected-text-color);
-        cursor: pointer;
-    }
-
-    & > div.selected {
-        background-color: var(--menu-selected-bg-color);
-        color: var(--menu-selected-text-color);
-    }
-
-    & > div.hidden {
-        background-color: #999;
-        color: white;
-    }
-
-    & > div.hidden.selected {
-        background-color: #777;
-        color: white;
-    }
-
-    & > div.hidden:hover {
-        background-color: #777;
-        color: white;
+    & > div:first-of-type {
+        height: calc(100% - 102px);
+        overflow: scroll;
     }
 
     & > div:last-child {
@@ -65,24 +70,26 @@ const List = ({heading='', array=[], hiddenArray=[], onClickObj, selected}) => {
     return (
         <StyledComp>
             <h4>{heading}</h4>
-            {
-                array.map(obj => {
-                    if (obj.name.length === 0) return null;
-                    return (
-                        <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</div>
-                    );
-                })
-            }
-            {   hiddenArray.length > 0 ? <hr/> : null   }
-            {
-                hiddenArray.map(obj => {
-                    if (obj.name.length === 0) return null;
-                    return (
-                        <div key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected hidden': 'hidden'}>{obj.name}</div>
-                    );
-                })
-            }
-            <div onClick={toggleEditMode} className={editMode ? 'selected' : ''}>Edit {heading}</div>
+            <div>
+                {
+                    array.map(obj => {
+                        if (obj.name.length === 0) return null;
+                        return (
+                            <StyledButton key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</StyledButton>
+                        );
+                    })
+                }
+                {   hiddenArray.length > 0 ? <hr/> : null   }
+                {
+                    hiddenArray.map(obj => {
+                        if (obj.name.length === 0) return null;
+                        return (
+                            <StyledButton key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected hidden': 'hidden'}>{obj.name}</StyledButton>
+                        );
+                    })
+                }
+            </div>
+            <StyledButton onClick={toggleEditMode} className={editMode ? 'selected' : ''}>Edit {heading}</StyledButton>
         </StyledComp>
     );
 }
