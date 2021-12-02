@@ -69,13 +69,14 @@ const TransactionDetails = ({obj, onClose, onDelete, onEdit=()=>{}}) => {
     }
 
     const remove = () => {     
-        if (parsedObj.type === undefined) dispatch({type: 'REMOVE_FUND_ADDITION', payload: parsedObj.id});
+        console.log(parsedObj.type);
+        if (parsedObj.type === undefined || parsedObj.type === 'Add to Fund') dispatch({type: 'REMOVE_FUND_ADDITION', payload: parsedObj.id});
         else dispatch({type: 'REMOVE_TRANSACTION', payload: parsedObj.id});
         onClose();
     }
 
     const onChangeTransaction = (newObj) => {
-        if (newObj.type === undefined) dispatch({type: 'UPDATE_FUND_ADDITION', payload: newObj});
+        if (newObj.type === undefined || newObj.type === 'Add to Fund') dispatch({type: 'UPDATE_FUND_ADDITION', payload: newObj});
         else dispatch({type: 'UPDATE_TRANSACTION', payload: newObj});
         onEdit(newObj);
         setEditMode(false);
