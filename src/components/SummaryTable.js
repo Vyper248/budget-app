@@ -4,33 +4,19 @@ import { MdUnfoldMore, MdUnfoldLess } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { format } from "date-fns";
 
-import { reverseDate, parseCurrency, checkBudget, filterDeleted } from "../functions";
+import { reverseDate, parseCurrency } from "../functions";
 
 import Table from "./Table";
-import BudgetInput from "./BudgetInput";
 
 const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expenseCategories, summaryTotals, rows, onClickValue, checkFundTarget, transactionId, getAmount, showMorePeriods, showLessPeriods}) => {
-    const budgets = useSelector(state => filterDeleted(state.budgets));
-    const transactions = useSelector(state => filterDeleted(state.transactions));
     const reverseSummaryTable = useSelector(state => state.general.reverseSummaryTable);
     const displayMonths = useSelector(state => state.general.displayMonths);
     const periodsToDisplay = useSelector(state => state.general.periodsToDisplay);
     const displayIncomeTotal = useSelector(state => state.general.displayIncomeTotal);
     const displayExpenseTotal = useSelector(state => state.general.displayExpenseTotal);
 
-    const [editCategory, setEditCategory] = useState(0);
-
     const showLessBtn = dates.length > periodsToDisplay;
     const showMoreBtn = dates.length < allDates.length;
-
-    const toggleEditCategory = (id) => () => {
-        if (editCategory === id) setEditCategory(0);
-        else setEditCategory(id);
-    }
-
-    const budgetIcon = (id) => {
-        return <div className="budgetIcon" onClick={toggleEditCategory(id)}><FaPiggyBank/></div>;
-    }
 
     const getTD = (obj, date, type) => {
         let amount = getAmount(rows, date, obj.name);
@@ -39,16 +25,13 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
         if (amount === '-') tdClassName = '';
         return  <td key={obj.id+date} className={tdClassName} onClick={onClickValue(rows[date][obj.name], obj.name, type, obj.id+date)}>
                     { amount }
-                    { editCategory === obj.id 
-                        ? <span> / <BudgetInput value={checkBudget(budgets, date, obj.id, transactions, true)} category={obj.id} date={date}/></span> 
-                        : checkBudget(budgets, date, obj.id, transactions) }
                 </td>
     }
 
     const getValueRow = (arr, type) => {
         return arr.map(obj => {
             return  <tr key={obj.id} className='summary'>
-                        <td className={type} style={{minWidth: '120px'}}>{obj.name}{type === 'expense' ? budgetIcon(obj.id) : null}</td>
+                        <td className={type} style={{minWidth: '120px'}}>{obj.name}</td>
                         { dates.map(date => getTD(obj, date, type)) }
                         { 
                             type === 'fund' 
@@ -67,47 +50,49 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
     if (reverseSummaryTable) {
         let minWidth = displayMonths ? '110px' : '125px';
         return (
-            <Table>
-                <thead>
-                    <tr>
-                        <td className='date'>
-                            <div className={`lessPeriodIcon reversed ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
-                            Date 
-                            <div className={`morePeriodIcon reversed ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
-                        </td>
-                        { dates.map(date => <td key={'date-'+date} style={{minWidth: minWidth}}>{formatDate(date)}</td>) }
-                        <td>Total</td>
-                    </tr>    
-                </thead>  
-                <tbody>
-                    { getValueRow(incomeCategories, 'income') }
-                    { displayIncomeTotal 
-                        ? <tr className='summary'>
-                            <td className='income bold'>Total Income</td>
-                            {
-                                dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td>)
-                            }
-                            <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td>
-                        </tr> 
-                        : null }
-                    { getValueRow(filteredFunds, 'fund') }
-                    { getValueRow(expenseCategories, 'expense') }
-                    { displayExpenseTotal 
-                        ? <tr className='summary'>
-                            <td className='expense bold'>Total Expenses</td>
-                            {
-                                dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td>)
-                            }
-                            <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td>
-                        </tr> 
-                        : null }
-                    <tr>
-                        <td className="remaining bold">Remaining</td>
-                        { dates.map(date => <td key={'remaining-'+date}>{ parseCurrency(rows[date].remaining) }</td>) }
-                        <td>{parseCurrency(summaryTotals.remaining)}</td>
-                    </tr>
-                </tbody>
-            </Table>
+            <div style={{padding: '20px', width: 'fit-content'}}>
+                <Table>
+                    <thead>
+                        <tr>
+                            <td className='date'>
+                                <div className={`lessPeriodIcon reversed ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
+                                Date 
+                                <div className={`morePeriodIcon reversed ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
+                            </td>
+                            { dates.map(date => <td key={'date-'+date} style={{minWidth: minWidth}}>{formatDate(date)}</td>) }
+                            <td>Total</td>
+                        </tr>    
+                    </thead>  
+                    <tbody>
+                        { getValueRow(incomeCategories, 'income') }
+                        { displayIncomeTotal 
+                            ? <tr className='summary'>
+                                <td className='income bold'>Total Income</td>
+                                {
+                                    dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td>)
+                                }
+                                <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td>
+                            </tr> 
+                            : null }
+                        { getValueRow(filteredFunds, 'fund') }
+                        { getValueRow(expenseCategories, 'expense') }
+                        { displayExpenseTotal 
+                            ? <tr className='summary'>
+                                <td className='expense bold'>Total Expenses</td>
+                                {
+                                    dates.map(date => <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td>)
+                                }
+                                <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td>
+                            </tr> 
+                            : null }
+                        <tr>
+                            <td className="remaining bold">Remaining</td>
+                            { dates.map(date => <td key={'remaining-'+date}>{ parseCurrency(rows[date].remaining) }</td>) }
+                            <td>{parseCurrency(summaryTotals.remaining)}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+            </div>
         );
     }
 
@@ -116,49 +101,51 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
     }
 
     return (
-        <Table>
-            <thead>
-                <tr>
-                    <td className='date'>
-                        <div className={`lessPeriodIcon ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
-                        Date 
-                        <div className={`morePeriodIcon ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
-                    </td>
-                    { incomeCategories.map(obj => <td key={'heading-'+obj.id} className="income">{obj.name}</td>) }
-                    { displayIncomeTotal ? <td className='income bold'>Total Income</td> : null }
-                    { filteredFunds.map(obj => <td key={'heading-'+obj.id} className="fund">{obj.name}</td>) }
-                    { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}<div className="budgetIcon" onClick={toggleEditCategory(obj.id)}><FaPiggyBank/></div></td>) }
-                    { displayExpenseTotal ? <td className='expense bold'>Total Expenses</td> : null }
-                    <td className="remaining bold">Remaining</td>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    dates.map(date => {
-                        return (
-                            <tr className='summary' key={'summaryDate-'+date}>
-                                <td>{formatDate(date)}</td>
-                                { getValue(incomeCategories, date, 'income') }
-                                { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td> : null }
-                                { getValue(filteredFunds, date, 'fund') }
-                                { getValue(expenseCategories, date, 'expense') }
-                                { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td> : null }
-                                <td>{ parseCurrency(rows[date].remaining) }</td>
-                            </tr>
-                        )
-                    })
-                }
-                <tr>
-                    <td>Total</td>
-                    { incomeCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
-                    { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td> : null }
-                    { filteredFunds.map(obj => <td key={'fundHeading-'+obj.id}>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td>) }
-                    { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
-                    { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td> : null }
-                    <td>{parseCurrency(summaryTotals.remaining)}</td>
-                </tr>
-            </tbody>
-        </Table>
+        <div style={{padding: '20px', overflow: 'scroll'}}>
+            <Table>
+                <thead>
+                    <tr>
+                        <td className='date'>
+                            <div className={`lessPeriodIcon ${!showLessBtn ? 'hidden' : ''}`} onClick={showLessPeriods}><MdUnfoldLess/></div> 
+                            Date 
+                            <div className={`morePeriodIcon ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
+                        </td>
+                        { incomeCategories.map(obj => <td key={'heading-'+obj.id} className="income">{obj.name}</td>) }
+                        { displayIncomeTotal ? <td className='income bold'>Total Income</td> : null }
+                        { filteredFunds.map(obj => <td key={'heading-'+obj.id} className="fund">{obj.name}</td>) }
+                        { expenseCategories.map(obj => <td key={'heading-'+obj.id} className="expense">{obj.name}</td>) }
+                        { displayExpenseTotal ? <td className='expense bold'>Total Expenses</td> : null }
+                        <td className="remaining bold">Remaining</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        dates.map(date => {
+                            return (
+                                <tr className='summary' key={'summaryDate-'+date}>
+                                    <td>{formatDate(date)}</td>
+                                    { getValue(incomeCategories, date, 'income') }
+                                    { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td> : null }
+                                    { getValue(filteredFunds, date, 'fund') }
+                                    { getValue(expenseCategories, date, 'expense') }
+                                    { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(rows[date].expenseTotal)}</td> : null }
+                                    <td>{ parseCurrency(rows[date].remaining) }</td>
+                                </tr>
+                            )
+                        })
+                    }
+                    <tr>
+                        <td>Total</td>
+                        { incomeCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td> : null }
+                        { filteredFunds.map(obj => <td key={'fundHeading-'+obj.id}>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td>) }
+                        { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td> : null }
+                        <td>{parseCurrency(summaryTotals.remaining)}</td>
+                    </tr>
+                </tbody>
+            </Table>
+        </div>
     );
 }
 

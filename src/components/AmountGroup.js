@@ -54,23 +54,14 @@ const StyledComp = styled.div`
     }
 `;
 
-const AmountGroup = ({title, amount, type, budget=0, editBudget=false, id, date}) => {
-    const [editMode, setEditMode] = useState(false);
-
-    const toggleEditMode = () => {
-        setEditMode(!editMode);
-    }
-
+const AmountGroup = ({title, amount, type}) => {
     return (
         <StyledComp type={type} className={title === 'Earnings' || title === 'Remaining' || title === 'Total' ? 'fullRow' : ''}>
             <div>
                 { title }
-                { editBudget ? <div className="budgetIcon" onClick={toggleEditMode}><FaPiggyBank/></div> : null }
             </div>
             <div>
                 { amount }
-                { !editMode && budget > 0 ? ` / ${parseCurrency(budget)}` : '' }
-                { editMode ? <span> / <BudgetInput value={budget} category={id} date={date}/></span> : null }
             </div>
         </StyledComp>
     );

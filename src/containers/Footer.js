@@ -13,7 +13,7 @@ const BottomArea = styled.div`
     height: 308px;
     background-color: var(--footer-bg);
     padding: 10px;
-    padding-top: 30px;
+    padding-top: 40px;
     border: 2px solid var(--footer-bg);
     z-index: 3;
     ${props => props.open ? 'transform: translateY(-275px);' : ''};

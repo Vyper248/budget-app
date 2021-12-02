@@ -160,7 +160,7 @@ const SummaryTables = () => {
                     { getHeading() }
                     { incomeCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='income'/>) }
                     { filteredFunds.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='fund'/>) }
-                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='expense' editBudget={true} budget={checkBudget(budgets, latestDate, obj.id, transactions, true)} id={obj.id} date={latestDate}/>) }
+                    { expenseCategories.map(obj => <AmountGroup key={'heading-'+obj.id} title={obj.name} amount={getAmount(rows, latestDate, obj.name)} type='expense'/>) }
                     <AmountGroup title='Remaining' amount={parseCurrency(rows[latestDate].remaining)} type='remaining'/>
                 </Grid>
             </div>
