@@ -35,8 +35,8 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                         { dates.map(date => getTD(obj, date, type)) }
                         { 
                             type === 'fund' 
-                                ? <td>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td> 
-                                : <td>{parseCurrency(summaryTotals[obj.name])}</td>
+                                ? <td className='highlighted'>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td> 
+                                : <td className='highlighted'>{parseCurrency(summaryTotals[obj.name])}</td>
                         }
                     </tr>
         });
@@ -88,7 +88,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                         <tr>
                             <td className="remaining bold">Remaining</td>
                             { dates.map(date => <td key={'remaining-'+date}>{ parseCurrency(rows[date].remaining) }</td>) }
-                            <td>{parseCurrency(summaryTotals.remaining)}</td>
+                            <td className='highlighted'>{parseCurrency(summaryTotals.remaining)}</td>
                         </tr>
                     </tbody>
                 </Table>
@@ -135,13 +135,13 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                         })
                     }
                     <tr>
-                        <td>Total</td>
-                        { incomeCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        <td className='highlighted'>Total</td>
+                        { incomeCategories.map(obj => <td className='highlighted' key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
                         { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalIncome)}</td> : null }
-                        { filteredFunds.map(obj => <td key={'fundHeading-'+obj.id}>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td>) }
-                        { expenseCategories.map(obj => <td key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
+                        { filteredFunds.map(obj => <td className='highlighted' key={'fundHeading-'+obj.id}>{parseCurrency(summaryTotals[obj.name].remaining)}{checkFundTarget(summaryTotals[obj.name])}</td>) }
+                        { expenseCategories.map(obj => <td className='highlighted' key={'totalsRow-'+obj.id}>{parseCurrency(summaryTotals[obj.name])}</td>) }
                         { displayExpenseTotal ? <td className='highlighted'>{parseCurrency(summaryTotals.totalExpenses)}</td> : null }
-                        <td>{parseCurrency(summaryTotals.remaining)}</td>
+                        <td className='highlighted'>{parseCurrency(summaryTotals.remaining)}</td>
                     </tr>
                 </tbody>
             </Table>
