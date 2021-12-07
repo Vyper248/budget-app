@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "308bc89ad5a4991b458a7da67863f4ac",
+    "revision": "01d6f607c06ad361a946960e5025ab38",
     "url": "/budget-app/index.html"
   },
   {
-    "revision": "603fbe5f0bfc2183ee60",
+    "revision": "53a8efa429c462c516c8",
     "url": "/budget-app/static/css/main.92657d9c.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/budget-app/static/js/2.22a37f7c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "603fbe5f0bfc2183ee60",
-    "url": "/budget-app/static/js/main.f8b554f6.chunk.js"
+    "revision": "53a8efa429c462c516c8",
+    "url": "/budget-app/static/js/main.ef91ecb2.chunk.js"
   },
   {
     "revision": "98bcc7c1f9780714c7d8",
