@@ -11,8 +11,30 @@ import AccountSummary from '../components/AccountSummary';
 import TopPopup from '../components/TopPopup';
 import TransactionList from '../components/TransactionList';
 import SummaryTable from '../components/SummaryTable';
+import PieChart from '../components/PieChart';
 
 import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
+
+const getChartData = (summaryTotals, expenseCategories, funds) => {
+    const chartData = [];
+
+    expenseCategories.forEach(cat => {
+        let value = summaryTotals[cat.name];
+        let obj = {label: cat.name, value: value};
+        chartData.push(obj);
+    });
+
+    funds.forEach(fund => {
+        console.log(fund);
+        let fundObj = summaryTotals[fund.name];
+        let obj = {label: fund.name, value: fundObj.saved};
+        chartData.push(obj);
+    });
+
+    chartData.push({label: 'Remaining', value: summaryTotals.remaining});
+
+    return chartData;
+}
 
 const SummaryTables = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -115,6 +137,8 @@ const SummaryTables = () => {
         setTransactionId(0);
     }
 
+    const chartData = getChartData(summaryTotals, expenseCategories, funds);
+
     if (isMobile) {
         let displayDate = latestDate;
         if (latestDate !== 'Totals') {
@@ -195,6 +219,7 @@ const SummaryTables = () => {
                     <AccountSummary arr={accountSummary} total={accountTotal}/>
                 </div>) : null
             }
+            { general.showChart ? <PieChart width={600} data={chartData} title='Totals Chart'/> : null }
         </div>
     );
 }

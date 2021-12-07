@@ -23,6 +23,7 @@ const initialState = {
         displayMonths: false,
         displayIncomeTotal: false,
         displayExpenseTotal: false,
+        showChart: true,
         savingsGoalDate: '2019-11-08',
         savingsGoalTarget: 0,
         salary: 0,
@@ -95,6 +96,7 @@ export const reducer = (state = initialState, action) => {
         case 'SET_DISPLAY_MONTHS': return {...state, general: {...state.general, displayMonths: value, updated: dateValue}};
         case 'SET_DISPLAY_INCOME_TOTAL': return {...state, general: {...state.general, displayIncomeTotal: value, updated: dateValue}};
         case 'SET_DISPLAY_EXPENSE_TOTAL': return {...state, general: {...state.general, displayExpenseTotal: value, updated: dateValue}};
+        case 'SET_SHOW_CHART': return {...state, general: {...state.general, showChart: value, updated: dateValue}};
 
         case 'ADD_ACCOUNT': let newAccounts = getNewArray(state.accounts, value); return {...state, accounts: newAccounts};
         case 'ADD_CATEGORY': let newCategories = getNewArray(state.categories, value); return {...state, categories: newCategories};

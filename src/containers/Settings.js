@@ -31,6 +31,7 @@ const Settings = () => {
     const displayMonths = useSelector(state => state.general.displayMonths);
     const displayIncomeTotal = useSelector(state => state.general.displayIncomeTotal);
     const displayExpenseTotal = useSelector(state => state.general.displayExpenseTotal);
+    const showChart = useSelector(state => state.general.showChart);
 
     const setPayPeriodType = (e) => dispatch({type: 'SET_PAY_PERIOD_TYPE', payload: e.target.value});
     const setCurrencySymbol = (e) => dispatch({type: 'SET_CURRENCY_SYMBOL', payload: e.target.value});
@@ -46,6 +47,7 @@ const Settings = () => {
     const setDisplayMonths = (e) => dispatch({type: 'SET_DISPLAY_MONTHS', payload: e.target.value === 'false' ? false : true});
     const setDisplayIncomeTotal = (e) => dispatch({type: 'SET_DISPLAY_INCOME_TOTAL', payload: e.target.value === 'false' ? false : true});
     const setDisplayExpenseTotal = (e) => dispatch({type: 'SET_DISPLAY_EXPENSE_TOTAL', payload: e.target.value === 'false' ? false : true});
+    const setShowChart = (e) => dispatch({type: 'SET_SHOW_CHART', payload: e.target.value === 'false' ? false : true});
 
     const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
     const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
@@ -219,6 +221,7 @@ const Settings = () => {
                 { isMobile ? null : <LabelledInput label="Display Months" type="dropdown" value={displayMonths} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayMonths} labelWidth={labelWidth}/> }
                 { isMobile ? null : <LabelledInput label="Show Income Total" type="dropdown" value={displayIncomeTotal} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayIncomeTotal} labelWidth={labelWidth}/> }
                 { isMobile ? null : <LabelledInput label="Show Expense Total" type="dropdown" value={displayExpenseTotal} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setDisplayExpenseTotal} labelWidth={labelWidth}/> }
+                { isMobile ? null : <LabelledInput label="Show Summary Chart" type="dropdown" value={showChart} options={[{value: true, display: 'Yes'}, {value: false, display: 'No'}]} onChange={setShowChart} labelWidth={labelWidth}/> }
                 <LabelledInput label="Background Colour" type="dropdown" value={colourScheme} options={[{value: 'dark', display: 'Dark'}, {value: 'black', display: 'Black'}, {value: 'light', display: 'Light'}]} onChange={onChangeColorScheme} labelWidth={labelWidth}/>
 
                 <h4>Backup</h4>

@@ -50,7 +50,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
     if (reverseSummaryTable) {
         let minWidth = displayMonths ? '110px' : '125px';
         return (
-            <div style={{padding: '20px', width: 'fit-content'}}>
+            <div style={{padding: '0px 20px 0px 20px', width: 'fit-content'}}>
                 <Table>
                     <thead>
                         <tr>
@@ -101,7 +101,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
     }
 
     return (
-        <div style={{padding: '20px', overflow: 'scroll'}}>
+        <div style={{padding: '0px 20px 0px 20px', overflow: 'scroll'}}>
             <Table>
                 <thead>
                     <tr>
