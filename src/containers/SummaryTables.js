@@ -13,7 +13,7 @@ import TransactionList from '../components/TransactionList';
 import SummaryTable from '../components/SummaryTable';
 import PieChart from '../components/PieChart';
 
-import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkBudget, checkFundTarget, filterDeleted } from '../functions';
+import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkFundTarget, filterDeleted } from '../functions';
 
 const getChartData = (summaryTotals, expenseCategories, funds) => {
     const chartData = [];
@@ -25,7 +25,6 @@ const getChartData = (summaryTotals, expenseCategories, funds) => {
     });
 
     funds.forEach(fund => {
-        console.log(fund);
         let fundObj = summaryTotals[fund.name];
         let obj = {label: fund.name, value: fundObj.saved};
         chartData.push(obj);
@@ -42,7 +41,6 @@ const SummaryTables = () => {
     const general = useSelector(state => state.general);
     const transactions = useSelector(state => filterDeleted(state.transactions));
     const categories = useSelector(state => filterDeleted(state.categories));
-    const budgets = useSelector(state => filterDeleted(state.budgets));
     const funds = useSelector(state => filterDeleted(state.funds));
     const fundAdditions = useSelector(state => filterDeleted(state.fundAdditions));
     const accounts = useSelector(state => filterDeleted(state.accounts));

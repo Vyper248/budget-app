@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { FaPiggyBank } from "react-icons/fa";
+import React from "react";
 import { MdUnfoldMore, MdUnfoldLess } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { format } from "date-fns";

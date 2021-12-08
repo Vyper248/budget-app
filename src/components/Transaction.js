@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaTrashAlt } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { format, parseISO } from 'date-fns';
 
 import { getAmount, filterDeleted } from '../functions';
-
-import IconButton from '../components/IconButton';
 
 const StyledComp = styled.div`
     & > table {
@@ -74,17 +71,11 @@ const StyledComp = styled.div`
     }
 `;
 
-const Transaction = ({obj, accountId, showDelete=false, hover=true, maxDescWidth='540px', onClick=()=>{}}) => {
-    const dispatch = useDispatch();
+const Transaction = ({obj, accountId, hover=true, maxDescWidth='540px', onClick=()=>{}}) => {
     const categories = useSelector(state => filterDeleted(state.categories));
     const funds = useSelector(state => filterDeleted(state.funds));
     const accounts = useSelector(state => filterDeleted(state.accounts));
     const currentPage = useSelector(state => state.currentPage);
-
-    const remove = () => {     
-        if (obj.type === undefined) dispatch({type: 'REMOVE_FUND_ADDITION', payload: obj.id});
-        else dispatch({type: 'REMOVE_TRANSACTION', payload: obj.id});
-    }
 
     let date = obj.date !== undefined ? format(parseISO(obj.date), 'MMM d, yyyy') : '';
     let description = getType(obj, accountId, categories, funds, accounts, currentPage);
@@ -99,7 +90,6 @@ const Transaction = ({obj, accountId, showDelete=false, hover=true, maxDescWidth
                             { description.length > 0 ? <span className='date'>{ date }</span> : <div className='description'>{ date }</div>}
                         </td>
                         <td>{getAmount(obj, categories, accountId)}</td>
-                        { showDelete ? <td><IconButton Icon={FaTrashAlt} onClick={remove} color='red' topAdjust='1px'/></td> : null }
                     </tr>
                 </tbody>
             </table>

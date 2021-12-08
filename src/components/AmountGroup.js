@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { FaPiggyBank } from 'react-icons/fa';
-
-import { parseCurrency } from '../functions';
-
-import BudgetInput from './BudgetInput';
 
 const StyledComp = styled.div`
     text-align: center;
