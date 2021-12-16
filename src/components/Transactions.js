@@ -62,7 +62,6 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     }
 
     const onToggleDetails = (obj) => () => {
-        if (obj.type === undefined) return;
         setDetails(obj);
         setShowDetails(true);
     }
@@ -130,7 +129,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
             { currentPage === 'Categories' && categoryType === 'income' ? <TotalsDisplay label="Total Earned" value={total}/> : null }
             { currentPage === 'Funds' ? <TotalsDisplay value={total} fundObj={fundInfo}/> : null }
             { organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null }
-            { organisedArr.map(group => <TransactionGroup key={'transactionGroup-'+group.month+id} id={id} group={group} onToggleDetails={onToggleDetails}/>) }
+            { organisedArr.map(group => <TransactionGroup key={'transactionGroup-'+group.month+id+group.transactions.length} id={id} group={group} onToggleDetails={onToggleDetails}/>) }
         </StyledComp>
     );
 }

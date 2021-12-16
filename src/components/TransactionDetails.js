@@ -69,7 +69,6 @@ const TransactionDetails = ({obj, onClose, onDelete, onEdit=()=>{}}) => {
     }
 
     const remove = () => {     
-        console.log(parsedObj.type);
         if (parsedObj.type === undefined || parsedObj.type === 'Add to Fund') dispatch({type: 'REMOVE_FUND_ADDITION', payload: parsedObj.id});
         else dispatch({type: 'REMOVE_TRANSACTION', payload: parsedObj.id});
         onClose();
