@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledComp = styled.div`
     width: ${props => props.width+'px'};
-    border: 1px solid white;
+    border: 1px solid var(--menu-border-color);
     position: fixed;
     background-color: var(--bg-color);
     left: 50%;
