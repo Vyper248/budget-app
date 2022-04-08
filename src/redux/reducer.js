@@ -2,6 +2,7 @@ import { format, compareAsc, compareDesc, parseISO } from 'date-fns';
 
 const initialState = {
     currentPage: 'Home',
+    selectedAccount: 0,
     addTransaction: false,
     editMode: false,
     lastSync: 0,
@@ -76,6 +77,7 @@ export const reducer = (state = initialState, action) => {
     let dateValue = Number(format(new Date(),'yyyyMMddHHmmss'));
     switch(action.type) {
         case 'SET_CURRENT_PAGE': return {...state, currentPage: value, editMode: false, addTransaction: false, message: {text: '', type: ''}};
+        case 'SET_SELECTED_ACCOUNT': return {...state, selectedAccount: value};
         case 'SET_ADD_TRANSACTION': return {...state, addTransaction: value};
         case 'SET_EDIT_MODE': return {...state, editMode: value};
         case 'SET_USER': return {...state, user: value};

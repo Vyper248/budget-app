@@ -26,16 +26,21 @@ const Accounts = () => {
     const [account, setAccount] = useState(firstAccountId);
     const [accountName, setAccountName] = useState(firstAccountName);
 
+    const setSelectedAccount = (id) => dispatch({type: 'SET_SELECTED_ACCOUNT', payload: id});
+
     React.useEffect(() => {
         //If there's no object in the array, then go straight to edit mode
         if (accounts.length === 0 && !editMode) {
             dispatch({type: 'SET_EDIT_MODE', payload: true});
+        } else {
+            setSelectedAccount(firstAccountId);
         }
-    });
+    }, []);
 
     const onClickObj = (id) => () => {
         let account = allAccounts.find(obj => obj.id === id);
         setAccount(id);
+        setSelectedAccount(id);
         setAccountName(account.name);
         dispatch({type: 'SET_EDIT_MODE', payload: false});
     }

@@ -16,9 +16,16 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
     const accounts = useSelector(state => filterDeleted(state.accounts));
     const funds = useSelector(state => filterDeleted(state.funds));
     const categories = useSelector(state => filterDeleted(state.categories));
+    const selectedAccount = useSelector(state => state.selectedAccount);
+    const currentPage = useSelector(state => state.currentPage);
 
     let defaultAccountObj = accounts.find(obj => obj.defaultAccount === true);
     let defaultAccount = defaultAccountObj !== undefined ? defaultAccountObj.id : accounts.length > 0 ? accounts[0].id : undefined;
+
+    if (currentPage === 'Accounts') {
+        defaultAccount = selectedAccount;
+        console.log(defaultAccount);
+    }
 
     const [id, setId] = useState(0);
     const [type, setType] = useState('spend');
