@@ -22,10 +22,8 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
     let defaultAccountObj = accounts.find(obj => obj.defaultAccount === true);
     let defaultAccount = defaultAccountObj !== undefined ? defaultAccountObj.id : accounts.length > 0 ? accounts[0].id : undefined;
 
-    if (currentPage === 'Accounts') {
-        defaultAccount = selectedAccount;
-        console.log(defaultAccount);
-    }
+    //if viewing an account on Accounts page, more useful to use that account as the default for a new transaction
+    if (currentPage === 'Accounts') defaultAccount = selectedAccount;
 
     const [id, setId] = useState(0);
     const [type, setType] = useState('spend');
