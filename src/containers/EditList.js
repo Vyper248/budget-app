@@ -9,6 +9,7 @@ import Button from '../components/Button';
 import HeaderDropdown from '../components/HeaderDropdown';
 import EditInput from '../components/EditInput';
 import MobileEditGroup from '../components/MobileEditGroup';
+import Grid from '../components/Grid';
 
 import { modals } from '../modals';
 import { fromCamelCase, checkIfCanDelete} from '../functions';
@@ -36,6 +37,8 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
     const add = 'ADD'+modalObj.editString;
     const update = 'UPDATE'+modalObj.editString;
     const remove = 'REMOVE'+modalObj.editString; 
+    const moveRight = 'MOVE_RIGHT'+modalObj.editString;
+    const moveLeft = 'MOVE_LEFT'+modalObj.editString;
 
     const onChange = (obj, key) => (e) => {
         let value = e.target.value;
@@ -59,6 +62,14 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
             if (typeof newObj[key] === 'string' && newObj[key] === 'date') newObj[key] = format(new Date(), 'yyyy-MM-dd');
         });  
         dispatch({type: add, payload: newObj});
+    }
+
+    const onMoveLeft = (id) => () => {
+        dispatch({type: moveLeft, payload: id});
+    }
+
+    const onMoveRight = (id) => () => {
+        dispatch({type: moveRight, payload: id});
     }
 
     const onChangePage = (id) => {
@@ -99,9 +110,13 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
                                 }
                                 <tr>
                                     <td colSpan='2'>
-                                    { checkIfCanDelete(obj) 
-                                        ? <Button value="Delete" onClick={onDelete(obj.id)} width='50%' color='red'/> 
-                                        : <div style={{height: 'var(--input-height)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Being Used</div> }
+                                        <Grid template='50px auto 50px' margin='5px'>
+                                            <span><Button value='<' onClick={onMoveLeft(obj.id)} width='50px'/></span>
+                                        { checkIfCanDelete(obj) 
+                                            ? <Button value="Delete" onClick={onDelete(obj.id)} width='80%' color='red'/> 
+                                            : <div style={{height: 'var(--input-height)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Being Used</div> }
+                                            <span><Button value='>' onClick={onMoveRight(obj.id)} width='50px'/></span>
+                                        </Grid>
                                     </td>
                                 </tr>
                             </tbody>

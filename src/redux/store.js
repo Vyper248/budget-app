@@ -3,6 +3,7 @@ import { reducer } from './reducer';
 import { changeColourScheme } from '../functions';
 
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
+let timeout = null;
 
 const localStorageMiddleware = ({getState}) => {
     return (next) => (action) => {
@@ -23,7 +24,17 @@ const syncMiddleware = ({getState, dispatch}) => {
         //sync with server if possible
         const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING'];
         if (ignore.includes(action.type)) return result;
-        sync(getState(), dispatch);
+
+        //don't want too many syncs to happen if doing a lot of quick changes
+        if (timeout !== null) { 
+            clearTimeout(timeout); 
+            timeout = null; 
+        }
+
+        timeout = setTimeout(() => {
+            sync(getState(), dispatch);
+            timeout = null;
+        }, 500);
 
         return result;
     }

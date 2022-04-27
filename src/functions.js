@@ -371,6 +371,8 @@ export const checkIfCanDelete = (obj) => {
         if (obj.to === id) return false;
     }
 
+    if (obj.startingBalance !== undefined && obj.startingBalance > 0) return false;
+
     return true;
 }
 

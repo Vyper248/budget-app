@@ -121,6 +121,14 @@ export const reducer = (state = initialState, action) => {
         case 'REMOVE_FUND_ADDITION': let removedFundAdditions = removeObject(state.fundAdditions, value); return {...state, fundAdditions: removedFundAdditions};
         case 'REMOVE_TRANSACTION': let removedTransactions = removeObject(state.transactions, value); return {...state, transactions: removedTransactions};
 
+        case 'MOVE_RIGHT_ACCOUNT': let movedRightAccounts = moveObjRight(state.accounts, value); return {...state, accounts: movedRightAccounts};
+        case 'MOVE_RIGHT_CATEGORY': let movedRightCategories = moveObjRight(state.categories, value); return {...state, categories: movedRightCategories};
+        case 'MOVE_RIGHT_FUND': let movedRightFunds = moveObjRight(state.funds, value); return {...state, funds: movedRightFunds};
+
+        case 'MOVE_LEFT_ACCOUNT': let movedLeftAccounts = moveObjLeft(state.accounts, value); return {...state, accounts: movedLeftAccounts};
+        case 'MOVE_LEFT_CATEGORY': let movedLeftCategories = moveObjLeft(state.categories, value); return {...state, categories: movedLeftCategories};
+        case 'MOVE_LEFT_FUND': let movedLeftFunds = moveObjLeft(state.funds, value); return {...state, funds: movedLeftFunds};
+
         case 'SYNC': return {...state, ...value, lastSync: dateValue};
         case 'IMPORT_BACKUP': return {...state, ...value};
         default: return state;
@@ -163,6 +171,34 @@ const getPreviousBudget = (budgets, date, category) => {
         if (compareDesc(parseISO(budget.startDate), parseISO(date)) === 1) return budget;
     }
     return undefined;
+}
+
+const moveObjRight = (arr, id) => {
+    let index = arr.findIndex(obj => obj.id === id);
+    if (index === arr.length-1) return arr;
+    
+    let indexToMoveTo = arr.findIndex((obj, i) => i > index && obj.deleted === undefined); //skip over deleted objects
+    let obj = arr[index];
+    let newArr = arr.filter(obj => obj.id !== id);
+    newArr.splice(indexToMoveTo, 0, obj);
+    return newArr;
+}
+
+const moveObjLeft = (arr, id) => {
+    let index = arr.findIndex(obj => obj.id === id);
+    if (index === 0) return arr;
+    
+    let indexToMoveTo; //skip over deleted objects
+    for (let i = index-1; i >= 0; i--) {
+        if (arr[i].deleted === undefined) {
+            indexToMoveTo = i;
+            break;
+        }
+    }
+    let obj = arr[index];
+    let newArr = arr.filter(obj => obj.id !== id);
+    newArr.splice(indexToMoveTo, 0, obj);
+    return newArr;
 }
 
 const removeObject = (arr, id) => {

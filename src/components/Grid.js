@@ -9,6 +9,7 @@ const Grid = styled.div`
     ${props => props.end !== undefined ? 'grid-column-end: '+props.end : ''};
     ${props => props.width !== undefined ? 'width: '+props.width : ''};
     ${props => props.width !== undefined ? 'margin: auto' : ''};
+    ${props => props.margin !== undefined ? 'margin: '+props.margin : ''};
 `;
 
 export default Grid;
