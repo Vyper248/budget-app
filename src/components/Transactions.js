@@ -82,7 +82,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     }, 0);        
 
     let negative = false;
-    if (currentObj && currentObj.startingBalance !== undefined) {
+    if (currentObj && currentObj.startingBalance !== undefined && filter.length === 0) {
         if (currentObj.type === 'expense') {
             total -= parseFloat(currentObj.startingBalance);
             negative = true;
@@ -122,6 +122,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     });
 
     const getTotalsDisplay = () => {
+        if (filter.length > 0) return <TotalsDisplay label='Search Total' value={total}/>;
         if (currentPage === 'Accounts') return <TotalsDisplay label='Balance' value={total}/>;
         if (currentPage === 'Categories' && categoryType === 'expense') return <TotalsDisplay label="Total Spent" value={-total}/>;
         if (currentPage === 'Categories' && categoryType === 'income') return <TotalsDisplay label="Total Earned" value={total}/>;
