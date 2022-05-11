@@ -59,7 +59,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const List = ({heading='', array=[], hiddenArray=[], onClickObj, selected}) => {
+const List = ({heading='', array=[], onClickObj, selected}) => {
     const dispatch = useDispatch();
     const editMode = useSelector(state => state.editMode);
 
@@ -67,12 +67,15 @@ const List = ({heading='', array=[], hiddenArray=[], onClickObj, selected}) => {
         dispatch({type: 'SET_EDIT_MODE', payload: !editMode});
     }
 
+    const activeArray = array.filter(obj => !obj.complete && !obj.hidden && !obj.closed);
+    const hiddenArray = array.filter(obj => obj.complete || obj.hidden || obj.closed);
+
     return (
         <StyledComp>
             <h4>{heading}</h4>
             <div>
                 {
-                    array.map(obj => {
+                    activeArray.map(obj => {
                         if (obj.name.length === 0) return null;
                         return (
                             <StyledButton key={'objList-'+obj.id} onClick={onClickObj(obj.id)} className={selected === obj.id && editMode === false ? 'selected': ''}>{obj.name}</StyledButton>

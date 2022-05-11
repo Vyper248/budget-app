@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { filterDeleted } from '../functions';
+import { filterDeleted, filterTransactions } from '../functions';
 
 import ListContainer from '../components/ListContainer';
 import List from '../components/List';
@@ -17,7 +17,6 @@ const Categories = () => {
     const editMode = useSelector(state => state.editMode);
     const allCategories = useSelector(state => filterDeleted(state.categories));
     const categories = allCategories.filter(cat => !cat.hidden);
-    const hiddenCategories = allCategories.filter(cat => cat.hidden);
     const firstCategory = categories[0];
     let firstCategoryId = firstCategory !== undefined ? firstCategory.id : undefined;
     let firstCategoryName = firstCategory !== undefined ? firstCategory.name : '';
@@ -26,9 +25,11 @@ const Categories = () => {
     const [category, setCategory] = useState(firstCategoryId);
     const [categoryName, setCategoryName] = useState(firstCategoryName);
 
+    const [filter, setFilter] = useState('');
+
     React.useEffect(() => {
         //If there's no object in the array, then go straight to edit mode
-        if (categories.length === 0 && !editMode) {
+        if (allCategories.length === 0 && !editMode) {
             dispatch({type: 'SET_EDIT_MODE', payload: true});
         }
     });
@@ -40,18 +41,33 @@ const Categories = () => {
         dispatch({type: 'SET_EDIT_MODE', payload: false});
     }
 
-    const filteredTransactions = transactions.filter(obj => {
+    const onChangeFilter = (e) => {
+        setFilter(e.target.value);
+    }    
+
+    //filter transactions based on user selected filter
+    let filteredTransactions = filterTransactions(transactions, filter);
+
+    //Search for categories with filteredTransactions and add number to name for displaying
+    const searchedCategories = allCategories.map(category => {
+        if (filter.length === 0) return category;
+        let transactionArr = filteredTransactions.filter(obj => obj.category === category.id);
+        return {...category, name: category.name + ' - ' + transactionArr.length};
+    });
+
+    //filter transactions based on selected category
+    filteredTransactions = filteredTransactions.filter(obj => {
         return obj.category !== undefined && obj.category === category ? true : false;
-    });    
+    });
 
     return (
         <div>  
             <Container>
                 <ListContainer>
-                    { isMobile ? null : <List heading={'Categories'} array={categories} hiddenArray={hiddenCategories} onClickObj={onClickObj} selected={category}/> }
+                    { isMobile ? null : <List heading={'Categories'} array={searchedCategories} onClickObj={onClickObj} selected={category}/> }
                     { editMode 
                         ? <EditList array={allCategories} onClickDropdown={onClickObj} id={category}/>
-                        : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={allCategories} id={category}/> 
+                        : <Transactions transactions={filteredTransactions} heading={categoryName} onClickDropdown={onClickObj} objArray={allCategories} id={category} filter={filter} onChangeFilter={onChangeFilter}/> 
                     }
                 </ListContainer>
             </Container>

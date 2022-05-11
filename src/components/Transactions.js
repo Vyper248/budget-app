@@ -27,7 +27,7 @@ const StyledComp = styled.div`
     }
 `;
 
-const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[]}) => {
+const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[], filter='', onChangeFilter=()=>{}}) => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
     const categories = useSelector(state => filterDeleted(state.categories));
@@ -36,15 +36,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     const [details, setDetails] = useState({});
     const [showDetails, setShowDetails] = useState(false);
 
-    const [search, setSearch] = useState('');
-
     let currentObj = objArray.find(obj => obj.id === id);
-
-    transactions = transactions.filter(obj => {
-        if (obj.description) return obj.description.toLowerCase().includes(search.toLowerCase());
-        else if (search.length > 0) return false;
-        else return true;
-    });
 
     //organise by month/year
     let organisedObj = {};
@@ -82,10 +74,6 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
 
     const onCloseDetails = () => {
         setShowDetails(false);
-    }
-
-    const onChangeSearch = (e) => {
-        setSearch(e.target.value);
     }
 
     let total = transactions.reduce((t,c) => {
@@ -149,7 +137,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
             <Grid template={isMobile ? '1fr' : '120px 1fr 120px'}>
                 <div></div>
                 <div>{ getTotalsDisplay() }</div>
-                <div style={{display: 'flex', alignItems: 'center'}}><Input value={search} placeholder='Search' onChange={onChangeSearch} width='100%'/></div>
+                <div style={{display: 'flex', alignItems: 'center'}}><Input value={filter} placeholder='Search' onChange={onChangeFilter} width='100%'/></div>
             </Grid>
             { organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null }
             { organisedArr.map(group => <TransactionGroup key={'transactionGroup-'+group.month+id+group.transactions.length} id={id} group={group} onToggleDetails={onToggleDetails}/>) }

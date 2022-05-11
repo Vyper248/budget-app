@@ -386,6 +386,14 @@ export const filterDeleted = (arr, ignoreHidden=false) => {
     });
 }
 
+export const filterTransactions = (arr=[], filter='') => {
+    return arr.filter(obj => {
+        if (obj.description) return obj.description.toLowerCase().includes(filter.toLowerCase());
+        else if (filter.length > 0) return false;
+        else return true;
+    });
+}
+
 export const formatDate = (date, formatMethod='MMM d, yyyy') => {
     if (date === undefined) return '';
     if (date.length === 0) return '';
