@@ -11,6 +11,8 @@ import TotalsDisplay from './TotalsDisplay';
 import Modal from './Modal';
 import TransactionDetails from './TransactionDetails';
 import TransactionGroup from './TransactionGroup';
+import Input from './Input';
+import Grid from './Grid';
 
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
@@ -34,7 +36,15 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     const [details, setDetails] = useState({});
     const [showDetails, setShowDetails] = useState(false);
 
+    const [search, setSearch] = useState('');
+
     let currentObj = objArray.find(obj => obj.id === id);
+
+    transactions = transactions.filter(obj => {
+        if (obj.description) return obj.description.toLowerCase().includes(search.toLowerCase());
+        else if (search.length > 0) return false;
+        else return true;
+    });
 
     //organise by month/year
     let organisedObj = {};
@@ -72,6 +82,10 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
 
     const onCloseDetails = () => {
         setShowDetails(false);
+    }
+
+    const onChangeSearch = (e) => {
+        setSearch(e.target.value);
     }
 
     let total = transactions.reduce((t,c) => {
@@ -119,15 +133,24 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         return {display: obj.name, value: obj.id, hidden: hidden};
     });
 
+    const getTotalsDisplay = () => {
+        if (currentPage === 'Accounts') return <TotalsDisplay label='Balance' value={total}/>;
+        if (currentPage === 'Categories' && categoryType === 'expense') return <TotalsDisplay label="Total Spent" value={-total}/>;
+        if (currentPage === 'Categories' && categoryType === 'income') return <TotalsDisplay label="Total Earned" value={total}/>;
+        if (currentPage === 'Funds') return <TotalsDisplay value={total} fundObj={fundInfo}/>;
+        return null;
+    }
+
     return (
         <StyledComp>
             { isMobile ? null : <h4>{heading}</h4> }
             { isMobile ? <HeaderDropdown value={id} options={headerOptions} onChange={onChangePage} /> : null }
             <Modal visible={showDetails}><TransactionDetails obj={details} onClose={onCloseDetails} onEdit={onEditTransaction}/></Modal>
-            { currentPage === 'Accounts' ? <TotalsDisplay label="Balance" value={total}/> : null }
-            { currentPage === 'Categories' && categoryType === 'expense' ? <TotalsDisplay label="Total Spent" value={-total}/> : null }
-            { currentPage === 'Categories' && categoryType === 'income' ? <TotalsDisplay label="Total Earned" value={total}/> : null }
-            { currentPage === 'Funds' ? <TotalsDisplay value={total} fundObj={fundInfo}/> : null }
+            <Grid template={isMobile ? '1fr' : '120px 1fr 120px'}>
+                <div></div>
+                <div>{ getTotalsDisplay() }</div>
+                <div style={{display: 'flex', alignItems: 'center'}}><Input value={search} placeholder='Search' onChange={onChangeSearch} width='100%'/></div>
+            </Grid>
             { organisedArr.length === 0 && objArray.length > 0 ? <div style={{margin: '10px'}}>No Transactions to Display</div> : null }
             { organisedArr.map(group => <TransactionGroup key={'transactionGroup-'+group.month+id+group.transactions.length} id={id} group={group} onToggleDetails={onToggleDetails}/>) }
         </StyledComp>
