@@ -129,6 +129,7 @@ export const reducer = (state = initialState, action) => {
         case 'MOVE_LEFT_CATEGORY': let movedLeftCategories = moveObjLeft(state.categories, value); return {...state, categories: movedLeftCategories};
         case 'MOVE_LEFT_FUND': let movedLeftFunds = moveObjLeft(state.funds, value); return {...state, funds: movedLeftFunds};
 
+        case 'SET_SYNC_DATE': return {...state, lastSync: dateValue};
         case 'SYNC': return {...state, ...value, lastSync: dateValue};
         case 'IMPORT_BACKUP': return {...state, ...value};
         default: return state;

@@ -22,12 +22,18 @@ const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
         //sync with server if possible
+
+        if (action.type === 'IMPORT_BACKUP') {
+            overwriteBackup(getState(), dispatch);
+            return result;
+        }
+
         const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING'];
         if (ignore.includes(action.type)) return result;
 
         //don't want too many syncs to happen if doing a lot of quick changes
         if (timeout !== null) { 
-            clearTimeout(timeout); 
+            clearTimeout(timeout);
             timeout = null; 
         }
 
@@ -40,13 +46,8 @@ const syncMiddleware = ({getState, dispatch}) => {
     }
 };
 
-export const sync = (state, dispatch, manual=false) => {
-    if (!state.user) return;
-    const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
-    const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
-    const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
-
-    const backupData = {
+const getBackupData = (state) => {
+    return {
         general: state.general,
         accounts: state.accounts,
         categories: state.categories,
@@ -56,6 +57,47 @@ export const sync = (state, dispatch, manual=false) => {
         transactions: state.transactions,
         user: state.user
     };
+}
+
+const overwriteBackup = (state, dispatch) => {
+    if (!state.user) return;
+    const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
+    const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
+    const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
+
+    const backupData = getBackupData(state);
+
+    setFetching(true);
+    fetch(url+'api/overwriteBackup', {
+        method: 'POST', 
+        headers: {'content-type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(backupData)
+    }).then(res => res.json()).then(data => {
+        setFetching(false);
+        if (data.status === 'success') {
+            setUser(data.user);
+            dispatch({type: 'SET_SYNC_DATE'});
+        } else {
+            console.log(data);
+            if (data.type === 'logout') setUser(null);
+            setMessage({text: data.message, type: 'error'});
+        }
+    }).catch(err => {
+        console.log('Error Syncing: ', err.message);
+        setFetching(false);
+        setUser(null);
+        setMessage({text: 'Failed to contact server for syncing. Please try to login again.', type: 'error'});
+    });
+}
+
+export const sync = (state, dispatch, manual=false) => {
+    if (!state.user) return;
+    const setUser = (value) => dispatch({type: 'SET_USER', payload: value});
+    const setMessage = (value) => dispatch({type: 'SET_MESSAGE', payload: value});
+    const setFetching = (value) => dispatch({type: 'SET_FETCHING', payload: value});
+
+    const backupData = getBackupData(state);
 
     setFetching(true);
     fetch(url+'api/backup', {

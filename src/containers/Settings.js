@@ -69,8 +69,7 @@ const Settings = () => {
             budgets: state.budgets,
             funds: state.funds,
             fundAdditions: state.fundAdditions,
-            transactions: state.transactions,
-            user: state.user
+            transactions: state.transactions
         };
     });
 
@@ -103,7 +102,6 @@ const Settings = () => {
                 if (obj.funds !== undefined) newObj.funds = obj.funds;
                 if (obj.fundAdditions !== undefined) newObj.fundAdditions = obj.fundAdditions;
                 if (obj.transactions !== undefined) newObj.transactions = obj.transactions;
-                if (obj.user !== undefined) newObj.user = obj.user;
                 
                 setImportData(newObj);
             }
@@ -128,7 +126,8 @@ const Settings = () => {
     }
 
     const manualSync = () => {
-        sync(backupData, dispatch, true);
+        const currentState = {...backupData, user};
+        sync(currentState, dispatch, true);
     }
 
     const login = () => {
@@ -229,7 +228,7 @@ const Settings = () => {
                 <Button value="Backup" width="120px" inline={true} onClick={downloadJson}/>
 
                 <h4>Restore</h4>
-                <p>Use this to restore from a previously taken backup JSON file. This will overwrite any current data and replace it with the backup data.</p>
+                <p>Use this to restore from a previously taken backup JSON file. This will overwrite any current data and replace it with the backup data, including on the server if logged in.</p>
                 <p style={{color: '#0F0'}}>{restoreMessage}</p>
                 <input type="file" onChange={onFileChange} ref={fileInput}/>
                 { importData !== null ? <Button value="Import" width="120px" inline={true} onClick={onImportBackup}/> : null }
