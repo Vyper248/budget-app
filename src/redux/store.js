@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { reducer } from './reducer';
 import { changeColourScheme } from '../functions';
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-ap1.herokuapp.com/';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-server.onrender.com/';
 let timeout = null;
 
 const localStorageMiddleware = ({getState}) => {
