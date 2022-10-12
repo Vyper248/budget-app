@@ -5,6 +5,8 @@ import { changeColourScheme } from '../functions';
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-server.onrender.com/';
 let timeout = null;
 
+let controller = new AbortController();
+
 const localStorageMiddleware = ({getState}) => {
     return (next) => (action) => {
         const result = next(action);
@@ -99,9 +101,17 @@ export const sync = (state, dispatch, manual=false) => {
 
     const backupData = getBackupData(state);
 
+    if (state.fetching) {
+        controller.abort();
+        controller = new AbortController();
+    }
+
+    const signal = controller.signal;
+
     setFetching(true);
     fetch(url+'api/backup', {
         method: 'POST', 
+        signal,
         headers: {'content-type': 'application/json'},
         credentials: 'include',
         body: JSON.stringify(backupData)
@@ -119,9 +129,15 @@ export const sync = (state, dispatch, manual=false) => {
         }
     }).catch(err => {
         console.log('Error Syncing: ', err.message);
+
+        //if a request is aborted, it's because another has started, so don't need to set fetching to false
+        if (err.message.includes('The user aborted a request.')) return;
+
         setFetching(false);
-        setUser(null);
         setMessage({text: 'Failed to contact server for syncing. Please try to login again.', type: 'error'});
+        
+        if (err.message.includes('Failed to fetch')) return;
+        setUser(null);
     });
 }
 
