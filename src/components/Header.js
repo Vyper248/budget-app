@@ -81,7 +81,7 @@ const Header = () => {
     }
 
     return (
-        <StyledComp isMobile={isMobile}>
+        <StyledComp isMobile={isMobile} id='header'>
             <HeaderButton page='Home' icon={isMobile ? <FaHome/> : null}/>
             <HeaderButton page='Categories'/>
             <HeaderButton page='Funds'/>

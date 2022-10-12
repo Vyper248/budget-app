@@ -30,7 +30,7 @@ const AddTransaction = ({onAdd=()=>{}}) => {
     }
 
     return (
-        <StyledComp>
+        <StyledComp id='addTransactionPopup'>
             <div>Add Transaction</div>
             <TransactionForm onChange={onClickAdd}/>
         </StyledComp>

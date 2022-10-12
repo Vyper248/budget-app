@@ -63,10 +63,10 @@ const Loader = styled.div`
     }
 `;
 
-const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}, loading=false, selected=false}) => {
-    if (loading) return <StyledComp width={width} inline={inline} color={color} style={style} className={selected ? 'selected' : ''}><Loader/>{value}</StyledComp>
+const Button = ({value, onClick, width='100%', inline=false, color=undefined, style={}, loading=false, selected=false, ...others}) => {
+    if (loading) return <StyledComp width={width} inline={inline} color={color} style={style} className={selected ? 'selected' : ''} {...others}><Loader/>{value}</StyledComp>
 
-    return <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style} className={selected ? 'selected' : ''}>{value}</StyledComp>
+    return <StyledComp width={width} onClick={onClick} inline={inline} color={color} style={style} className={selected ? 'selected' : ''} {...others}>{value}</StyledComp>
 }
 
 export default Button;

@@ -12,7 +12,6 @@
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.0",
     "react-responsive": "^8.1.0",
-    "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "styled-components": "^5.1.1"
   },
@@ -41,6 +40,8 @@
   },
   "homepage": "http://Vyper248.github.io/budget-app",
   "devDependencies": {
-    "gh-pages": "^3.1.0"
+    "cypress": "^10.9.0",
+    "gh-pages": "^3.1.0",
+    "react-scripts": "^5.0.1"
   }
 }

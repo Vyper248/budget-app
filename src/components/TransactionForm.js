@@ -122,19 +122,19 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
     if (type === 'fundAddition') {
         return (
             <StyledComp>
-                { editMode ? null : <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/> }
-                <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))}/>
-                <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-                <LabelledInput label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
-                <Button value={buttonLabel} onClick={finishFundAddition} width="140px"/>
+                { editMode ? null : <LabelledInput id='type' label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/> }
+                <LabelledInput id='amount' label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))}/>
+                <LabelledInput id='date' label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
+                <LabelledInput id='fund' label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
+                <Button id='saveTransaction' value={buttonLabel} onClick={finishFundAddition} width="140px"/>
             </StyledComp>
         );
     }
 
     return (
         <StyledComp>
-            { editMode ? null : <LabelledInput label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/> }
-            <LabelledInput label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))}/>
+            { editMode ? null : <LabelledInput id='type' label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/> }
+            <LabelledInput id='amount' label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))}/>
             { type === 'transfer' ? null : <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/> }
             <LabelledInput label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
             { type === 'transfer' ? null : <LabelledInput label={'Account'} type='dropdown' value={account} onChange={(e) => setAccount(Number(e.target.value))} options={accounts.map(obj => ({value: obj.id, display: obj.name}))}/> }
@@ -143,7 +143,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
             { type === 'transfer' ? null : <LabelledInput label={'Group'} type='dropdown' value={groupValue} onChange={onChangeGroup} groups={[ 
                                                                     {label: 'Funds', options: funds.map(obj => ({value: obj.id, display: obj.name}) )} , 
                                                                     {label: 'Categories', options: categories.map(obj => ({value: obj.id, display: obj.name}) )}  ]}/> }
-            <Button value={buttonLabel} onClick={finishTransaction} width="140px"/>
+            <Button id='saveTransaction' value={buttonLabel} onClick={finishTransaction} width="140px"/>
         </StyledComp>
     );
 }

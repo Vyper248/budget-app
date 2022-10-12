@@ -24,7 +24,7 @@ const StyledComp = styled.input`
 
 const Input = ({value, type='text', placeholder='', onChange, options=[], groups=[], width="100px", noBorder=false, ...others}) => {
     if (type === 'dropdown' && (options.length > 0 || groups.length > 0)) return (
-        <StyledComp as='select' onChange={onChange} value={value} width={width} noBorder={noBorder}>
+        <StyledComp as='select' onChange={onChange} value={value} width={width} noBorder={noBorder} {...others}>
             <option hidden value={undefined}>Select an Option</option>
         {
             options.length > 0 
