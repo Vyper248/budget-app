@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { format } from 'date-fns';
 
-import { changeColourScheme } from '../functions';
+import { changeColourScheme, formatDate } from '../functions';
 import { sync } from '../redux/store';
 
 import Container from '../components/Container';
@@ -78,7 +77,7 @@ const Settings = () => {
 
         const link = document.createElement("a");
         link.setAttribute("href", dataStr);
-        link.setAttribute("download", `Budget Backup - ${format(new Date(),'yyyy-MM-dd')}.json`);
+        link.setAttribute("download", `Budget Backup - ${formatDate(new Date(),'yyyy-MM-dd')}.json`);
         link.click();
     }
 

@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { format, parseISO } from 'date-fns';
 
-import { getAmount, filterDeleted } from '../functions';
+import { getAmount, filterDeleted, formatDate } from '../functions';
 
 const StyledComp = styled.div`
     & > table {
@@ -77,7 +76,7 @@ const Transaction = ({obj, accountId, hover=true, maxDescWidth='540px', onClick=
     const accounts = useSelector(state => filterDeleted(state.accounts));
     const currentPage = useSelector(state => state.currentPage);
 
-    let date = obj.date !== undefined ? format(parseISO(obj.date), 'MMM d, yyyy') : '';
+    let date = obj.date !== undefined ? formatDate(obj.date, 'MMM d, yyyy') : '';
     let description = getType(obj, accountId, categories, funds, accounts, currentPage);
 
     return (

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux';
-import { format } from 'date-fns';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 import Grid from '../components/Grid';
@@ -13,7 +12,7 @@ import TransactionList from '../components/TransactionList';
 import SummaryTable from '../components/SummaryTable';
 import PieChart from '../components/PieChart';
 
-import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkFundTarget, filterDeleted } from '../functions';
+import { getLatestDates, getAllDates, getSummaryRows, getSummaryTotals, getAccountSummary, parseCurrency, checkFundTarget, filterDeleted, formatDate } from '../functions';
 
 const getChartData = (summaryTotals, expenseCategories, funds) => {
     const chartData = [];
@@ -140,7 +139,7 @@ const SummaryTables = () => {
     if (isMobile) {
         let displayDate = latestDate;
         if (latestDate !== 'Totals') {
-            displayDate = format(new Date(latestDate), 'do MMM yyyy');
+            displayDate = formatDate(new Date(latestDate), 'do MMM yyyy');
         }
 
         let index = dates.indexOf(latestDate);

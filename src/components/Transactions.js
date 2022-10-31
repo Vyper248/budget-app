@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { format, parseISO, parse, compareAsc } from 'date-fns';
+import { parseISO, parse, compareAsc } from 'date-fns';
 import { useMediaQuery } from 'react-responsive';
 
-import { getAmount, filterDeleted } from '../functions';
+import { getAmount, filterDeleted, formatDate } from '../functions';
 
 import HeaderDropdown from './HeaderDropdown';
 import TotalsDisplay from './TotalsDisplay';
@@ -42,7 +42,7 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
     let organisedObj = {};
     transactions.forEach(obj => {
         let date = obj.date;
-        let formatted = format(parseISO(date), 'MMMM yyyy');
+        let formatted = formatDate(date, 'MMMM yyyy');;
         if (organisedObj[formatted] === undefined) organisedObj[formatted] = [];
         organisedObj[formatted].push(obj);
     });

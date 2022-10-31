@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { format } from 'date-fns';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { filterDeleted } from '../functions';
+import { filterDeleted, formatDate } from '../functions';
 
 import LabelledInput from './LabelledInput';
 import Button from './Button';
@@ -29,7 +28,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
     const [type, setType] = useState('spend');
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+    const [date, setDate] = useState(formatDate(new Date(), 'yyyy-MM-dd'));
     const [account, setAccount] = useState(defaultAccount);
     const [fund, setFund] = useState(undefined);
     const [category, setCategory] = useState(undefined);
@@ -50,7 +49,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
         setType(type);
         setAmount(obj.amount || '');
         setDescription(obj.description || '');
-        setDate(obj.date || format(new Date(), 'yyyy-MM-dd'));
+        setDate(obj.date || formatDate(new Date(), 'yyyy-MM-dd'));
         setAccount(obj.account || defaultAccount);
         setFund(obj.fund || undefined);
         setCategory(obj.category || undefined);
@@ -65,6 +64,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
         if (account === undefined) return;
         if (type === 'spend' && fund === undefined && category === undefined) return;
         if (type === 'transfer' && from === undefined && to === undefined) return;
+        if (/\b[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date) === false) return;
 
         let transaction;
         if (type === 'spend') {
@@ -83,6 +83,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
         if (amount === 0 || isNaN(amount)) return;
         if (date.length === 0) return;
         if (fund === undefined) return;
+        if (/\b[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date) === false) return;
 
         let fundAddition = {amount, date, fund};
 

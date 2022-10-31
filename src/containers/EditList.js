@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
-import { format } from 'date-fns';
 
 import Table from '../components/Table';
 import Button from '../components/Button';
@@ -12,7 +11,7 @@ import MobileEditGroup from '../components/MobileEditGroup';
 import Grid from '../components/Grid';
 
 import { modals } from '../modals';
-import { fromCamelCase, checkIfCanDelete} from '../functions';
+import { fromCamelCase, checkIfCanDelete, formatDate} from '../functions';
 
 const StyledComp = styled.div`
     border: 1px solid white;
@@ -59,7 +58,7 @@ const EditList = ({array=[], vertical=false, onClickDropdown=()=>{}, id}) => {
         let newObj = {...modal};
         Object.keys(newObj).forEach(key => {
             if (typeof newObj[key] === 'string' && newObj[key].includes(',')) newObj[key] = newObj[key].split(',')[0];
-            if (typeof newObj[key] === 'string' && newObj[key] === 'date') newObj[key] = format(new Date(), 'yyyy-MM-dd');
+            if (typeof newObj[key] === 'string' && newObj[key] === 'date') newObj[key] = formatDate(new Date(), 'yyyy-MM-dd');
         });  
         dispatch({type: add, payload: newObj});
     }

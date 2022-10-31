@@ -21,7 +21,7 @@ export const getLatestDates = (startDate, periodLength, periods=0) => {
     let numberOfPeriods = periodLength === 'fourWeekly' ? 13 : 12;
     if (periods > 0) numberOfPeriods = periods;
     for (let i = 0; i < numberOfPeriods; i++) {
-        latestDates.push(format(latestDate, 'yyyy-MM-dd'));
+        latestDates.push(formatDate(latestDate, 'yyyy-MM-dd'));
         latestDate = periodLength === 'monthly' ? add(latestDate, {months: -1}) : add(latestDate, {days: -daysInPeriod});
         if (compareAsc(parseISO(startDate), latestDate) >= 1) break;
     }
@@ -41,7 +41,7 @@ export const getAllDates = (startDate, periodLength) => {
     let dates = [];
 
     while (compareAsc(today, currentDate) === 1) {
-        dates.push(format(currentDate, 'yyyy-MM-dd'));
+        dates.push(formatDate(currentDate, 'yyyy-MM-dd'));
         if (periodLength === 'monthly') currentDate = add(currentDate, {months: 1});
         else currentDate = add(currentDate, {days: daysInPeriod});
     }
@@ -397,7 +397,16 @@ export const filterTransactions = (arr=[], filter='') => {
 export const formatDate = (date, formatMethod='MMM d, yyyy') => {
     if (date === undefined) return '';
     if (date.length === 0) return '';
-    return format(parseISO(date), formatMethod);
+    let formattedDate = 'Incorrect Date Format';
+
+    try {
+        let parsed = parseISO(date).toString() === 'Invalid Date' ? date : parseISO(date);
+        formattedDate = format(parsed, formatMethod);
+    } catch (err) {
+        console.log(err.message);
+    }
+
+    return formattedDate;
 } 
 
 export const reverseDate = (date) => {

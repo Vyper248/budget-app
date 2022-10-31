@@ -1,9 +1,8 @@
 import React from "react";
 import { MdUnfoldMore, MdUnfoldLess } from "react-icons/md";
 import { useSelector } from 'react-redux';
-import { format } from "date-fns";
 
-import { reverseDate, parseCurrency } from "../functions";
+import { reverseDate, parseCurrency, formatDate } from "../functions";
 
 import Table from "./Table";
 
@@ -41,8 +40,8 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
         });
     }
 
-    const formatDate = (date) => {
-        if (displayMonths) return format(new Date(date), 'MMM-Y');
+    const getDateFormat = (date) => {
+        if (displayMonths) return formatDate(new Date(date), 'MMM-Y');
         else return reverseDate(date);
     }
 
@@ -58,7 +57,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                                 Date 
                                 <div className={`morePeriodIcon reversed ${!showMoreBtn ? 'hidden' : ''}`} onClick={showMorePeriods}><MdUnfoldMore/></div>
                             </td>
-                            { dates.map(date => <td key={'date-'+date} style={{minWidth: minWidth}}>{formatDate(date)}</td>) }
+                            { dates.map(date => <td key={'date-'+date} style={{minWidth: minWidth}}>{getDateFormat(date)}</td>) }
                             <td>Total</td>
                         </tr>    
                     </thead>  
@@ -122,7 +121,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
                         dates.map(date => {
                             return (
                                 <tr className='summary' key={'summaryDate-'+date}>
-                                    <td>{formatDate(date)}</td>
+                                    <td>{getDateFormat(date)}</td>
                                     { getValue(incomeCategories, date, 'income') }
                                     { displayIncomeTotal ? <td className='highlighted'>{parseCurrency(rows[date].incomeTotal)}</td> : null }
                                     { getValue(filteredFunds, date, 'fund') }
