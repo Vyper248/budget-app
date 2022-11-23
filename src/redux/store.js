@@ -30,7 +30,7 @@ const syncMiddleware = ({getState, dispatch}) => {
             return result;
         }
 
-        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING', 'SET_SELECTED_ACCOUNT', 'SET_SALARY', 'SET_SAVINGS_GOAL_TARGET', 'SET_SAVINGS_GOAL_DATE'];
         if (ignore.includes(action.type)) return result;
 
         //don't want too many syncs to happen if doing a lot of quick changes
