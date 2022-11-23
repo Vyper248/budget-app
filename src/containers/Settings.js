@@ -9,7 +9,7 @@ import Container from '../components/Container';
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions/';
 
 const Settings = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });

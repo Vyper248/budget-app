@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { reducer } from './reducer';
 import { changeColourScheme } from '../functions';
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions/';
 let timeout = null;
 
 let controller = new AbortController();
