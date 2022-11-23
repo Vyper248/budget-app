@@ -9,7 +9,7 @@ import Container from '../components/Container';
 import LabelledInput from '../components/LabelledInput';
 import Button from '../components/Button';
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-server.onrender.com/';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions';
 
 const Settings = () => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
@@ -132,7 +132,7 @@ const Settings = () => {
     const login = () => {
         dispatch({type: 'SET_MESSAGE', payload: {text: '', type: ''}});
         setFetching(true);
-        fetch(url+'api/login', {
+        fetch(url+'login', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',
@@ -167,7 +167,7 @@ const Settings = () => {
 
         setMessage({text: '', type: ''});
         setFetching(true);
-        fetch(url+'api/register', {
+        fetch(url+'register', {
             method: 'POST', 
             headers: {'content-type': 'application/json'},
             credentials: 'include',

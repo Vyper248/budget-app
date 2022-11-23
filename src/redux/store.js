@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { reducer } from './reducer';
 import { changeColourScheme } from '../functions';
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/' : 'https://budget-app-server.onrender.com/';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8888/.netlify/functions/' : 'https://budget-app-serverless.netlify.app/.netlify/functions';
 let timeout = null;
 
 let controller = new AbortController();
@@ -70,7 +70,7 @@ const overwriteBackup = (state, dispatch) => {
     const backupData = getBackupData(state);
 
     setFetching(true);
-    fetch(url+'api/overwriteBackup', {
+    fetch(url+'overwriteBackup', {
         method: 'POST', 
         headers: {'content-type': 'application/json'},
         credentials: 'include',
@@ -109,7 +109,7 @@ export const sync = (state, dispatch, manual=false) => {
     const signal = controller.signal;
 
     setFetching(true);
-    fetch(url+'api/backup', {
+    fetch(url+'backup', {
         method: 'POST', 
         signal,
         headers: {'content-type': 'application/json'},
