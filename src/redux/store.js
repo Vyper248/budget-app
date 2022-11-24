@@ -23,6 +23,7 @@ const localStorageMiddleware = ({getState}) => {
 const syncMiddleware = ({getState, dispatch}) => {
     return (next) => (action) => {
         const result = next(action);
+        // console.log(action);
         //sync with server if possible
 
         if (action.type === 'IMPORT_BACKUP') {
@@ -30,7 +31,10 @@ const syncMiddleware = ({getState, dispatch}) => {
             return result;
         }
 
-        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 'SET_FETCHING', 'SET_SELECTED_ACCOUNT', 'SET_SALARY', 'SET_SAVINGS_GOAL_TARGET', 'SET_SAVINGS_GOAL_DATE'];
+        const ignore = ['SET_CURRENT_PAGE', 'SET_EDIT_MODE', 'SYNC', 'SET_USER', 'SET_ADD_TRANSACTION', 'SET_MESSAGE', 
+                        'SET_FETCHING', 'SET_SELECTED_ACCOUNT', 'SET_SALARY', 'SET_SAVINGS_GOAL_TARGET', 'SET_SAVINGS_GOAL_DATE', 
+                        'MOVE_RIGHT_CATEGORY', 'MOVE_LEFT_CATEGORY', 'MOVE_LEFT_FUND', 'MOVE_RIGHT_FUND', 
+                        'MOVE_LEFT_ACCOUNT', 'MOVE_RIGHT_ACCOUNT'];
         if (ignore.includes(action.type)) return result;
 
         //don't want too many syncs to happen if doing a lot of quick changes
@@ -42,7 +46,7 @@ const syncMiddleware = ({getState, dispatch}) => {
         timeout = setTimeout(() => {
             sync(getState(), dispatch);
             timeout = null;
-        }, 500);
+        }, 1000);
 
         return result;
     }
