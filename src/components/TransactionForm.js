@@ -85,7 +85,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
         if (fund === undefined) return;
         if (/\b[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date) === false) return;
 
-        let fundAddition = {amount, date, fund};
+        let fundAddition = {amount, date, fund, description};
 
         if (id !== 0) fundAddition.id = id;
 
@@ -125,6 +125,7 @@ const TransactionForm = ({onChange, obj=undefined, buttonLabel='Save'}) => {
             <StyledComp>
                 { editMode ? null : <LabelledInput id='type' label={'Type'} type='dropdown' value={type} onChange={(e) => setType(e.target.value)} options={types}/> }
                 <LabelledInput id='amount' label={'Amount'} type='number' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))}/>
+                <LabelledInput label={'Description'} value={description} onChange={(e) => setDescription(e.target.value)}/>
                 <LabelledInput id='date' label={'Date'} type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
                 <LabelledInput id='fund' label={'Fund'} type='dropdown' value={fund} onChange={(e) => setFund(Number(e.target.value))} options={funds.map(obj => ({value: obj.id, display: obj.name}))}/>
                 <Button id='saveTransaction' value={buttonLabel} onClick={finishFundAddition} width="140px"/>
