@@ -27,6 +27,23 @@ const StyledComp = styled.div`
     }
 `;
 
+const addRunningBalances = (arr, categories, accountId) => {
+    let runningBalance = 0;
+
+    const addBalance = (transaction) => {
+        runningBalance += getAmount(transaction, categories, accountId, false);
+        return {...transaction, runningBalance};
+    }
+
+    //reverse loop to work backwards from first month
+    for (let i = arr.length-1; i >= 0; i--) {
+        let monthObj = arr[i];
+        let transactions = monthObj.transactions;
+        //reverse to work backwards from first transaction, add balance and reverse again
+        monthObj.transactions = transactions.reverse().map(addBalance).reverse();
+    }
+}
+
 const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, objArray=[], filter='', onChangeFilter=()=>{}}) => {
     const isMobile = useMediaQuery({ maxWidth: 700 });
 
@@ -129,6 +146,8 @@ const Transactions = ({transactions=[], heading='', id, onClickDropdown=()=>{}, 
         if (currentPage === 'Funds') return <TotalsDisplay value={total} fundObj={fundInfo}/>;
         return null;
     }
+
+    addRunningBalances(organisedArr, categories, id);
 
     return (
         <StyledComp>

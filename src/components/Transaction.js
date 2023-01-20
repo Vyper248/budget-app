@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
-import { getAmount, filterDeleted, formatDate } from '../functions';
+import { getAmount, filterDeleted, formatDate, parseCurrency } from '../functions';
 
 const StyledComp = styled.div`
     & > table {
         width: 100%;
-        max-width: 650px;
+        max-width: 700px;
         margin: auto;
     }
 
@@ -26,8 +27,9 @@ const StyledComp = styled.div`
     }
 
     & td:nth-child(3) {
-        width: 50px;
+        width: 100px;
         text-align: right;
+        color: var(--light-text-color);
     }
 
     & div.description {
@@ -71,6 +73,7 @@ const StyledComp = styled.div`
 `;
 
 const Transaction = ({obj, accountId, hover=true, maxDescWidth='540px', onClick=()=>{}}) => {
+    const isMobile = useMediaQuery({ maxWidth: 700 });
     const categories = useSelector(state => filterDeleted(state.categories));
     const funds = useSelector(state => filterDeleted(state.funds));
     const accounts = useSelector(state => filterDeleted(state.accounts));
@@ -89,6 +92,7 @@ const Transaction = ({obj, accountId, hover=true, maxDescWidth='540px', onClick=
                             { description.length > 0 ? <span className='date'>{ date }</span> : <div className='description'>{ date }</div>}
                         </td>
                         <td>{getAmount(obj, categories, accountId)}</td>
+                        { currentPage === 'Accounts' && !isMobile ? <td>{parseCurrency(obj.runningBalance)}</td> : null }
                     </tr>
                 </tbody>
             </table>
