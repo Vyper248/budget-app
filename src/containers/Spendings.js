@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { parseISO, compareAsc } from 'date-fns';
 
-import { today, filterDeleted, parseCurrency, parseTransaction } from '../functions';
+import { today, filterDeleted, parseCurrency, getSpendingsTableObjs } from '../functions';
 
 import Container from '../components/Container';
 import Grid from '../components/Grid';
@@ -22,56 +21,12 @@ const Spendings = ({}) => {
     if (accounts.length === 0) return <div>Please add an account to use this feature.</div>;
     if (transactions.length === 0) return <div>There are no transactions to display.</div>;
 
-    //Setup table object
-    const tableObj = {totals: {}};
-    const accountTotals = {};
-
-    //Setup income table object
-    const incomeTableObj = {totals: {}};
-    const incomeAccountTotals = {};
-
-    const setupTableObj = (obj) => {
-        let itemObj = {};
-        accounts.forEach(account => itemObj[account.name] = 0);
-
-        incomeTableObj[obj.name] = itemObj;
-        incomeTableObj.totals[obj.name] = 0;
-        tableObj[obj.name] = itemObj;
-        tableObj.totals[obj.name] = 0;
-    };
-
-    categories.forEach(setupTableObj);
-    funds.forEach(setupTableObj);
-    accounts.forEach(account => {
-        accountTotals[account.name] = 0;
-        incomeAccountTotals[account.name] = 0;
-    });
-    
-    //add transaction data to table object
-    transactions.forEach(tr => {
-        if (tr.type !== 'spend') return;
-
-        if (compareAsc(parseISO(tr.date), parseISO(fromDate)) === -1) return; //if before fromDate, ignore
-        if (compareAsc(parseISO(tr.date), parseISO(toDate)) === 1) return; //if after toDate, ignore
-
-        let category = categories.find(obj => obj.id === tr.category);
-        
-        let parsed = parseTransaction(tr);
-        let key = parsed.category !== undefined ? parsed.category : parsed.fund;
-
-        if (category?.type === 'income') {
-            incomeTableObj[key][parsed.account] += parsed.amount;
-            incomeTableObj.totals[key] += parsed.amount;
-            incomeAccountTotals[parsed.account] += parsed.amount;
-        } else {
-            tableObj[key][parsed.account] += parsed.amount;
-            tableObj.totals[key] += parsed.amount;
-            accountTotals[parsed.account] += parsed.amount;
-        }
-    });
-
-    let totalAmount = Object.values(tableObj.totals).reduce((a,c) => a+c, 0);
-    let totalIncomeAmount = Object.values(incomeTableObj.totals).reduce((a,c) => a+c, 0);
+    const { tableObj, 
+            accountTotals, 
+            incomeTableObj, 
+            incomeAccountTotals, 
+            totalAmount, 
+            totalIncomeAmount } = getSpendingsTableObjs(accounts, categories, funds, transactions, fromDate, toDate);
 
     const onChangeFrom = (e) => {
         setFromDate(e.target.value);

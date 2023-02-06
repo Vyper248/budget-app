@@ -462,6 +462,64 @@ export const parseTransaction = (tr) => {
     return copyTr;
 }
 
+export const getSpendingsTableObjs = (accounts, categories, funds, transactions, fromDate, toDate) => {
+    //Setup table object
+    const tableObj = {totals: {}};
+    const accountTotals = {};
+
+    //Setup income table object
+    const incomeTableObj = {totals: {}};
+    const incomeAccountTotals = {};
+
+    const setupTableObj = (obj) => {
+        let itemObj = {};
+        accounts.forEach(account => itemObj[account.name] = 0);
+        // accounts.forEach(account => itemObj[account.name+'-data'] = []);
+
+        incomeTableObj[obj.name] = itemObj;
+        incomeTableObj.totals[obj.name] = 0;
+        tableObj[obj.name] = itemObj;
+        tableObj.totals[obj.name] = 0;
+    };
+
+    categories.forEach(setupTableObj);
+    funds.forEach(setupTableObj);
+    accounts.forEach(account => {
+        accountTotals[account.name] = 0;
+        incomeAccountTotals[account.name] = 0;
+    });
+    
+    //add transaction data to table object
+    transactions.forEach(tr => {
+        if (tr.type !== 'spend') return;
+
+        if (compareAsc(parseISO(tr.date), parseISO(fromDate)) === -1) return; //if before fromDate, ignore
+        if (compareAsc(parseISO(tr.date), parseISO(toDate)) === 1) return; //if after toDate, ignore
+
+        let category = categories.find(obj => obj.id === tr.category);
+        
+        let parsed = parseTransaction(tr);
+        let key = parsed.category !== undefined ? parsed.category : parsed.fund;
+
+        if (category?.type === 'income') {
+            incomeTableObj[key][parsed.account] += parsed.amount;
+            // incomeTableObj[key][parsed.account+'-data'].push(parsed);
+            incomeTableObj.totals[key] += parsed.amount;
+            incomeAccountTotals[parsed.account] += parsed.amount;
+        } else {
+            tableObj[key][parsed.account] += parsed.amount;
+            // tableObj[key][parsed.account+'-data'].push(parsed);
+            tableObj.totals[key] += parsed.amount;
+            accountTotals[parsed.account] += parsed.amount;
+        }
+    });
+
+    let totalAmount = Object.values(tableObj.totals).reduce((a,c) => a+c, 0);
+    let totalIncomeAmount = Object.values(incomeTableObj.totals).reduce((a,c) => a+c, 0);
+
+    return {tableObj, accountTotals, incomeTableObj, incomeAccountTotals, totalAmount, totalIncomeAmount};
+}
+
 export const changeColourScheme = (scheme) => {
     let root = document.documentElement;
 
