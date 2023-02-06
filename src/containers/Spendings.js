@@ -81,6 +81,11 @@ const Spendings = ({}) => {
         setToDate(e.target.value);
     }
 
+    const checkAccountTotal = (accountName) => {
+        if (accountTotals[accountName] === 0 && incomeAccountTotals[accountName] === 0) return false;
+        return true;
+    }
+
     const getTableRow = (dataObj, key) => {
         let obj = dataObj[key];
         let total = dataObj.totals[key];
@@ -91,7 +96,7 @@ const Spendings = ({}) => {
             <td>{key}</td>
             <td>{parseCurrency(total)}</td>
             {
-                accounts.map(account => <td key={`data-${key}-${account.name}`}>{parseCurrency(obj[account.name])}</td>)
+                accounts.map(account => checkAccountTotal(account.name) ? <td key={`data-${key}-${account.name}`}>{parseCurrency(obj[account.name])}</td> : null)
             }
         </tr>;
     }
@@ -112,46 +117,45 @@ const Spendings = ({}) => {
                         <tr>
                             <td></td>
                             <td>Total</td>
-                            { accounts.map(obj => <td key={'account-'+obj.id}>{obj.name}</td>) }
+                            { 
+                                accounts.map(obj => checkAccountTotal(obj.name) 
+                                    ? <td key={'account-'+obj.id}>{obj.name}</td> 
+                                    : null) 
+                            }
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            categories.map(obj => {
-                                if (obj.type === 'expense') return null;
-                                return getIncomeTableRow(obj.name);
-                            })
+                            categories.map(obj => obj.type === 'income' ? getIncomeTableRow(obj.name) : null)
                         }
                         <tr>
                             <th></th>
                             <th>{parseCurrency(totalIncomeAmount)}</th>
                             {
-                                accounts.map(obj => <th key={'totals-'+obj.name}>{parseCurrency(incomeAccountTotals[obj.name])}</th>)
+                                accounts.map(obj => checkAccountTotal(obj.name) 
+                                    ? <th key={'totals-'+obj.name}>{parseCurrency(incomeAccountTotals[obj.name])}</th> 
+                                    : null )
                             }
                         </tr>
 
                         <tr className='spacer'>
                             <td></td>
                             <td></td>
-                            { accounts.map(obj => <td key={'empty-'+obj.id}></td>) }
+                            { accounts.map(obj => checkAccountTotal(obj.name) ? <td key={'empty-'+obj.id}></td> : null) }
                         </tr>
-
                         {
-                            categories.map(obj => {
-                                if (obj.type === 'income') return null;
-                                return getExpenseTableRow(obj.name);
-                            })
+                            categories.map(obj => obj.type === 'expense' ? getExpenseTableRow(obj.name) : null)
                         }
                         {
-                            funds.map(obj => {
-                                return getExpenseTableRow(obj.name);
-                            })
+                            funds.map(obj => getExpenseTableRow(obj.name))
                         }
                         <tr>
                             <th></th>
                             <th>{parseCurrency(totalAmount)}</th>
                             {
-                                accounts.map(obj => <th key={'totals-'+obj.name}>{parseCurrency(accountTotals[obj.name])}</th>)
+                                accounts.map(obj => checkAccountTotal(obj.name) 
+                                    ? <th key={'totals-'+obj.name}>{parseCurrency(accountTotals[obj.name])}</th> 
+                                    : null)
                             }
                         </tr>
                     </tbody>
