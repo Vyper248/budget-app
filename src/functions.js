@@ -59,8 +59,9 @@ export const getDaysInPeriod = (periodLength) => {
     }
 }
 
-export const getSummaryTotals = (transactions, funds, categories, fundAdditions) => {
+export const getSummaryTotals = (transactions, funds, categories, fundAdditions, dateFrom, dateTo) => {
     let obj = {};
+    let dateMode = dateFrom !== undefined && dateTo !== undefined;
 
     //store names in object for quick lookup
     let {categoryNames, fundNames} = createNameObjects(categories, funds);
@@ -68,11 +69,23 @@ export const getSummaryTotals = (transactions, funds, categories, fundAdditions)
     //make sure every key has a value even if no transactions for it
     funds.forEach(fund => {
         let saved = fund.startingBalance > 0 ? fund.startingBalance : 0;
+        if (dateMode) saved = 0;
         obj[fund.name] = {saved: saved, target: fund.targetAmount, spent: 0, remaining: saved};
     });
-    categories.forEach(category => obj[category.name] = category.startingBalance > 0 ? category.startingBalance : 0);
+    categories.forEach(category => {
+        let amount = category.startingBalance > 0 ? category.startingBalance : 0;
+        if (dateMode) amount = 0;
+        obj[category.name] = amount;
+    });
 
     const addToTotals = tr => {
+        if (dateMode) {
+            //if date is not after or including first date, ignore
+            if (compareAsc(parseISO(tr.date), parseISO(dateFrom)) === -1) return;
+            //if date is after second date, ignore
+            if (compareAsc(parseISO(tr.date), parseISO(dateTo)) === 1) return;
+        }
+        
         let heading = getTransactionHeading(fundNames, categoryNames, tr);
 
         if (tr.fund !== undefined) {

@@ -56,6 +56,15 @@ const Table = styled.table`
         font-weight: normal;
     }
 
+    & tbody td {
+        white-space: nowrap;
+    }
+
+    & tr.spacer td {
+        border-left: none !important;
+        border-right: none !important;
+    }
+
     & tr td.corner-top-left {
         border-top: none !important;
         border-left: none !important;
