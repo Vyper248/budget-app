@@ -38,7 +38,7 @@ const StyledComp = styled.div`
     & #labels {
         width: ${props => props.labelWidth};
         height: ${props => props.pieWidth};
-        overflow: scroll;
+        overflow: auto;
 
         #label {
             display: flex;

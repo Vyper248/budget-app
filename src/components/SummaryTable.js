@@ -99,7 +99,7 @@ const SummaryTable = ({dates, allDates, incomeCategories, filteredFunds, expense
     }
 
     return (
-        <div style={{padding: '0px 20px 0px 20px', overflow: 'scroll'}}>
+        <div style={{padding: '0px 20px 0px 20px', overflow: 'auto'}}>
             <Table>
                 <thead>
                     <tr>

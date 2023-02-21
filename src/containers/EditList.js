@@ -16,7 +16,7 @@ import { fromCamelCase, checkIfCanDelete, formatDate} from '../functions';
 const StyledComp = styled.div`
     border: 1px solid white;
     margin: 5px 5px 5px 0px;
-    overflow: scroll;
+    overflow: auto;
 
     @media screen and (max-width: 700px) {
         margin: 0px;

@@ -40,7 +40,7 @@ const StyledComp = styled.div`
         right: 0px;
         background-color: var(--bg-color);
         max-height: ${props => props.open ? props.maxHeight : '0px'};
-        overflow: scroll;
+        overflow: auto;
         transition: 0.3s;
     }
 

@@ -17,7 +17,7 @@ import Grid from './Grid';
 const StyledComp = styled.div`
     border: 1px solid var(--menu-border-color);
     margin: 5px 5px 5px 0px;
-    overflow: scroll;
+    overflow: auto;
     position: relative;
 
     @media screen and (max-width: 700px) {

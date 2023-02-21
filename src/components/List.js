@@ -43,12 +43,12 @@ const StyledComp = styled.div`
     min-width: 200px;
     margin: 5px;
     padding: 0px 5px;
-    overflow: scroll;
+    overflow: auto;
     position: relative;
 
     & > div:first-of-type {
         height: calc(100% - 102px);
-        overflow: scroll;
+        overflow: auto;
     }
 
     & > div:last-child {
